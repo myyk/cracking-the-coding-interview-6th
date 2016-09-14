@@ -44,4 +44,14 @@ class Chapter1SolutionsTest extends FlatSpec with Matchers {
     Chapter1Solutions.urlify(chars3, 9)
     new String(chars3) shouldBe "a%20c%20d%20%20e%20\0"
   }
+
+  "canHavePalindromePermutation" should "return whether a string can form a palindrome" in {
+    Chapter1Solutions.canHavePalindromePermutation("") shouldBe true
+    Chapter1Solutions.canHavePalindromePermutation(" ") shouldBe true
+    Chapter1Solutions.canHavePalindromePermutation("a") shouldBe true
+    Chapter1Solutions.canHavePalindromePermutation("ab") shouldBe false
+    Chapter1Solutions.canHavePalindromePermutation("aA abB") shouldBe true
+    Chapter1Solutions.canHavePalindromePermutation("Tact Coa") shouldBe true
+    Chapter1Solutions.canHavePalindromePermutation("Myyk") shouldBe false
+  }
 }

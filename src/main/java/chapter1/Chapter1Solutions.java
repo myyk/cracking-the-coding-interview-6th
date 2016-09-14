@@ -71,8 +71,8 @@ public class Chapter1Solutions {
    *  there is enough space in char array to hold additional characters
    *  given true length of string
    *  
-   * Time complexity: 
-   * Space complexity: 
+   * Time complexity: O(n)
+   * Space complexity: O(1)
    */
   public static void urlify(char[] chars, int length) {
     int numSpaces = 0;
@@ -95,5 +95,43 @@ public class Chapter1Solutions {
         chars[i+2*numSpaces] = c;
       }
     }
+  }
+
+  /**
+   * Palindrome Permutation: Given a string check if a permutation can be made from it.
+   * 
+   * Highly optimized solution using a single int for space.
+   * 
+   * Assumptions:
+   *   case insensitive
+   *   alphabet is A-Z only
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(1)
+   */
+  public static boolean canHavePalindromePermutation(String str) {
+    int bitMap = 0;
+    for (int i=0; i<str.length(); i++) {
+      int pos = getPosition(str.charAt(i));
+      if (pos >= 0 ) { 
+        bitMap ^= 1<<pos;
+      }
+    }
+    return containsOnlyOneOdd(bitMap);
+  }
+
+  // returns -1 if not there
+  private static int getPosition(char c) {
+    if(c >= 'a' && c <= 'z') {
+      return c-'a';
+    } else if(c >= 'A' && c <= 'Z') {
+      return c-'A';
+    } else {
+      return -1;
+    }
+  }
+
+  private static boolean containsOnlyOneOdd(int bitMap) {
+    return (bitMap & (bitMap-1)) == 0;
   }
 }
