@@ -29,4 +29,19 @@ class Chapter1SolutionsTest extends FlatSpec with Matchers {
     Chapter1Solutions.arePermutations("abc", "a") shouldBe false
     Chapter1Solutions.arePermutations("a", "bca") shouldBe false
   }
+
+  "urlify" should "replace spaces with '%20' in place" in {
+    val chars1 = Array('a', 'b', 'c', '\0')
+    Chapter1Solutions.urlify(chars1, 3)
+    new String(chars1) shouldBe "abc\0"
+
+    val chars2 = Array('a', ' ', 'c', '\0', ' ', ' ')
+    Chapter1Solutions.urlify(chars2, 3)
+    new String(chars2) shouldBe "a%20c\0"
+
+    // string is "a c d  e "
+    val chars3 = Array('a', ' ', 'c', ' ', 'd', ' ', ' ', 'e', ' ', '\0', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ')
+    Chapter1Solutions.urlify(chars3, 9)
+    new String(chars3) shouldBe "a%20c%20d%20%20e%20\0"
+  }
 }

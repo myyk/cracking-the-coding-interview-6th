@@ -38,7 +38,7 @@ public class Chapter1Solutions {
    *    ASCII characters
    *    capitalization matters
    *    whitespace matters
-   *    strings aren't larger than 2^16.
+   *    strings aren't larger than 2^16
    * 
    * Time complexity: O(max(c,n) where c is number of characters in alphabet (128)
    * and n is the length of the string.
@@ -62,5 +62,38 @@ public class Chapter1Solutions {
 
       return true;
     }    
+  }
+
+  /**
+   * URLify: replace spaces in a string with '%20'. Perform in place.
+   * 
+   * Assumptions:
+   *  there is enough space in char array to hold additional characters
+   *  given true length of string
+   *  
+   * Time complexity: 
+   * Space complexity: 
+   */
+  public static void urlify(char[] chars, int length) {
+    int numSpaces = 0;
+    for (int i=0; i<length; i++) {
+      if (chars[i] == ' ') {
+        numSpaces++;
+      }
+    }
+
+    // Iterate backwards shifting the characters by number of spaces seen up to that point times 2.
+    chars[length + 2*numSpaces] = '\0';
+    for (int i=length-1; i>=0 && numSpaces>0; i--) {
+      char c = chars[i];
+      if (c == ' ') {
+        numSpaces--;
+        chars[i+2*numSpaces] = '%';
+        chars[i+2*numSpaces+1] = '2';
+        chars[i+2*numSpaces+2] = '0';
+      } else {
+        chars[i+2*numSpaces] = c;
+      }
+    }
   }
 }
