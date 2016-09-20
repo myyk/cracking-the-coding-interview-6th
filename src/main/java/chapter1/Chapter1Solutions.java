@@ -134,4 +134,40 @@ public class Chapter1Solutions {
   private static boolean containsOnlyOneOdd(int bitMap) {
     return (bitMap & (bitMap-1)) == 0;
   }
+
+  /**
+   * One Away: If there are only insert, remove, update edit operations can 2 strings be one (or less)
+   *  edit away from each other.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(1)
+   */
+  public static boolean isOneAway(String str1, String str2) {
+    //optimization
+    if(Math.abs(str1.length() - str2.length()) > 1) {
+      return false;
+    } else {
+      String shorter = str1, longer = str2;
+      if (str1.length() > str2.length()) {
+        shorter = str2;
+        longer = str1;
+      }
+
+      boolean differenceFound = false;
+      for (int i = 0, j = 0; i < shorter.length() && j < longer.length(); i++, j++) {
+        if (shorter.charAt(i) != longer.charAt(j)) {
+          if (differenceFound) {
+            return false;
+          }
+          if (shorter.length() != longer.length()) {
+            j++;
+          }
+          differenceFound = true;
+        }
+      }
+      return true;
+    }
+  }
 }

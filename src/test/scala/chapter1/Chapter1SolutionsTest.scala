@@ -54,4 +54,12 @@ class Chapter1SolutionsTest extends FlatSpec with Matchers {
     Chapter1Solutions.canHavePalindromePermutation("Tact Coa") shouldBe true
     Chapter1Solutions.canHavePalindromePermutation("Myyk") shouldBe false
   }
+
+  "isOneAway" should "return whether a string is one edit from another string" in {
+    Chapter1Solutions.isOneAway("pale", "pale") shouldBe true
+    Chapter1Solutions.isOneAway("pale", "ple") shouldBe true
+    Chapter1Solutions.isOneAway("pales", "pale") shouldBe true
+    Chapter1Solutions.isOneAway("pale", "bale") shouldBe true
+    Chapter1Solutions.isOneAway("pale", "bake") shouldBe false
+  }
 }
