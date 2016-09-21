@@ -235,27 +235,28 @@ public class Chapter1Solutions {
    *
    * Assumptions:
    *   in place
+   *   matrix is at least 1x1 in size.
    * 
    * Time complexity: O(n*m)
-   * Space complexity: O(n+m)
+   * Space complexity: O(m)
    */
   public static int[][] zeroMatrix(final int[][] matrix) {
     int n = matrix.length;
     int m = matrix[0].length;
+    //TODO: could improve by finding smaller between x and y
     final boolean[] shouldZeroY = new boolean[m];
-    final boolean[] shouldZeroX = new boolean[n];
     for (int i = 0; i<n; i++) {
       for (int j = 0; j<m; j++) {
         if (matrix[i][j] == 0) {
-          shouldZeroX[i] = true;
+          matrix[i][0] = 0;
           shouldZeroY[j] = true;
         }
       }
     }
 
     for (int i = 0; i<n; i++) {
-      if (shouldZeroX[i]) {
-        for (int j = 0; j<m; j++) {
+      if (matrix[i][0] == 0) {
+        for (int j = 1; j<m; j++) {
           matrix[i][j] = 0;
         }
       }

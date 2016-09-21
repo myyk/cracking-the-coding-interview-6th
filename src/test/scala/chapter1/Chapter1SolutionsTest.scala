@@ -109,7 +109,7 @@ class Chapter1SolutionsTest extends FlatSpec with Matchers {
   }
 
   "zeroMatrix" should "zeros rows and columns with zeroes in the original matrix" in {
-    Chapter1Solutions.zeroMatrix(Array(Array())) shouldBe Array(Array())
+    Chapter1Solutions.zeroMatrix(Array(Array(1))) shouldBe Array(Array(1))
     Chapter1Solutions.zeroMatrix(Array(Array(1,2),
                                        Array(3,4))) shouldBe Array(Array(1,2),
                                                                    Array(3,4))
