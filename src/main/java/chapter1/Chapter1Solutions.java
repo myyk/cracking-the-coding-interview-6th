@@ -238,37 +238,66 @@ public class Chapter1Solutions {
    *   matrix is at least 1x1 in size.
    * 
    * Time complexity: O(n*m)
-   * Space complexity: O(m)
+   * Space complexity: O(1)
    */
   public static int[][] zeroMatrix(final int[][] matrix) {
-    int n = matrix.length;
-    int m = matrix[0].length;
-    //TODO: could improve by finding smaller between x and y
-    final boolean[] shouldZeroY = new boolean[m];
-    for (int i = 0; i<n; i++) {
-      for (int j = 0; j<m; j++) {
+    int m = matrix.length;
+    int n = matrix[0].length;
+
+    boolean firstRowZero = false;
+    boolean firstColumnZero = false;
+    for (int j = 0; j<n; j++) {
+      if (matrix[0][j] == 0) {
+        firstRowZero = true;
+        break;
+      }
+    }
+    for (int i = 0; i<m; i++) {
+      if (matrix[i][0] == 0) {
+        firstColumnZero = true;
+        break;
+      }
+    }
+
+    for (int i = 1; i<m; i++) {
+      for (int j = 1; j<n; j++) {
         if (matrix[i][j] == 0) {
           matrix[i][0] = 0;
-          shouldZeroY[j] = true;
+          matrix[0][j] = 0;
         }
       }
     }
 
-    for (int i = 0; i<n; i++) {
+    for (int i = 1; i<m; i++) {
       if (matrix[i][0] == 0) {
-        for (int j = 1; j<m; j++) {
-          matrix[i][j] = 0;
-        }
+        zeroX(matrix, i);
       }
     }
-    for (int j = 0; j<m; j++) {
-      if (shouldZeroY[j]) {
-        for (int i = 0; i<n; i++) {
-          matrix[i][j] = 0;
-        }
+    for (int j = 1; j<n; j++) {
+      if (matrix[0][j] == 0) {
+        zeroY(matrix, j);
       }
+    }
+
+    if (firstColumnZero) {
+      zeroY(matrix, 0);
+    }
+    if (firstRowZero) {
+      zeroX(matrix, 0);
     }
 
     return matrix;
+  }
+
+  private static void zeroX(final int[][] matrix, final int x) {
+    for (int j = 0; j<matrix[0].length; j++) {
+      matrix[x][j] = 0;
+    }
+  }
+
+  private static void zeroY(final int[][] matrix, final int y) {
+    for (int i = 0; i<matrix.length; i++) {
+      matrix[i][y] = 0;
+    }
   }
 }

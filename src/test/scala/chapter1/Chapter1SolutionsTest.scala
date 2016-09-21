@@ -116,7 +116,9 @@ class Chapter1SolutionsTest extends FlatSpec with Matchers {
     Chapter1Solutions.zeroMatrix(Array(Array(1,0),
                                        Array(3,4))) shouldBe Array(Array(0,0),
                                                                    Array(3,0))
-
+    Chapter1Solutions.zeroMatrix(Array(Array(1,0,3),
+                                       Array(3,4,5))) shouldBe Array(Array(0,0,0),
+                                                                     Array(3,0,5))
     Chapter1Solutions.zeroMatrix(Array(
       Array( 1, 2, 3, 4, 5),
       Array( 6, 7, 8, 0,10),
@@ -129,6 +131,17 @@ class Chapter1SolutionsTest extends FlatSpec with Matchers {
       Array( 0, 0, 0, 0, 0),
       Array(16, 0,18, 0, 0),
       Array( 0, 0, 0, 0, 0))
+    Chapter1Solutions.zeroMatrix(Array(
+      Array( 0, 2, 3, 4, 5),
+      Array( 6, 7, 8, 0,10),
+      Array(11,12,13,14,15),
+      Array(16,17,18,19,20),
+      Array(21,22,23,24, 0))) shouldBe
+      Array(
+      Array( 0, 0, 0, 0, 0),
+      Array( 0, 0, 0, 0, 0),
+      Array( 0,12,13, 0, 0),
+      Array( 0,17,18, 0, 0),
+      Array( 0, 0, 0, 0, 0))
   }
-
 }
