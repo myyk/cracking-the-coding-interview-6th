@@ -170,4 +170,38 @@ public class Chapter1Solutions {
       return true;
     }
   }
+
+  /**
+   * String Compression: Using basic compression of letter followed by frequency. Returns the original
+   *   string if compressed version is not smaller.
+   * 
+   * Assumptions:
+   *   it's ok to allocate a string buffer of size equal to the input string
+   *   it's better to have simpler code and not figure out if compressed result is smaller before creating it
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(1)
+   */
+  public static String compress(String str) {
+    if (str.isEmpty()) {
+      return "";
+    }
+
+    int count = 1;
+    char last = str.charAt(0);
+    StringBuffer buf = new StringBuffer(str.length());
+    for (int i=1; i<str.length(); i++) {
+      char next = str.charAt(i);
+      if (last == next) {
+        count++;
+      } else {
+        buf.append(last).append(count);
+        count = 1;
+        last = next;
+      }
+    }
+    buf.append(last).append(count);
+
+    return buf.length()<str.length() ? buf.toString() : str;
+  }
 }

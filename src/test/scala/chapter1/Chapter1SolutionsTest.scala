@@ -62,4 +62,12 @@ class Chapter1SolutionsTest extends FlatSpec with Matchers {
     Chapter1Solutions.isOneAway("pale", "bale") shouldBe true
     Chapter1Solutions.isOneAway("pale", "bake") shouldBe false
   }
+
+  "compress" should "return a compressed string if it can compress it" in {
+    Chapter1Solutions.compress("aabcccccaaa") shouldBe "a2b1c5a3"
+    Chapter1Solutions.compress("abc") shouldBe "abc"
+    Chapter1Solutions.compress("a") shouldBe "a"
+    Chapter1Solutions.compress("aa") shouldBe "aa"
+    Chapter1Solutions.compress("") shouldBe ""
+  }
 }
