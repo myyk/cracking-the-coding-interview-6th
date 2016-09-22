@@ -31,4 +31,26 @@ class Chapter2SolutionsTest extends FlatSpec with Matchers {
     test(List(1,2,3,2,4,2,2), List(1,2,3,4), Chapter2Solutions.removeDups)
   }
 
+  def testKToLast(k: Int, input: Seq[Int], expected: Seq[Int]): Unit = {
+    toSeq(Chapter2Solutions.kToLast(k, toNodes(input))) shouldBe expected
+  }
+
+  "kToLast" should "return the k-th node" in {
+    testKToLast(1, Nil, Nil)
+    testKToLast(-1, List(1,2,3), Nil)
+    testKToLast(0, List(1,2,3), List(3))
+    testKToLast(1, List(1,2,3), List(2,3))
+    testKToLast(2, List(1,2,3), List(1,2,3))
+    testKToLast(3, List(1,2,3), Nil)
+  }
+
+  "deleteMiddleNode" should "delete the provided middle node" in {
+    val list1 = toNodes(List(1,2,3,4,5))
+    Chapter2Solutions.deleteMiddleNode(list1.next.next)
+    toSeq(list1) shouldBe List(1,2,4,5)
+
+    val list2 = toNodes(List(1,2,3,4,5))
+    Chapter2Solutions.deleteMiddleNode(list2)
+    toSeq(list2) shouldBe List(2,3,4,5)
+  }
 }
