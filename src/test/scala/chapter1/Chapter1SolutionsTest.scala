@@ -144,4 +144,14 @@ class Chapter1SolutionsTest extends FlatSpec with Matchers {
       Array( 0,17,18, 0, 0),
       Array( 0, 0, 0, 0, 0))
   }
+
+  "isStringRotation" should "determine if there the strings are rotations of each other" in {
+    Chapter1Solutions.isStringRotation("", "") shouldBe true
+    Chapter1Solutions.isStringRotation("a", "a") shouldBe true
+    Chapter1Solutions.isStringRotation("ab", "ab") shouldBe true
+    Chapter1Solutions.isStringRotation("ba", "ab") shouldBe true
+    Chapter1Solutions.isStringRotation("waterbottle", "erbottlewat") shouldBe true
+    Chapter1Solutions.isStringRotation("waterbottle", "waterbottl") shouldBe false
+    Chapter1Solutions.isStringRotation("waterbottl", "waterbottle") shouldBe false
+  }
 }

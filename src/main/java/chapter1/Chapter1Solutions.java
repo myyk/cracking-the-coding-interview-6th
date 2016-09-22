@@ -300,4 +300,17 @@ public class Chapter1Solutions {
       matrix[i][y] = 0;
     }
   }
+
+  /**
+   * String Rotation: Are strings rotations of each other. Can use a single call to String.contains.
+   *
+   * Assumptions:
+   *   neither string is null
+   *
+   * Time complexity: O(n) where n is length of the string
+   * Space complexity: O(1)
+   */
+  public static boolean isStringRotation(String a, String b) {
+    return (a.length() == b.length()) && (a+a).contains(b);
+  }
 }
