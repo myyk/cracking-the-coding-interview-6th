@@ -1,4 +1,4 @@
-package chapter1;
+package com.github.myyk.cracking;
 
 /**
  * Arrays and Strings
