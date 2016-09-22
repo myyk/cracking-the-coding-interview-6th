@@ -28,6 +28,7 @@ class Chapter2SolutionsTest extends FlatSpec with Matchers {
     test(Nil, Nil, Chapter2Solutions.removeDups)
     test(List(1,2,3,4), List(1,2,3,4), Chapter2Solutions.removeDups)
     test(List(1,1,2,1,1,3,4,1,1), List(1,2,3,4), Chapter2Solutions.removeDups)
+    test(List(1,2,3,2,4,2,2), List(1,2,3,4), Chapter2Solutions.removeDups)
   }
 
 }

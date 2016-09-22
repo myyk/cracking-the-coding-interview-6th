@@ -26,20 +26,20 @@ public class Chapter2Solutions {
    * Space complexity: O(1)
    */
   public static Node removeDups(Node n) {
-    Node prev = n;
-    while (prev != null) {
-      Node runnerPrev = n;
-      Node runnerNext = prev.next;
-      while (runnerNext != null) {
-        if (prev.value == runnerNext.value) {
-          runnerPrev.next = runnerNext.next;
+    Node current = n;
+    while (current != null) {
+      Node runner = current;
+      while (runner.next != null) {
+        if (current.value == runner.next.value) {
+          runner.next = runner.next.next;
         } else {
-          runnerPrev = runnerPrev.next;
+          runner = runner.next;
         }
-        runnerNext = runnerNext.next;
       }
-      prev = prev.next;
+      current = current.next;
     }
     return n;
   }
+
+  
 }
