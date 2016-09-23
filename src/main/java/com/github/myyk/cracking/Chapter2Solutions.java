@@ -86,4 +86,39 @@ public class Chapter2Solutions {
     n.value = n.next.value;
     n.next = n.next.next;
   }
+
+  /**
+   * Partition: Partition list around x, if x is also contained it just has to be after values
+   *   less than it.
+   *
+   * Assumptions:
+   *  not stable
+   *  not in place
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(1)
+   */
+  public static Node partition(int x, Node n) {
+    if (n==null) {
+      return null;
+    }
+
+    Node under = n;
+    Node over = n;
+    Node current = n;
+    while (current != null) {
+      Node next = current.next;
+      if (current.value < x) {
+        current.next = under;
+        under = current;
+      } else {
+        over.next = current;
+        over = current;
+      }
+      current = next;
+    }
+    over.next = null;
+
+    return under;
+  }
 }

@@ -53,4 +53,16 @@ class Chapter2SolutionsTest extends FlatSpec with Matchers {
     Chapter2Solutions.deleteMiddleNode(list2)
     toSeq(list2) shouldBe List(2,3,4,5)
   }
+
+  def testPartition(x: Int, list: List[Int]): Unit = {
+    val result = toSeq(Chapter2Solutions.partition(x, toNodes(list)))
+    // partitioning again shouldn't change order
+    val (front, back) = result.partition(_<x)
+    result shouldBe front ++ back
+  }
+
+  "partition" should "partition the list around x" in {
+    testPartition(5, List(3,5,8,5,10,2,1))
+    testPartition(5, List())
+  }
 }
