@@ -1,5 +1,9 @@
 package com.github.myyk.cracking;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
+
 /**
  * Linked Lists
  */
@@ -230,5 +234,71 @@ public class Chapter2Solutions {
     } else {
       return new Node(0, padZeros(n, zeros-1));
     }
+  }
+
+  /**
+   * Palindrome: Are the contents of a singly linked list palindomic.
+   *
+   * Assumptions:
+   *   length is not given
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(n)
+   */
+  public static boolean isPalindrome(Node n) {
+    if (n == null || n.next == null) {
+      return true;
+    }
+
+    Node current = n;
+    Node runner = n;
+    Stack<Integer> stack = new Stack<Integer>();
+
+    while (runner != null && runner.next != null) {
+      stack.push(current.value);
+      current = current.next;
+      runner = runner.next.next;
+    }
+
+    // odd number of elements, skip the middle element
+    if (runner != null) {
+      current = current.next;
+    }
+
+    while (current != null) {
+      if (current.value != stack.pop()) {
+        return false;
+      }
+      current = current.next;
+    }
+
+    return true;
+  }
+
+  /**
+   * Intersection: Find where two singly linked lists intersect if they do.
+   *
+   * Assumptions:
+   *   intersection is done by reference equality
+   * Time complexity: O(n+m)
+   * Space complexity: O()
+   */
+  public static Node findInteresection(Node a, Node b) {
+    Node current = a;
+    Set<Node> nodes = new HashSet<Node>();
+    while (current != null) {
+      nodes.add(current);
+      current = current.next;
+    }
+
+    current = b;
+    while (current != null) {
+      if (nodes.contains(current)) {
+        return current;
+      }
+      current = current.next;
+    }
+
+    return null;
   }
 }

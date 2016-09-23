@@ -102,4 +102,33 @@ class Chapter2SolutionsTest extends FlatSpec with Matchers {
     testSumLists2(99999, 1)
     testSumLists2(1, 99999)
   }
+
+  def testIsPalindrome(list: Seq[Int], expected: Boolean): Unit = {
+    Chapter2Solutions.isPalindrome(toNodes(list)) shouldBe expected
+
+  }
+
+  "isPalindrome" should "determine if a link list contains a palindrome" in {
+    testIsPalindrome(List(), true)
+    testIsPalindrome(List(1), true)
+    testIsPalindrome(List(8,9), false)
+    testIsPalindrome(List(1,2,3), false)
+    testIsPalindrome(List(2,1,3,3,1,2), true)
+    testIsPalindrome(List(2,1,3,1,2), true)
+  }
+
+  def testFindIntersection(intersection: Seq[Int]): Unit = {
+    val n = toNodes(intersection)
+    val list1 = new Node(1, n)
+    val list2 = new Node(2, n)
+    Chapter2Solutions.findInteresection(list1, list2) shouldBe n
+    Chapter2Solutions.findInteresection(list1, n) shouldBe n
+    Chapter2Solutions.findInteresection(n, list2) shouldBe n
+    Chapter2Solutions.findInteresection(n, n) shouldBe n
+  }
+
+  "findInteresection" should "find the intersection of two linked lists" in {
+    testFindIntersection(List(1,2,3,4))
+    testFindIntersection(List(5))
+  }
 }
