@@ -121,4 +121,114 @@ public class Chapter2Solutions {
 
     return under;
   }
+
+  /**
+   * Sum Lists (1s first): single digit stored in each element, 1s first. Add the numbers.
+   *
+   * Assumptions:
+   *   it is better to do a few extra operations on each pair of nodes to not do any operations when there isn't a pair or carry.
+   *
+   * Improved on the books' answer by optimizing when one list is much longer than another list to not traverse.
+   *
+   * Time complexity: O(max(n,m))
+   * Space complexity: O(max(n,m))
+   */
+  public static Node sumLists1(Node n1, Node n2) {
+    return sumLists1Helper(n1, n2, false);
+  }
+
+  private static Node sumLists1Helper(Node a, Node b, Boolean carry) {
+    int sum = 0;
+    Node nextA = null;
+    Node nextB = null;
+    if (a != null) {
+      sum += a.value;
+      nextA = a.next;
+    }
+    if (b != null) {
+      sum += b.value;
+      nextB = b.next;
+    }
+    sum = carry ? (sum + 1) : sum;
+    boolean nextCarry = (sum / 10 > 0);
+
+    if (sum == 0 && a == null && b == null) {
+      return null;
+    } else if (a==null && !nextCarry) {
+      return new Node(sum, nextB);
+    } else if (b==null && !nextCarry) {
+      return new Node(sum, nextA);
+    } else {
+      return new Node(sum%10, sumLists1Helper(nextA, nextB, nextCarry));
+    }
+  }
+
+  /**
+   * Sum Lists (1s first): single digit stored in each element, 1s last. Add the numbers.
+   *
+   * Assumptions:
+   *   the interviewer wants me to not just reverse the things and write something convoluted instead
+   *
+   * Time complexity: O(max(n,m))
+   * Space complexity: O(max(n,m))
+   */
+  public static Node sumLists2(Node n1, Node n2) {
+    return sumLists2Helper(n1, n2);
+  }
+  
+  private static class SumResult {
+    Node sum;
+    boolean carry;
+
+    public SumResult(Node sum, boolean carry) {
+      this.sum = sum;
+      this.carry = carry;
+    }
+  }
+
+  private static Node sumLists2Helper(Node a, Node b) {
+    int lenA = findLength(a);
+    int lenB = findLength(b);
+
+    //pad shorter
+    if (lenA < lenB) {
+      a = padZeros(a, lenB - lenA);
+    } else if (lenA > lenB) {
+      b = padZeros(b, lenA - lenB);
+    }
+
+    SumResult result = sumHelperHelper(a, b);
+    if (result.carry) {
+      return new Node(1, result.sum);
+    } else {
+      return result.sum;
+    }
+  }
+
+  private static SumResult sumHelperHelper(Node a, Node b) {
+    if (a == null) {
+      return new SumResult(null, false);
+    } else {
+      SumResult sumRight = sumHelperHelper(a.next, b.next);
+      int sum = a.value + b.value + (sumRight.carry ? 1 : 0);
+      return new SumResult(new Node(sum%10, sumRight.sum), (sum/10 == 1));
+    }
+  }
+
+  private static int findLength(Node n) {
+    int length = 0;
+    while (n != null) {
+      length++;
+      n = n.next;
+    }
+    return length;
+  }
+
+  private static Node padZeros(Node n, int zeros) {
+    if (zeros <= 0) {
+      return n;
+    } else {
+      return new Node(0, padZeros(n, zeros-1));
+    }
+  }
 }

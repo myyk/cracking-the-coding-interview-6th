@@ -63,6 +63,43 @@ class Chapter2SolutionsTest extends FlatSpec with Matchers {
 
   "partition" should "partition the list around x" in {
     testPartition(5, List(3,5,8,5,10,2,1))
+    testPartition(5, List(6,3,5,8,5,10,2,1))
     testPartition(5, List())
+    testPartition(5, List(5))
+    testPartition(5, List(1))
+  }
+
+  def testSumLists1(a: Int, b: Int): Unit = {
+    def toIntSeq(n: Int): Seq[Int] = {
+      n.toString.reverse.map(_.asDigit).toList
+    }
+    def toNode(n: Int): Node = {
+      toNodes(toIntSeq(n))
+    }
+    toSeq(Chapter2Solutions.sumLists1(toNode(a), toNode(b))) shouldBe toIntSeq(a+b)
+  }
+
+  def testSumLists2(a: Int, b: Int): Unit = {
+    def toIntSeq(n: Int): Seq[Int] = {
+      n.toString.map(_.asDigit).toList
+    }
+    def toNode(n: Int): Node = {
+      toNodes(toIntSeq(n))
+    }
+    toSeq(Chapter2Solutions.sumLists2(toNode(a), toNode(b))) shouldBe toIntSeq(a+b)
+  }
+
+  "sumList1" should "sum lists of digits with 1s magnitude first" in {
+    testSumLists1(1, 1)
+    testSumLists1(131234, 9723464)
+    testSumLists1(99999, 1)
+    testSumLists1(1, 99999)
+  }
+
+  "sumLists2" should "sum lists of digits with 1s magnitude last" in {
+    testSumLists2(1, 1)
+    testSumLists2(131234, 9723464)
+    testSumLists2(99999, 1)
+    testSumLists2(1, 99999)
   }
 }
