@@ -131,4 +131,16 @@ class Chapter2SolutionsTest extends FlatSpec with Matchers {
     testFindIntersection(List(1,2,3,4))
     testFindIntersection(List(5))
   }
+
+  "findLoopStart" should "find the start of a loop if there is one in the linked list" in {
+    Chapter2Solutions.findLoopStart(new Node(1, null)) shouldBe null
+
+    val n1 = toNodes(List(1,2,3,4,5))
+    n1.next.next.next.next.next = n1.next.next //create the loop 5->3
+    Chapter2Solutions.findLoopStart(n1).value shouldBe n1.next.next.value
+
+    val n2 = toNodes(List(1,2,3))
+    n2.next.next.next = n2.next //create the loop 3->2
+    Chapter2Solutions.findLoopStart(n2).value shouldBe n2.next.value
+  }
 }

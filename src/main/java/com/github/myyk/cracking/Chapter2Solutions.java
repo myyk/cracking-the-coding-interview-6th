@@ -280,8 +280,10 @@ public class Chapter2Solutions {
    *
    * Assumptions:
    *   intersection is done by reference equality
+   *   the lists aren't too different in length
+   *
    * Time complexity: O(n+m)
-   * Space complexity: O()
+   * Space complexity: O(n) when n is the length of the first list
    */
   public static Node findInteresection(Node a, Node b) {
     Node current = a;
@@ -300,5 +302,38 @@ public class Chapter2Solutions {
     }
 
     return null;
+  }
+
+  /**
+   * Loop Detection: Find where a loop started if there is one in the singly linked list.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(1)
+   */
+  public static Node findLoopStart(Node n) {
+    Node slow = n;
+    Node fast = n;
+    while (fast != null && fast.next != null) {
+      System.out.println("racing      " + slow.value +"->" + fast.value);
+      slow = slow.next;
+      fast = fast.next.next;
+      if (slow == fast) // tricky, do this here instead of in while or else breaks on start
+        break;
+    }
+
+    if (fast == null || fast.next == null) {
+      return null;
+    }
+
+    slow = n;
+    while (slow != fast) {
+      System.out.println("catching up " + slow.value +"->" + fast.value);
+      slow = slow.next;
+      fast = fast.next;
+    }
+
+    return slow;
   }
 }
