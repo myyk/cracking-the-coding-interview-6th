@@ -316,7 +316,6 @@ public class Chapter2Solutions {
     Node slow = n;
     Node fast = n;
     while (fast != null && fast.next != null) {
-      System.out.println("racing      " + slow.value +"->" + fast.value);
       slow = slow.next;
       fast = fast.next.next;
       if (slow == fast) // tricky, do this here instead of in while or else breaks on start
@@ -329,7 +328,6 @@ public class Chapter2Solutions {
 
     slow = n;
     while (slow != fast) {
-      System.out.println("catching up " + slow.value +"->" + fast.value);
       slow = slow.next;
       fast = fast.next;
     }
