@@ -72,4 +72,39 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
     stack.isEmpty shouldBe true
   }
 
+  "SetOfStacks" should "be a stack that can popAt a sub-stack" in {
+    val stack = new Chapter3Solutions.SetOfStacks[Integer](3)
+    intercept[EmptyStackException] {
+      stack.peek()
+    }
+    for (i <- 1 to 10) {
+      stack.push(i)
+    }
+    for (i <- 10 to 1 by -1) {
+      stack.pop() shouldBe i
+    }
+    stack.isEmpty shouldBe true
+
+    for (i <- 1 to 10) {
+      stack.push(i)
+    }
+    stack.popAt(3) shouldBe 10
+    intercept[IndexOutOfBoundsException] {
+      stack.popAt(3)
+    }
+    stack.popAt(0) shouldBe 3
+    stack.popAt(1) shouldBe 6
+    stack.popAt(2) shouldBe 9
+    stack.popAt(0) shouldBe 2
+    stack.popAt(1) shouldBe 5
+    stack.popAt(2) shouldBe 8
+    stack.popAt(0) shouldBe 1
+    intercept[IndexOutOfBoundsException] {
+      stack.popAt(2)
+    }
+    stack.popAt(0) shouldBe 4
+    stack.isEmpty shouldBe false
+    stack.popAt(0) shouldBe 7
+    stack.isEmpty shouldBe true
+  }
 }

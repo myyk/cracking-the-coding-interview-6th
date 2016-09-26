@@ -1,7 +1,6 @@
 package com.github.myyk.cracking;
 
 import java.util.EmptyStackException;
-import java.util.NoSuchElementException;
 import java.util.Stack;
 
 /**
@@ -68,13 +67,11 @@ public class Chapter3Solutions {
     }
 
     public void push(T elem, int stackNum) {
-      System.out.println("pushing " + elem + " on stack " + stackNum);
       validateStackNumber(stackNum);
       int start = stackStartIndexes[stackNum];
       if (start >= stackCapacity/numberOfStacks*(stackNum+1)) {
         throw new FullStackException();
       }
-      System.out.println("pushing " + elem + " on stack " + stackNum + " at element " + start);
       elements[start] = elem;
       stackStartIndexes[stackNum] = start+1;
     }
@@ -91,10 +88,9 @@ public class Chapter3Solutions {
    *   stack functions still being O(1).
    *
    * Assumptions:
-   *   stack only contains Integers
    *
    * Design:
-   *   keep min, push (value, min) min is just like peekTuple._2
+   *   Use a stack for storing the mins, pop min when popping if it equals the top of the min stack.
    */
   public static class StackWithMin<T extends Comparable<? super T>> extends Stack<T> {
     private static final long serialVersionUID = -1006279127078761653L;
@@ -121,6 +117,93 @@ public class Chapter3Solutions {
         minStack.pop();
       }
       return result;
+    }
+  }
+
+  /**
+   * Stacks of Plates: A stack that when it gets larger than a threshold it creates another stack.
+   *   There's a new method popAt(int index) which pops from the specified sub-stack.
+   *
+   * Assumptions:
+   *   I should remove empty sub-stacks
+   *   sub-stacks are indexed like stacks, next to pop is at size() - 1, first pushed at 0.
+   * Design:
+   *   Extending Stack<T> doesn't really make sense, but there's no Java interface for Stack, so...
+   */
+  public static class SetOfStacks<T> extends Stack<T> {
+    private static final long serialVersionUID = -9099626550812598651L;
+
+    private final int threshold;
+    private final Stack<Stack<T>> stacks;
+
+    public SetOfStacks(final int threshold) {
+      super();
+      if (threshold < 0) {
+        throw new IllegalArgumentException();
+      }
+      this.threshold = threshold;
+      this.stacks = new Stack<Stack<T>>();
+    }
+
+    private void checkConsistency() {
+      for (int i = 0; i < stacks.size(); i++) {
+        Stack<T> stack = stacks.get(i);
+        if (stack.isEmpty()) {
+          throw new IllegalStateException("sub-stacks should never be empty");
+        }
+      }
+    }
+
+    @Override
+    public T push(T item) {
+      T result;
+      if (stacks.isEmpty() || stacks.peek().size() >= threshold) {
+        result = pushOnNewStack(item);
+      } else {
+        result = pushOnCurrentStack(item);
+      }
+      checkConsistency();
+      return result;
+    }
+
+    private T pushOnCurrentStack(T item) {
+      return stacks.peek().push(item);
+    }
+
+    private T pushOnNewStack(T item) {
+      Stack<T> newStack = new Stack<T>();
+      newStack.push(item);
+      stacks.push(newStack);
+      return item;
+    }
+
+    @Override
+    public T pop() {
+      //delegate exception handling to Stack<T> implementation.
+      T result = stacks.peek().pop();
+      if (stacks.peek().isEmpty()) {
+        removeStack(stacks.size() - 1);
+      }
+      checkConsistency();
+      return result;
+    }
+
+    private Stack<T> removeStack(int i) {
+      return stacks.remove(i);
+    }
+
+    public T popAt(int index) {
+      Stack<T> stack = stacks.get(index);
+      T result = stack.pop();
+      if (stack.empty()) {
+        removeStack(index);
+      }
+      return result;
+    }
+
+    @Override
+    public boolean isEmpty() {
+      return stacks.isEmpty();
     }
   }
 }
