@@ -44,4 +44,32 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
       stack.pop(2)
     }
   }
+
+  "StackWithMin" should "be a stack that can always provide the min" in {
+    val stack = new Chapter3Solutions.StackWithMin[Integer]()
+    intercept[EmptyStackException] {
+      stack.peek()
+    }
+    for (i <- 1 to 10) {
+      stack.push(i)
+      stack.min shouldBe 1
+    }
+
+    for (i <- 1 to 10) {
+      stack.min shouldBe 1
+      stack.pop()
+    }
+    stack.isEmpty shouldBe true
+
+    for (i <- 10 to 1 by -1) {
+      stack.push(i)
+      stack.min shouldBe i
+    }
+    for (i <- 1 to 10) {
+      stack.min shouldBe i
+      stack.pop() shouldBe i
+    }
+    stack.isEmpty shouldBe true
+  }
+
 }

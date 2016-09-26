@@ -96,30 +96,28 @@ public class Chapter3Solutions {
    * Design:
    *   keep min, push (value, min) min is just like peekTuple._2
    */
-  public static class StackWithMin extends Stack<Integer> {
+  public static class StackWithMin<T extends Comparable<? super T>> extends Stack<T> {
     private static final long serialVersionUID = -1006279127078761653L;
 
-    private Stack<Integer> minStack = new Stack<Integer>();
+    private Stack<T> minStack = new Stack<T>();
 
-    public Integer min() {
+    public T min() {
       return minStack.peek();
     }
 
     @Override
-    public Integer push(Integer i) {
-      super.push(i);
-
-      if (Math.min(i, min()) == i.intValue()) {
+    public T push(T i) {
+      if (isEmpty() || i.compareTo(min()) <= 0) {
         minStack.push(i);
       }
 
-      return i;
+      return super.push(i);
     }
 
     @Override
-    public Integer pop() {
-      Integer result = super.pop();
-      if (Math.min(result, min()) == result.intValue()) {
+    public T pop() {
+      T result = super.pop();
+      if (result.compareTo(min()) <= 0) {
         minStack.pop();
       }
       return result;
