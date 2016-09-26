@@ -127,6 +127,8 @@ public class Chapter3Solutions {
    * Assumptions:
    *   I should remove empty sub-stacks
    *   sub-stacks are indexed like stacks, next to pop is at size() - 1, first pushed at 0.
+   *   it's okay to have sub-indexes in the middle at less than full capacity
+   *
    * Design:
    *   Extending Stack<T> doesn't really make sense, but there's no Java interface for Stack, so...
    */
@@ -205,5 +207,16 @@ public class Chapter3Solutions {
     public boolean isEmpty() {
       return stacks.isEmpty();
     }
+  }
+
+  /**
+   * Queue via Stacks: Implement a queue using two stacks.
+   *
+   * Assumptions:
+   *
+   * Design:
+   */
+  public static class QueueFromStacks {
+    
   }
 }

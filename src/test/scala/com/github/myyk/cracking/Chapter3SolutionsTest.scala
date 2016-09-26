@@ -3,9 +3,25 @@ import org.scalatest.FlatSpec
 import org.scalatest.Matchers
 import java.util.EmptyStackException
 import com.github.myyk.cracking.Chapter3Solutions.FullStackException
+import java.util.Stack
 
 class Chapter3SolutionsTest extends FlatSpec with Matchers {
-  
+
+  // should be empty to start with
+  def testStandardStackBehavior(stack: Stack[Integer]): Unit = {
+    stack.isEmpty shouldBe true
+    intercept[EmptyStackException] {
+      stack.peek()
+    }
+    for (i <- 1 to 10) {
+      stack.push(i)
+    }
+    for (i <- 10 to 1 by -1) {
+      stack.pop() shouldBe i
+    }
+    stack.isEmpty shouldBe true
+  }
+
   "arrayStack" should "be a single array implementing 3 stacks" in {
     val stack = new Chapter3Solutions.FixedMultiStack[Int](30)
     intercept[IllegalArgumentException] {
@@ -47,19 +63,7 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
 
   "StackWithMin" should "be a stack that can always provide the min" in {
     val stack = new Chapter3Solutions.StackWithMin[Integer]()
-    intercept[EmptyStackException] {
-      stack.peek()
-    }
-    for (i <- 1 to 10) {
-      stack.push(i)
-      stack.min shouldBe 1
-    }
-
-    for (i <- 1 to 10) {
-      stack.min shouldBe 1
-      stack.pop()
-    }
-    stack.isEmpty shouldBe true
+    testStandardStackBehavior(stack)
 
     for (i <- 10 to 1 by -1) {
       stack.push(i)
@@ -74,16 +78,7 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
 
   "SetOfStacks" should "be a stack that can popAt a sub-stack" in {
     val stack = new Chapter3Solutions.SetOfStacks[Integer](3)
-    intercept[EmptyStackException] {
-      stack.peek()
-    }
-    for (i <- 1 to 10) {
-      stack.push(i)
-    }
-    for (i <- 10 to 1 by -1) {
-      stack.pop() shouldBe i
-    }
-    stack.isEmpty shouldBe true
+    testStandardStackBehavior(stack)
 
     for (i <- 1 to 10) {
       stack.push(i)
@@ -106,5 +101,9 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
     stack.isEmpty shouldBe false
     stack.popAt(0) shouldBe 7
     stack.isEmpty shouldBe true
+  }
+
+  "QueueFromStacks" should "be a Queue" in {
+    
   }
 }
