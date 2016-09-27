@@ -4,6 +4,10 @@ import org.scalatest.Matchers
 import java.util.EmptyStackException
 import com.github.myyk.cracking.Chapter3Solutions.FullStackException
 import java.util.Stack
+import java.util.Queue
+import scala.util.Random
+import java.util.LinkedList
+import scala.collection.JavaConversions._
 
 class Chapter3SolutionsTest extends FlatSpec with Matchers {
 
@@ -20,6 +24,52 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
       stack.pop() shouldBe i
     }
     stack.isEmpty shouldBe true
+  }
+
+  // should be empty to start with
+  def testStandardQueueBehavior(queue: Queue[Integer]): Unit = {
+    println("=============")
+    queue.isEmpty shouldBe true
+    queue.poll() shouldBe null
+    intercept[NoSuchElementException] {
+      queue.remove()
+    }
+    val randomNumbers = for (i <- 1 to 10) yield {
+      Random.nextInt()
+    }
+    for (i <- randomNumbers) {
+      queue.add(i)
+    }
+    for (i <- randomNumbers.take(5)) {
+      queue.poll() shouldBe i
+    }
+    for (i <- randomNumbers) {
+      queue.add(i)
+    }
+    for (i <- randomNumbers.takeRight(5)) {
+      queue.poll() shouldBe i
+    }
+    for (i <- randomNumbers) {
+      queue.poll() shouldBe i
+    }
+    queue.isEmpty shouldBe true
+    for (i <- randomNumbers) {
+      queue.add(i)
+    }
+    val (oddIndex, evenIndex) = randomNumbers.zipWithIndex.partition(_._2%2==1)
+    queue.removeAll(oddIndex.map(_._1))
+    for (i <- evenIndex.map(_._1)) {
+      queue.poll() shouldBe i
+    }
+    queue.isEmpty shouldBe true
+  }
+
+  "testStandardStackBehavior" should "work with the standard library" in {
+    testStandardStackBehavior(new Stack[Integer]())
+  }
+
+  "testStandardQueueBehavior" should "work with the standard library" in {
+    testStandardQueueBehavior(new LinkedList[Integer]())
   }
 
   "arrayStack" should "be a single array implementing 3 stacks" in {
@@ -104,6 +154,7 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
   }
 
   "QueueFromStacks" should "be a Queue" in {
-    
+    val queue = new Chapter3Solutions.QueueFromStacks[Integer]();
+    testStandardQueueBehavior(queue)
   }
 }

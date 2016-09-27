@@ -1,7 +1,16 @@
 package com.github.myyk.cracking;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EmptyStackException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Stack;
+import java.util.Queue;
+
+import com.google.common.collect.Iterators;
 
 /**
  * Stacks and Queues
@@ -213,10 +222,159 @@ public class Chapter3Solutions {
    * Queue via Stacks: Implement a queue using two stacks.
    *
    * Assumptions:
+   *   all the irrelevant to the parts of the interface will throw exceptions
    *
    * Design:
    */
-  public static class QueueFromStacks {
+  public static class QueueFromStacks<T> implements Queue<T> {
+    final Stack<T> front = new Stack<T>();
+    final Stack<T> back = new Stack<T>();
+
+    /**
+     * Moves front to back.
+     */
+    private void popAllFront() {
+      if (!back.isEmpty()) {
+        new IllegalStateException("Can't pop all from front if there's still elements in the back.");
+      }
+      while (!front.isEmpty()) {
+        back.push(front.pop());
+      }
+    }
+
+    @Override
+    public int size() {
+      return front.size() + back.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+      return size() == 0;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+      return front.contains(o) || back.contains(o);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+      throw new UnsupportedOperationException();
+    }
+
+    private List<T> toList() {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Object[] toArray() {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <E> E[] toArray(E[] a) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean remove(Object o) {
+      if (back.remove(o)) {
+        return true;
+      } else {
+        ListIterator<T> it = front.listIterator(front.size());
+        while (it.hasPrevious()) {
+          if (it.previous().equals(o)) {
+            it.remove();
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends T> c) {
+      for (T next: c) {
+        front.push(next);
+      }
+      return true;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+      Iterator<?> it = c.iterator();
+      boolean result = true;
+      while (it.hasNext()) {
+        result &= remove(it.next());
+      }
+      return result;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void clear() {
+      front.clear();
+      back.clear();
+    }
+
+    @Override
+    public boolean add(T e) {
+      front.push(e);
+      return true;
+    }
+
+    @Override
+    public boolean offer(T e) {
+      front.push(e);
+      return true;
+    }
+
+    @Override
+    public T remove() {
+      if (isEmpty()) {
+        throw new NoSuchElementException("Cannot remove when queue is empty.");
+      }
+      return poll();
+    }
+
+    @Override
+    public T poll() {
+      if (isEmpty()) {
+        return null;
+      } else if (back.isEmpty()) {
+        popAllFront();
+      }
+     
+      return back.pop();
+    }
+
+    @Override
+    public T element() {
+      if (isEmpty()) {
+        throw new NoSuchElementException("Cannot see element when queue is empty.");
+      }
+      return peek();
+    }
+
+    @Override
+    public T peek() {
+      if (isEmpty()) {
+        return null;
+      } else if (back.isEmpty()) {
+        popAllFront();
+      }
+
+      return back.peek();
+    }
     
   }
 }
