@@ -28,7 +28,6 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
 
   // should be empty to start with
   def testStandardQueueBehavior(queue: Queue[Integer]): Unit = {
-    println("=============")
     queue.isEmpty shouldBe true
     queue.poll() shouldBe null
     intercept[NoSuchElementException] {

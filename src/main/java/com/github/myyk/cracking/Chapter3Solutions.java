@@ -378,12 +378,34 @@ public class Chapter3Solutions {
    * Sort Stack: Sort a stack only using another stack.
    *
    * Assumptions:
+   *   sort ascending
    *
-   *
-   * Time complexity: O()
-   * Space complexity: O()
+   * Time complexity: O(n^2)
+   * Space complexity: O(n)
    */
-  public static void sortStack(Stack<? extends Comparable<?>> stack) {
-     
+  public static <T extends Comparable<? super T>> void sortStack(Stack<T> stack) {
+    Stack<T> temp = new Stack<T>();
+    while (!stack.isEmpty()) {
+      T next = stack.pop();
+      if (temp.isEmpty() || next.compareTo(temp.peek()) < 0) {
+        temp.push(next);
+      } else {
+        stack.push(temp.pop());
+        while (!temp.isEmpty()) {
+          if (next != null && next.compareTo(temp.peek()) >= 0 && next.compareTo(stack.peek()) < 0) {
+            stack.push(next);
+            next = null;
+          }
+          stack.push(temp.pop());
+        }
+        if (next != null) {
+          stack.push(next);
+        }
+      }
+    }
+
+    while (!temp.isEmpty()) {
+      stack.push(temp.pop());
+    }
   }
 }
