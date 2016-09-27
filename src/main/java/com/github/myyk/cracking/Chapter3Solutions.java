@@ -373,4 +373,17 @@ public class Chapter3Solutions {
       return back.peek();
     }
   }
+
+  /**
+   * Sort Stack: Sort a stack only using another stack.
+   *
+   * Assumptions:
+   *
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   */
+  public static void sortStack(Stack<? extends Comparable<?>> stack) {
+     
+  }
 }

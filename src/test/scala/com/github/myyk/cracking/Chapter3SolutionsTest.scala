@@ -157,4 +157,16 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
     val queue = new Chapter3Solutions.QueueFromStacks[Integer]();
     testStandardQueueBehavior(queue)
   }
+
+  "sortStack" should "sort the stack" in {
+    val stack = new Stack[Integer]()
+    val randomNumbers = for (i <- 1 to 10) yield {
+      Random.nextInt()
+    }
+    for (i <- randomNumbers) {
+      stack.push(i)
+    }
+    Chapter3Solutions.sortStack(stack)
+    stack.toList shouldBe randomNumbers.toList.sorted
+  }
 }
