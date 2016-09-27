@@ -1,16 +1,13 @@
 package com.github.myyk.cracking;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
-import java.util.Stack;
 import java.util.Queue;
-
-import com.google.common.collect.Iterators;
+import java.util.Stack;
 
 /**
  * Stacks and Queues
@@ -375,6 +372,5 @@ public class Chapter3Solutions {
 
       return back.peek();
     }
-    
   }
 }
