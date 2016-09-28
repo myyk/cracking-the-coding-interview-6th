@@ -3,11 +3,14 @@ package com.github.myyk.cracking;
 import java.util.Collection;
 import java.util.EmptyStackException;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Stack;
+
+import com.google.common.collect.Lists;
 
 /**
  * Stacks and Queues
@@ -139,7 +142,7 @@ public class Chapter3Solutions {
    *   Extending Stack<T> doesn't really make sense, but there's no Java interface for Stack, so...
    */
   public static class SetOfStacks<T> extends Stack<T> {
-    private static final long serialVersionUID = -9099626550812598651L;
+    private static final long serialVersionUID = -2895833133191086808L;
 
     private final int threshold;
     private final Stack<Stack<T>> stacks;
@@ -259,10 +262,6 @@ public class Chapter3Solutions {
       throw new UnsupportedOperationException();
     }
 
-    private List<T> toList() {
-      throw new UnsupportedOperationException();
-    }
-
     @Override
     public Object[] toArray() {
       throw new UnsupportedOperationException();
@@ -379,6 +378,7 @@ public class Chapter3Solutions {
    *
    * Assumptions:
    *   sort ascending
+   *   in-place sorting
    *
    * Time complexity: O(n^2)
    * Space complexity: O(n)
@@ -387,25 +387,89 @@ public class Chapter3Solutions {
     Stack<T> temp = new Stack<T>();
     while (!stack.isEmpty()) {
       T next = stack.pop();
-      if (temp.isEmpty() || next.compareTo(temp.peek()) < 0) {
-        temp.push(next);
-      } else {
+      while (!temp.isEmpty() && next.compareTo(temp.peek()) >= 0) {
         stack.push(temp.pop());
-        while (!temp.isEmpty()) {
-          if (next != null && next.compareTo(temp.peek()) >= 0 && next.compareTo(stack.peek()) < 0) {
-            stack.push(next);
-            next = null;
-          }
-          stack.push(temp.pop());
-        }
-        if (next != null) {
-          stack.push(next);
-        }
       }
+      temp.push(next);
     }
 
     while (!temp.isEmpty()) {
       stack.push(temp.pop());
+    }
+  }
+
+  /**
+   * Animal Shelter: Animals are given out in a LIFO basis. Adopters can choose between
+   *   cat or dog.
+   *
+   * Assumptions:
+   *   can use java.util.LinkedList
+   *
+   * Time complexity and Space complexity:
+   *   Enqueues are O(1) because it's just the end linked list.
+   *   Dequeues are O(1) since we just check which of the two queues to look at.
+   *
+   * If I were to expand on this, I'm probably have a pet type to queue map. So I could look
+   * up the different animals more easily. Maybe also the dequeue method could take a collection
+   * of possible animals that the adopter would like.
+   */
+  public static class AnimalShelter {
+    public static abstract class Pet {
+      private int id;
+      public Pet(int id) { this.id = id; }
+
+      public int getId() { return id; }
+      public void setId(int id) { this.id = id; }
+    }
+    public static class Dog extends Pet {
+      public Dog(int id) { super(id); }
+    }
+    public static class Cat extends Pet {
+      public Cat(int id) { super(id); }
+    }
+
+    public int nextId = 0; // this give ordering of when pets were added
+    public LinkedList<Dog> dogs = Lists.newLinkedList();
+    public LinkedList<Cat> cats = Lists.newLinkedList();
+
+    public Pet enqueue(Pet pet) {
+      pet.setId(nextId++);
+      if (pet instanceof Dog) {
+        dogs.addLast((Dog) pet);
+      } else if (pet instanceof Cat) {
+        cats.addLast((Cat) pet);
+      }
+      return pet;
+    }
+
+    public Cat dequeueCat() {
+      if (cats.isEmpty()) {
+        throw new NoSuchElementException("There are no more cats to adopt.");
+      }
+      return cats.removeFirst();
+    }
+
+    public Dog dequeueDog() {
+      if (dogs.isEmpty()) {
+        throw new NoSuchElementException("There are no more dogs to adopt.");
+      }
+      return dogs.removeFirst();
+    }
+
+    public Pet dequeueAny() {
+      if (dogs.isEmpty() && cats.isEmpty()) {
+        throw new NoSuchElementException("There are no more pets to adopt.");
+      } else if (dogs.isEmpty()) {
+        return dequeueCat();
+      } else if (cats.isEmpty()) {
+        return dequeueDog();
+      } else {
+        if (cats.peek().getId() < dogs.peek().getId()) {
+          return dequeueCat();
+        } else {
+          return dequeueDog();
+        }
+      }
     }
   }
 }
