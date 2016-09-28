@@ -1,13 +1,18 @@
 package com.github.myyk.cracking
+
+import java.util.EmptyStackException
+import java.util.LinkedList
+import java.util.Queue
+import java.util.Stack
+
+import scala.collection.JavaConversions.asScalaBuffer
+import scala.collection.JavaConversions.seqAsJavaList
+import scala.util.Random
+
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
-import java.util.EmptyStackException
+
 import com.github.myyk.cracking.Chapter3Solutions.FullStackException
-import java.util.Stack
-import java.util.Queue
-import scala.util.Random
-import java.util.LinkedList
-import scala.collection.JavaConversions._
 
 class Chapter3SolutionsTest extends FlatSpec with Matchers {
 
