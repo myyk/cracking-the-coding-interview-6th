@@ -160,4 +160,14 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
     listsOfDepths(null) shouldBe List()
     listsOfDepths(new Tree(1)) shouldBe List(List(1))
   }
+
+  "isBalanced" should "check if a tree is balanced" in {
+    Chapter4Solutions.isBalanced(null) shouldBe true
+    Chapter4Solutions.isBalanced(new Tree(1)) shouldBe true
+    Chapter4Solutions.isBalanced(new Tree(1, new Tree(2), new Tree(3))) shouldBe true
+    Chapter4Solutions.isBalanced(new Tree(1, new Tree(2, new Tree(4), null), null)) shouldBe true
+    Chapter4Solutions.isBalanced(new Tree(1, new Tree(2, null, new Tree(4)), null)) shouldBe true
+    Chapter4Solutions.isBalanced(new Tree(1, null, new Tree(2, null, new Tree(4)))) shouldBe true
+    Chapter4Solutions.isBalanced(new Tree(1, null, new Tree(2, new Tree(4), null))) shouldBe true
+  }
 }

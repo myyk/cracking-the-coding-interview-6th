@@ -217,8 +217,8 @@ public class Chapter4Solutions {
    * Assumptions:
    *   order matters, left to right
    *
-   * Time complexity: O()
-   * Space complexity: O()
+   * Time complexity: O(n)
+   * Space complexity: O(n)
    */
   public static <T> List<List<T>> listsOfDepths(Tree<T> tree) {
     Queue<Tree<T>> queue = Queues.newArrayDeque();
@@ -248,4 +248,41 @@ public class Chapter4Solutions {
 
     return lists;
   }
+
+  /**
+   * Check Balanced: Checks if a given binary tree is balanced.
+   *
+   * Assumptions:
+   *   balanced means any two branches from a node have at most a height difference of 1
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(1)
+   * 
+   * Timed coding portion: 3m33s
+   */
+  public static <T> boolean isBalanced(Tree<T> tree) {
+    return isBalancedHelper(tree) != -1;
+  }
+
+  private static <T> int isBalancedHelper(Tree<T> tree) {
+    if (tree == null) {
+      return 0;
+    } else {
+      int heightLeft = isBalancedHelper(tree.left);
+      if (heightLeft == -1) {
+        return -1;
+      }
+      int heightRight = isBalancedHelper(tree.right);
+      if (heightRight == -1) {
+        return -1;
+      }
+      if (Math.abs(heightLeft - heightRight) > 1) {
+        return -1;
+      } else {
+        return Math.max(heightLeft, heightRight);
+      }
+    }
+  }
+
+  
 }
