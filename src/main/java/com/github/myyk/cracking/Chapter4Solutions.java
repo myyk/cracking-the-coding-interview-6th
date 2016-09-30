@@ -284,5 +284,29 @@ public class Chapter4Solutions {
     }
   }
 
-  
+  /**
+   * Validate BST: Checks if a given binary tree is a binary search tree.
+   *
+   * Assumptions:
+   *   duplicates are valid
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(1)
+   * 
+   * Timed coding portion:  7m30s
+   */
+  public static <T extends Comparable<T>> boolean isValidBST(Tree<T> tree) {
+    if (tree == null) {
+      return true;
+    }
+
+    if (tree.getLeft() != null && tree.getData().compareTo(tree.getLeft().getData()) < 0) {
+      return false;
+    }
+    if (tree.getRight() != null && tree.getData().compareTo(tree.getRight().getData()) > 0) {
+      return false;
+    }
+    return isValidBST(tree.getLeft()) && isValidBST(tree.getRight());
+  }
+
 }

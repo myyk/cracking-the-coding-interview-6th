@@ -170,4 +170,18 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
     Chapter4Solutions.isBalanced(new Tree(1, null, new Tree(2, null, new Tree(4)))) shouldBe true
     Chapter4Solutions.isBalanced(new Tree(1, null, new Tree(2, new Tree(4), null))) shouldBe true
   }
+
+  "isValidBST" should "check if a tree is balanced" in {
+    Chapter4Solutions.isValidBST(null) shouldBe true
+    Chapter4Solutions.isValidBST(new Tree[Integer](1)) shouldBe true
+    Chapter4Solutions.isValidBST(new Tree[Integer](1, new Tree(2), null)) shouldBe false
+    Chapter4Solutions.isValidBST(new Tree[Integer](1, new Tree(0), null)) shouldBe true
+    Chapter4Solutions.isValidBST(new Tree[Integer](1, null, new Tree(2))) shouldBe true
+    Chapter4Solutions.isValidBST(new Tree[Integer](1, null, new Tree(0))) shouldBe false
+    Chapter4Solutions.isValidBST(new Tree[Integer](1, new Tree(0), new Tree(2))) shouldBe true
+    Chapter4Solutions.isValidBST(new Tree[Integer](1, new Tree(1), new Tree(1))) shouldBe true
+    Chapter4Solutions.isValidBST(Chapter4Solutions.minBinaryTree((0 until 1000).map(_ => Random.nextInt).sorted.toArray)) shouldBe true
+    Chapter4Solutions.isValidBST(Chapter4Solutions.minBinaryTree((0 until 1000).map(_ => Random.nextInt).toArray)) shouldBe false
+  }
+  
 }
