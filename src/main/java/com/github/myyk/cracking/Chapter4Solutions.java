@@ -68,10 +68,32 @@ public class Chapter4Solutions {
    *
    * Assumptions:
    *
-   * Time complexity: O()
-   * Space complexity: O()
+   * Time complexity: O(n)
+   * Space complexity: O(n)
+   *
+   * Notes: Simple breadth first search.
    */
   public static boolean pathExistsDirectional(IntNode a, IntNode b, IntGraph graph) {
+    if (a == b) {
+      return true;
+    }
+
+    Queue<IntNode> queue = Queues.newArrayDeque();
+    Set<IntNode> visited = Sets.newHashSet();
+    queue.add(a);
+    visited.add(a);
+
+    while (!queue.isEmpty()) {
+      IntNode next = queue.remove();
+      for (Node<Integer> adjacent : next.getAdjacent()) {
+        if (adjacent == b) {
+          return true;
+        } else if (visited.add((IntNode) adjacent)) {
+          queue.add((IntNode) adjacent);
+        }
+      }  
+    }
+
     return false;
   }
   
@@ -80,93 +102,44 @@ public class Chapter4Solutions {
    *
    * Assumptions:
    *
-   * Time complexity: O()
-   * Space complexity: O()
+   * Time complexity: O(n) where n is numer of nodes
+   * Space complexity: O(n)
    */
-  public static boolean pathExistsBidirectional(IntNode a, IntNode b, IntGraph graph) {
-    System.out.println("==================");
-    if (a == b) {
-      return true;
-    }
-
+  public static boolean pathExistsBidirectional(IntNode a, IntNode b) {
     // BFS on both nodes at the same time
-    Queue<ReachableNode<Integer>> queue = Queues.newArrayDeque();
-    Set<ReachableNode<Integer>> visited = Sets.newHashSet();
+    Queue<IntNode> queueA = Queues.newArrayDeque();
+    Queue<IntNode> queueB = Queues.newArrayDeque();
+    Set<IntNode> visitedA = Sets.newHashSet();
+    Set<IntNode> visitedB = Sets.newHashSet();
 
-    visited.add(new ReachableNode<Integer>(a, a));
-    visited.add(new ReachableNode<Integer>(b, b));
-    queue.add(new ReachableNode<Integer>(a, a));
-    queue.add(new ReachableNode<Integer>(b, b));
+    visitedA.add(a);
+    visitedB.add(b);
+    queueA.add(a);
+    queueB.add(b);
 
-    while (!queue.isEmpty()) {
-      ReachableNode<Integer> next = queue.remove();
-      IntNode destination = (IntNode) getOppositeNode((Node<Integer>) a, (Node<Integer>) b, next.getFrom());
-      System.out.println("visiting " + next.getNode().getData());
-      for (Node<Integer> adjacent : next.getNode().getAdjacent()) {
-        if (visited.contains(new ReachableNode<Integer>(destination, next.getNode()))) {
-          System.out.println("FOUND dest = " + destination.getData() + "  from = " + next.getFrom().getData() + "  next = "+ next.getNode().getData());
-          return true;
-        } else if (visited.add(new ReachableNode<Integer>(next.getFrom(), adjacent))) {
-          System.out.println("queuing " + adjacent.getData());
-          queue.add(new ReachableNode<Integer>(next.getFrom(), adjacent));
-        }
+    while (!queueA.isEmpty() && !queueB.isEmpty()) {
+      if (pathExistsBidirectionalHelper(queueA, visitedA, visitedB)) {
+        return true;
+      }
+      if (pathExistsBidirectionalHelper(queueB, visitedB, visitedA)) {
+        return true;
       }
     }
 
     return false;
   }
 
-  // give opposite node
-  private static <T> Node<T> getOppositeNode(Node<T> a, Node<T> b, Node<T> node) {
-    if (a == node) {
-      return b;
-    } else {
-      return a;
+  private static boolean pathExistsBidirectionalHelper(Queue<IntNode> queue, Set<IntNode> visitedFromThisSide, Set<IntNode> visitedFromThatSide) {
+    if (!queue.isEmpty()) {
+      IntNode next = queue.remove();
+      for (Node<Integer> adjacent : next.getAdjacent()) {
+        if (visitedFromThatSide.contains(adjacent)) {
+          return true;
+        } else if (visitedFromThisSide.add((IntNode) adjacent)) {
+          queue.add((IntNode) adjacent);
+        }
+      }
     }
-  }
-
-  private static class ReachableNode<T> {
-    private final Node<T> from;
-    private final Node<T> node;
-    public ReachableNode(Node<T> from, Node<T> node) {
-      super();
-      this.from = from;
-      this.node = node;
-    }
-    public Node<T> getFrom() {
-      return from;
-    }
-    public Node<T> getNode() {
-      return node;
-    }
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((from == null) ? 0 : from.hashCode());
-      result = prime * result + ((node == null) ? 0 : node.hashCode());
-      return result;
-    }
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      ReachableNode other = (ReachableNode) obj;
-      if (from == null) {
-        if (other.from != null)
-          return false;
-      } else if (!from.equals(other.from))
-        return false;
-      if (node == null) {
-        if (other.node != null)
-          return false;
-      } else if (!node.equals(other.node))
-        return false;
-      return true;
-    }
+    return false;
   }
 }
