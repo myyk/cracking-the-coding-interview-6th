@@ -9,6 +9,7 @@ import com.github.myyk.cracking.Chapter4Solutions.Tree
 import scala.annotation.tailrec
 import scala.util.Random
 import scala.collection.JavaConversions._
+import com.github.myyk.cracking.Chapter4Solutions.BinarySearchTree
 
 class Chapter4SolutionsTest extends FlatSpec with Matchers {
   def createMediumDirectionalTestGraph: (IntGraph, Seq[IntNode]) = {
@@ -192,5 +193,24 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
     // right grandchild greater than node
     Chapter4Solutions.isValidBST(new Tree[Integer](20, new Tree(10, null, new Tree(25)), new Tree(30))) shouldBe false
   }
-  
+
+  "findSuccessor" should "find the in-order successor to the node" in {
+    Chapter4Solutions.findSuccessor(null: BinarySearchTree[Integer]) shouldBe null
+    Chapter4Solutions.findSuccessor(new BinarySearchTree[Integer](1)) shouldBe null
+    Chapter4Solutions.findSuccessor((new BinarySearchTree[Integer](2)).setLeft(1)) shouldBe null
+    val bst1 = (new BinarySearchTree[Integer](2)).setRight(3)
+    bst1.getRight.setRight(4)
+    Chapter4Solutions.findSuccessor(bst1) shouldBe bst1.getRight
+    Chapter4Solutions.findSuccessor(bst1.getRight) shouldBe bst1.getRight.getRight
+    Chapter4Solutions.findSuccessor(bst1.getRight.getRight) shouldBe null
+    val bst2 = (new BinarySearchTree[Integer](20)).setLeft(10).setRight(30)
+    bst2.getLeft().setRight(15)
+    Chapter4Solutions.findSuccessor(bst2.getLeft) shouldBe bst2
+    Chapter4Solutions.findSuccessor(bst2.getLeft.getRight) shouldBe bst2
+
+    
+
+
+
+  }
 }

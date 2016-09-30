@@ -294,7 +294,7 @@ public class Chapter4Solutions {
    *   left <= current < right
    *
    * Time complexity: O(n)
-   * Space complexity: O(log n)
+   * Space complexity: O(log n) in a balanced tree due to recursive call stacks
    *
    * Notes: Be careful about duplicates, they are okay on the left, not the right.
    */
@@ -319,5 +319,67 @@ public class Chapter4Solutions {
     }
 
     return isValidBST(tree.getLeft(), min, tree.getData()) && isValidBST(tree.getRight(), tree.getData(), max);
+  }
+
+  public static class BinarySearchTree<T extends Comparable<T>> extends Tree<T> {
+    private final BinarySearchTree<T> parent;
+    public BinarySearchTree(T data) {
+      super(data);
+      this.parent = null;
+    }
+    public BinarySearchTree(T data, BinarySearchTree<T> parent) {
+      super(data);
+      this.parent = parent;
+    }
+    public BinarySearchTree<T> getParent() {
+      return parent;
+    }
+    public BinarySearchTree<T> setLeft(T value) {
+      setLeft(new BinarySearchTree<T>(value, this));
+      return this;
+    }
+    public BinarySearchTree<T> setRight(T value) {
+      setRight(new BinarySearchTree<T>(value, this));
+      return this;
+    }
+    @Override
+    public BinarySearchTree<T> getLeft() {
+      return (BinarySearchTree<T>) super.getLeft();
+    }
+
+    @Override
+    public void setLeft(Tree<T> left) {
+      if (!(left instanceof BinarySearchTree<?>)) {
+        throw new IllegalArgumentException("left must also be a BinarySearchTree");
+      }
+      super.setLeft(left);
+    }
+
+    @Override
+    public BinarySearchTree<T> getRight() {
+      return (BinarySearchTree<T>) super.getRight();
+    }
+
+    @Override
+    public void setRight(Tree<T> right) {
+      if (!(right instanceof BinarySearchTree<?>)) {
+        throw new IllegalArgumentException("right must also be a BinarySearchTree");
+      }
+      super.setLeft(right);
+    }
+  }
+
+  /**
+   * Successor: Find the in-order successor to the given node in a BST. Nodes have pointers to parent nodes.
+   *
+   * Assumptions:
+   *   duplicates are valid
+   *   left <= current < right
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   */
+  public static <T extends Comparable<T>> BinarySearchTree<T> findSuccessor(BinarySearchTree<T> bst) {
+    return bst;
   }
 }
