@@ -294,7 +294,7 @@ public class Chapter4Solutions {
    *   left <= current < right
    *
    * Time complexity: O(n)
-   * Space complexity: O(1)
+   * Space complexity: O(log n)
    *
    * Notes: Be careful about duplicates, they are okay on the left, not the right.
    */
