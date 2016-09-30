@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
+import javafx.util.Pair;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
@@ -289,24 +291,33 @@ public class Chapter4Solutions {
    *
    * Assumptions:
    *   duplicates are valid
+   *   left <= current < right
    *
    * Time complexity: O(n)
    * Space complexity: O(1)
-   * 
-   * Timed coding portion:  7m30s
+   *
+   * Notes: Be careful about duplicates, they are okay on the left, not the right.
    */
   public static <T extends Comparable<T>> boolean isValidBST(Tree<T> tree) {
     if (tree == null) {
       return true;
     }
 
-    if (tree.getLeft() != null && tree.getData().compareTo(tree.getLeft().getData()) < 0) {
-      return false;
-    }
-    if (tree.getRight() != null && tree.getData().compareTo(tree.getRight().getData()) > 0) {
-      return false;
-    }
-    return isValidBST(tree.getLeft()) && isValidBST(tree.getRight());
+    return isValidBST(tree, null, null);
   }
 
+  public static <T extends Comparable<T>> boolean isValidBST(Tree<T> tree, T min, T max) {
+    if (tree == null) {
+      return true;
+    }
+
+    if (max != null && tree.getData().compareTo(max) > 0) {
+      return false;
+    }
+    if (min != null && tree.getData().compareTo(min) <= 0) {
+      return false;
+    }
+
+    return isValidBST(tree.getLeft(), min, tree.getData()) && isValidBST(tree.getRight(), tree.getData(), max);
+  }
 }
