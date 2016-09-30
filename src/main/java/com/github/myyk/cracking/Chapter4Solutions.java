@@ -1,5 +1,6 @@
 package com.github.myyk.cracking;
 
+import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
@@ -141,5 +142,83 @@ public class Chapter4Solutions {
       }
     }
     return false;
+  }
+
+  public static class Tree<T> {
+    private Tree<T> left, right;
+    private T data;
+
+    public Tree(T data) {
+      super();
+      this.data = data;
+    }
+
+    public Tree(T data, Tree<T> left, Tree<T> right) {
+      super();
+      this.left = left;
+      this.right = right;
+      this.data = data;
+    }
+
+    public Tree<T> getLeft() {
+      return left;
+    }
+
+    public void setLeft(Tree<T> left) {
+      this.left = left;
+    }
+
+    public Tree<T> getRight() {
+      return right;
+    }
+
+    public void setRight(Tree<T> right) {
+      this.right = right;
+    }
+
+    public T getData() {
+      return data;
+    }
+
+    public void setData(T data) {
+      this.data = data;
+    }
+  }
+
+  /**
+   * Minimal Tree: Given a sorted array of unique integers, provide a minimal height BST.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(n)
+   */
+  public static Tree<Integer> minBinaryTree(int[] array) {
+    return minBinaryTree(array, 0, array.length);
+  }
+
+  private static Tree<Integer> minBinaryTree(int[] array, int start, int end) {
+    if (start == end) {
+      return null;
+    } else {
+      int mid = (start + end) / 2;
+      return new Tree<Integer>(
+          new Integer(array[mid]),
+          minBinaryTree(array, start, mid),
+          minBinaryTree(array, mid + 1, end)
+      );
+    }
+  }
+
+  /**
+   * Lists of Depths: Given a binary, return lists containing the elements at each depth.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   */
+  public static <T> List<T> listsOfDepths(Tree<T> tree) {
+    return null;
   }
 }

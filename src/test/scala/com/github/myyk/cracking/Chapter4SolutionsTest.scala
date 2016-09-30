@@ -5,6 +5,9 @@ import org.scalatest.Matchers
 import com.github.myyk.cracking.Chapter4Solutions.IntGraph
 import com.github.myyk.cracking.Chapter4Solutions.IntNode
 import com.github.myyk.cracking.Chapter4Solutions.Node
+import com.github.myyk.cracking.Chapter4Solutions.Tree
+import scala.annotation.tailrec
+import scala.util.Random
 
 class Chapter4SolutionsTest extends FlatSpec with Matchers {
   def createMediumDirectionalTestGraph: (IntGraph, Seq[IntNode]) = {
@@ -77,5 +80,55 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
     Chapter4Solutions.pathExistsBidirectional(nodes(1), nodes(6)) shouldBe true
     Chapter4Solutions.pathExistsBidirectional(nodes(0), nodes(7)) shouldBe false
     Chapter4Solutions.pathExistsBidirectional(nodes(7), nodes(0)) shouldBe false
+  }
+
+  def getHeight(tree: Tree[_]): Int = {
+    if (tree == null) {
+      0
+    } else {
+      1 + Math.max(getHeight(tree.getLeft), getHeight(tree.getRight))
+    }
+  }
+
+  @tailrec
+  private def binarySearch(value: Int, tree: Tree[Integer]): Boolean = {
+    if (tree == null) {
+      false
+    } else if (value == tree.getData) {
+      true
+    } else if (value < tree.getData) {
+      binarySearch(value, tree.getLeft)
+    } else {
+      binarySearch(value, tree.getRight)
+    }
+  }
+
+  def log2(num: Int): Int = {
+    if (num == 0) {
+      0
+    } else {
+      31 - Integer.numberOfLeadingZeros(num)
+    }
+  }
+
+  def testMinBinaryTree(array: Array[Int]): Unit = {
+    val bst = Chapter4Solutions.minBinaryTree(array)
+    if (array.isEmpty) {
+      getHeight(bst) shouldBe 0
+    } else {
+      getHeight(bst) shouldBe (log2(array.size) + 1)
+    }
+    for (i <- array) {
+      binarySearch(i, bst) shouldBe true
+    }
+  }
+
+  "minBinaryTree" should "produce a minimal height BST" in {
+    for (i <- (0 to 128)) {
+      val numbers = for (j <- (0 until i)) yield {
+        Random.nextInt()
+      }
+      testMinBinaryTree(numbers.sorted.toArray)
+    }
   }
 }
