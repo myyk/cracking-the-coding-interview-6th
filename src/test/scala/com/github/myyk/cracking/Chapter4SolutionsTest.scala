@@ -8,6 +8,7 @@ import com.github.myyk.cracking.Chapter4Solutions.Node
 import com.github.myyk.cracking.Chapter4Solutions.Tree
 import scala.annotation.tailrec
 import scala.util.Random
+import scala.collection.JavaConversions._
 
 class Chapter4SolutionsTest extends FlatSpec with Matchers {
   def createMediumDirectionalTestGraph: (IntGraph, Seq[IntNode]) = {
@@ -130,5 +131,33 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
       }
       testMinBinaryTree(numbers.sorted.toArray)
     }
+  }
+
+  def javaListsOfListsToScala[T](lists: java.util.List[java.util.List[T]]): List[List[T]] = {
+    lists.map(_.toList).toList
+  }
+
+  def listsOfDepths[T](tree: Tree[T]): List[List[T]] = {
+    javaListsOfListsToScala(Chapter4Solutions.listsOfDepths(tree))
+  }
+
+  "listsOfDepths" should "give lists of the elements at each depth" in {
+    /*
+     *            1
+     *         2      4
+     *       3   *  *    5
+     *     *  *         *  *
+     */
+    val tree = new Tree(
+        1,
+        new Tree(2, new Tree(3), null), new Tree(4, null, new Tree(5))
+    )
+    listsOfDepths(tree) shouldBe List(
+        List(1),
+        List(2, 4),
+        List(3, 5)
+    )
+    listsOfDepths(null) shouldBe List()
+    listsOfDepths(new Tree(1)) shouldBe List(List(1))
   }
 }

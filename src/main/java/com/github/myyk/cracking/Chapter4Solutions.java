@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 
@@ -214,11 +215,37 @@ public class Chapter4Solutions {
    * Lists of Depths: Given a binary, return lists containing the elements at each depth.
    *
    * Assumptions:
+   *   order matters, left to right
    *
    * Time complexity: O()
    * Space complexity: O()
    */
-  public static <T> List<T> listsOfDepths(Tree<T> tree) {
-    return null;
+  public static <T> List<List<T>> listsOfDepths(Tree<T> tree) {
+    Queue<Tree<T>> queue = Queues.newArrayDeque();
+    if (tree != null) {
+      queue.add(tree);
+    }
+    Queue<Tree<T>> temp;
+
+    List<List<T>> lists = Lists.newLinkedList();
+    List<T> nextList;
+    while (!queue.isEmpty()) {
+      nextList = Lists.newLinkedList(); // could use arraylist of exact size if we wanted to calculate
+      temp = Queues.newArrayDeque();
+      while (!queue.isEmpty()) {
+        Tree<T> next = queue.remove();
+        nextList.add(next.getData());
+        if (next.left != null) {
+          temp.add(next.left);
+        }
+        if (next.right != null) {
+          temp.add(next.right);
+        }
+      }
+      queue = temp;
+      lists.add(nextList);
+    }
+
+    return lists;
   }
 }
