@@ -323,25 +323,31 @@ public class Chapter4Solutions {
 
   public static class BinarySearchTree<T extends Comparable<T>> extends Tree<T> {
     private final BinarySearchTree<T> parent;
+
     public BinarySearchTree(T data) {
       super(data);
       this.parent = null;
     }
+
     public BinarySearchTree(T data, BinarySearchTree<T> parent) {
       super(data);
       this.parent = parent;
     }
+
     public BinarySearchTree<T> getParent() {
       return parent;
     }
+
     public BinarySearchTree<T> setLeft(T value) {
       setLeft(new BinarySearchTree<T>(value, this));
       return this;
     }
+
     public BinarySearchTree<T> setRight(T value) {
       setRight(new BinarySearchTree<T>(value, this));
       return this;
     }
+
     @Override
     public BinarySearchTree<T> getLeft() {
       return (BinarySearchTree<T>) super.getLeft();
@@ -365,7 +371,7 @@ public class Chapter4Solutions {
       if (!(right instanceof BinarySearchTree<?>)) {
         throw new IllegalArgumentException("right must also be a BinarySearchTree");
       }
-      super.setLeft(right);
+      super.setRight(right);
     }
   }
 
@@ -376,10 +382,53 @@ public class Chapter4Solutions {
    *   duplicates are valid
    *   left <= current < right
    *
-   * Time complexity: O()
-   * Space complexity: O()
+   * Time complexity: O(log n) in balanced tree
+   * Space complexity: O(log n) in balanced tree
    */
   public static <T extends Comparable<T>> BinarySearchTree<T> findSuccessor(BinarySearchTree<T> bst) {
+    if (bst == null) {
+      return null;
+    }
+
+    if (bst.getRight() != null) {
+      return findSuccessorDown(bst.getRight());
+    } else {
+      return findSuccessorUp(bst);
+    }
+  }
+
+  private static <T extends Comparable<T>> BinarySearchTree<T> findSuccessorDown(BinarySearchTree<T> bst) {
+    if (bst == null) {
+      return null;
+    }
+
+    BinarySearchTree<T> successor = findSuccessorDown(bst.getLeft());
+    if (successor != null) {
+      return successor;
+    }
     return bst;
   }
+
+  private static <T extends Comparable<T>> BinarySearchTree<T> findSuccessorUp(BinarySearchTree<T> bst) {
+    if (bst.getParent() == null) {
+      return null;
+    }
+    if (bst.getParent().getLeft() == bst) {
+      return bst.getParent();
+    } else {
+      return findSuccessorUp(bst.getParent());
+    }
+  }
+
+  /**
+   * Build Order: Projects build dependencies are on other projects. Given a list of project build dependencies determine if
+   *  the projects call all be built. (Extra Credit: provide the build order)
+   *
+   * Assumptions:
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   *
+   * Notes: Build graph and toposort. This is a super common problem.
+   */
 }

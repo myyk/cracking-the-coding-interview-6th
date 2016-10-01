@@ -205,7 +205,7 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
     Chapter4Solutions.findSuccessor(bst1.getRight.getRight) shouldBe null
     val bst2 = (new BinarySearchTree[Integer](20)).setLeft(10).setRight(30)
     bst2.getLeft().setRight(15)
-    Chapter4Solutions.findSuccessor(bst2.getLeft) shouldBe bst2
+    Chapter4Solutions.findSuccessor(bst2.getLeft) shouldBe bst2.getLeft.getRight
     Chapter4Solutions.findSuccessor(bst2.getLeft.getRight) shouldBe bst2
 
     
