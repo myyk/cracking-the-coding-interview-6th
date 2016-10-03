@@ -466,4 +466,65 @@ public class Chapter4Solutions {
     nodes.removeAll(nonRoots);
     return nodes;
   }
+
+  /**
+   * First Common Ancestor: Write an algorithm to find the first common ancestor between two nodes in
+   *   a given tree. Avoid storing additional nodes in a data structure.
+   *
+   * Assumptions:
+   *   there may be no ancestor
+   *   if the two nodes are the same, it is the ancestor
+   *   if one is the parent to the other, it is the ancestor
+   *   no parent pointers
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(1)
+   *
+   * Notes: This is pretty complicated to get right during an interview.
+   */
+  public static <T> Tree<T> findFirstCommonAncestor(Tree<T> tree, Tree<T> p, Tree<T> q) {
+    AncestorResult<T> result = findFirstCommonAncestorHelper(tree, p, q);
+    return (result.isAnswer ? result.tree : null);
+  }
+
+  private static class AncestorResult<T> {
+    private final boolean isAnswer;
+    private final Tree<T> tree;
+    public AncestorResult(boolean isAnswer, Tree<T> tree) {
+      this.isAnswer = isAnswer;
+      this.tree = tree;
+    }    
+  }
+
+  /**
+   * Return either the answer. Or if only p is found in tree, then p. Otherwise if only q is found in tree,
+   * then q. Otherwise null.
+   */
+  public static <T> AncestorResult<T> findFirstCommonAncestorHelper(Tree<T> tree, Tree<T> p, Tree<T> q) {
+    if (tree == null) {
+      return new AncestorResult<T>(false, null);
+    }
+    if (tree == p && tree == q) {
+      return new AncestorResult<T>(true, tree);
+    }
+
+    AncestorResult<T> resultLeft = findFirstCommonAncestorHelper(tree.getLeft(), p, q);
+    if (resultLeft.isAnswer) {
+      return resultLeft;
+    }
+
+    AncestorResult<T> resultRight = findFirstCommonAncestorHelper(tree.getRight(), p, q);
+    if (resultRight.isAnswer) {
+      return resultRight;
+    }
+
+    if (resultLeft.tree != null && resultRight.tree != null ) {
+      return new AncestorResult<T>(true, tree);
+    } else if (q == tree || p == tree) {
+      boolean isAncestor = resultLeft.tree != null || resultRight.tree != null;
+      return new AncestorResult<T>(isAncestor, tree);
+    } else {
+      return new AncestorResult<T>(false, resultLeft.tree != null ? resultLeft.tree : resultRight.tree);
+    }
+  }
 }

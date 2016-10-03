@@ -252,4 +252,22 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
       Chapter4Solutions.findBuildOrder(projects)
     }
   }
+
+  "findFirstCommonAncestor" should "find the first common ancestor" in {
+    /*
+     *      1
+     *   2     3
+     * 4     6   7
+     */
+    val tree = new Tree(1, new Tree(2, new Tree(4), null), new Tree(3, new Tree(6), new Tree(7)))
+    Chapter4Solutions.findFirstCommonAncestor(tree, tree, tree) shouldBe tree
+    Chapter4Solutions.findFirstCommonAncestor(tree, tree, new Tree(-999)) shouldBe null
+    Chapter4Solutions.findFirstCommonAncestor(tree, new Tree(-999), tree) shouldBe null
+    Chapter4Solutions.findFirstCommonAncestor(tree, tree.getRight.getRight, tree) shouldBe tree
+    Chapter4Solutions.findFirstCommonAncestor(tree, tree, tree.getRight.getRight) shouldBe tree
+    Chapter4Solutions.findFirstCommonAncestor(tree, tree.getLeft, tree) shouldBe tree
+    Chapter4Solutions.findFirstCommonAncestor(tree, tree, tree.getLeft) shouldBe tree
+    Chapter4Solutions.findFirstCommonAncestor(tree, tree.getRight.getRight, tree.getRight.getLeft) shouldBe tree.getRight
+    Chapter4Solutions.findFirstCommonAncestor(tree, tree.getLeft.getLeft, tree.getRight.getRight) shouldBe tree
+  }
 }
