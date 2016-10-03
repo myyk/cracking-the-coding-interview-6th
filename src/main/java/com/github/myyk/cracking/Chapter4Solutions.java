@@ -1,10 +1,9 @@
 package com.github.myyk.cracking;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
-
-import javafx.util.Pair;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
@@ -421,14 +420,50 @@ public class Chapter4Solutions {
   }
 
   /**
-   * Build Order: Projects build dependencies are on other projects. Given a list of project build dependencies determine if
-   *  the projects call all be built. (Extra Credit: provide the build order)
+   * Build Order: Projects build dependencies are on other projects. Given a list of project build dependencies
+   * find a build order that can build all the projects. Throw an exception if it cannot be done.
    *
    * Assumptions:
    *
-   * Time complexity: O()
-   * Space complexity: O()
+   * Time complexity: O(p + d) where p is number of projects and d is number of dependencies
+   * Space complexity: O(n)
    *
-   * Notes: Build graph and toposort. This is a super common problem.
+   * Notes: This is basically toposort with cycle detection. This is a super common problem.
    */
+  public static <T> List<Node<T>> findBuildOrder(Graph<T> projects) {
+    final List<Node<T>> buildOrder = Lists.newLinkedList();
+    final Set<Node<T>> rootProjects = findRoots(projects.getNodes());
+    final LinkedList<Node<T>> queue = Lists.newLinkedList(rootProjects);
+    final Set<Node<T>> marked = Sets.newHashSet();
+
+    while (!queue.isEmpty()) {
+      Node<T> next = queue.removeFirst();
+      buildOrder.add(next);
+      for (Node<T> adj : next.getAdjacent()) {
+        if (marked.add(adj)) {
+          queue.addLast(adj);
+        }
+      }
+    }
+
+    if (buildOrder.size() != projects.getNodes().size()) {
+      throw new IllegalArgumentException("The projects cannot be built because there is a cycle.");
+    }
+    return buildOrder;
+  }
+
+  /**
+   * Time complexity: O(p + d) where p is number of projects and d is number of dependencies
+   * Space complexity: O(n)
+   */
+  private static <T> Set<Node<T>> findRoots(Set<Node<T>> nodes) {
+    final Set<Node<T>> nonRoots = Sets.newHashSet();
+    for (Node<T> next : nodes) {
+      for (Node<T> adj : next.getAdjacent()) {
+        nonRoots.add(adj);
+      }
+    }
+    nodes.removeAll(nonRoots);
+    return nodes;
+  }
 }

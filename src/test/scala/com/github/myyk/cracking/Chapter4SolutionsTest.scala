@@ -10,6 +10,7 @@ import scala.annotation.tailrec
 import scala.util.Random
 import scala.collection.JavaConversions._
 import com.github.myyk.cracking.Chapter4Solutions.BinarySearchTree
+import com.github.myyk.cracking.Chapter4Solutions.Graph
 
 class Chapter4SolutionsTest extends FlatSpec with Matchers {
   def createMediumDirectionalTestGraph: (IntGraph, Seq[IntNode]) = {
@@ -207,10 +208,48 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
     bst2.getLeft().setRight(15)
     Chapter4Solutions.findSuccessor(bst2.getLeft) shouldBe bst2.getLeft.getRight
     Chapter4Solutions.findSuccessor(bst2.getLeft.getRight) shouldBe bst2
+  }
 
-    
+  "findBuildOrder" should "find a build order for the provided projects" in {
+    val projects = new Graph[Char]()
+    val a = new Node('a')
+    val b = new Node('b')
+    val c = new Node('c')
+    val d = new Node('d')
+    val e = new Node('e')
+    val f = new Node('f')
+    a addAdjacent d
+    f addAdjacent b
+    b addAdjacent d
+    f addAdjacent a
+    d addAdjacent c
+    projects.addNode(a)
+    projects.addNode(b)
+    projects.addNode(c)
+    projects.addNode(d)
+    projects.addNode(e)
+    projects.addNode(f)
 
+    Chapter4Solutions.findBuildOrder(projects).size shouldBe 6
+    // This can be multiple different correct answers. Would need a checkBuildOrder function to test this.
+//    Chapter4Solutions.findBuildOrder(projects).map(_.getData) shouldBe List(e, f, b, a, d, c).map(_.getData)
+  }
 
+  "findBuildOrder" should "not find a build order for the provided projects" in {
+    val projects = new Graph[Char]()
+    val a = new Node('a')
+    a addAdjacent a
+    projects.addNode(a)
 
+    intercept[IllegalArgumentException] {
+      Chapter4Solutions.findBuildOrder(projects)
+    }
+
+    val b = new Node('b')
+    projects.addNode(b)
+
+    intercept[IllegalArgumentException] {
+      Chapter4Solutions.findBuildOrder(projects)
+    }
   }
 }
