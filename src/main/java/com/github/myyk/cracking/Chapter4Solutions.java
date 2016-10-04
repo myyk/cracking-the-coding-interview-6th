@@ -527,4 +527,86 @@ public class Chapter4Solutions {
       return new AncestorResult<T>(false, resultLeft.tree != null ? resultLeft.tree : resultRight.tree);
     }
   }
+
+  /**
+   * BST Sequences: A BST was created from an array by traversing from right to left and inserting into
+   *   the tree. Given a BST, return all the possible arrays that could have created it.
+   *
+   * Assumptions:
+   *   no duplicates
+   *
+   * Time complexity: O() ?
+   * Space complexity: O((log n)^2) ?
+   *
+   * Notes: Wow, this is hard in Java.
+   */
+  @SuppressWarnings("unchecked")
+  public static <T> List<LinkedList<T>> bstSequences(Tree<T> tree) {
+    if (tree == null) {
+      return null;
+    }
+    final List<LinkedList<T>> results = Lists.newArrayList();
+    final LinkedList<T> result = Lists.newLinkedList();
+    if (tree.getLeft() == null && tree.getRight() == null) {
+      result.add(tree.getData());
+      results.add(result);
+      return results;
+    }
+
+    List<LinkedList<T>> leftSequences = bstSequences(tree.getLeft());
+    List<LinkedList<T>> rightSequences = bstSequences(tree.getRight());
+
+    if (leftSequences == null || rightSequences == null) {
+      return leftSequences == null ? rightSequences : leftSequences;
+    }
+    LinkedList<T> prefix = Lists.newLinkedList();
+    prefix.add(tree.getData());
+    for (LinkedList<T> leftSequence : leftSequences) {
+      for (LinkedList<T> rightSequence : rightSequences) {
+        List<LinkedList<T>> weaved = weaveSequences(leftSequence, rightSequence, Lists.<LinkedList<T>>newArrayList(), prefix);
+        results.addAll(weaved);
+      }
+    }
+    return results;
+  }
+
+  protected static <T> List<LinkedList<T>> weaveSequences(LinkedList<T> first, LinkedList<T> second, List<LinkedList<T>> results, LinkedList<T> prefix) {
+    if (first.isEmpty() || second.isEmpty()) {
+      @SuppressWarnings("unchecked")
+      LinkedList<T> result = (LinkedList<T>) prefix.clone();
+      result.addAll(first);
+      result.addAll(second);
+      results.add(result);
+      return results;
+    }
+
+    T firstHead = first.removeFirst();
+    prefix.addLast(firstHead);
+    weaveSequences(first, second, results, prefix);
+    //restore for other calls
+    prefix.removeLast();
+    first.addFirst(firstHead);
+
+    T secondHead = second.removeFirst();
+    prefix.addLast(secondHead);
+    weaveSequences(first, second, results, prefix);
+    //restore for other calls
+    prefix.removeLast();
+    second.addFirst(secondHead);
+
+    return results;
+  }
+
+  /**
+   * Check Subtree: Given two trees, T1 and T2, where T1 is very large and much larger than T2.
+   *   Find out if T2 is a subtree of T1.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   */
+  public static <T> boolean isSubtree(Tree<T> t1, Tree<T> t2) {
+    return false;
+  }
 }

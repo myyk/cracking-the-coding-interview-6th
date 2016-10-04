@@ -11,6 +11,8 @@ import scala.util.Random
 import scala.collection.JavaConversions._
 import com.github.myyk.cracking.Chapter4Solutions.BinarySearchTree
 import com.github.myyk.cracking.Chapter4Solutions.Graph
+import com.google.common.collect.Lists
+import java.util.LinkedList
 
 class Chapter4SolutionsTest extends FlatSpec with Matchers {
   def createMediumDirectionalTestGraph: (IntGraph, Seq[IntNode]) = {
@@ -269,5 +271,31 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
     Chapter4Solutions.findFirstCommonAncestor(tree, tree, tree.getLeft) shouldBe tree
     Chapter4Solutions.findFirstCommonAncestor(tree, tree.getRight.getRight, tree.getRight.getLeft) shouldBe tree.getRight
     Chapter4Solutions.findFirstCommonAncestor(tree, tree.getLeft.getLeft, tree.getRight.getRight) shouldBe tree
+  }
+
+  "bstSequences" should "give all the sequences that could have created it" in {
+    Chapter4Solutions.bstSequences[Int](null) shouldBe null
+    Chapter4Solutions.bstSequences(new Tree(1, new Tree(2), new Tree(3))).map(_.toList).toSet shouldBe Set(List(1,2,3), List(1,3,2))
+  }
+
+  "weaveSequences" should "weave the two sequences together" in {
+    val list1 = Lists.newLinkedList[Int]
+    list1.add(1)
+    val list2 = Lists.newLinkedList[Int]
+    list2.add(2)
+    val prefix = Lists.newLinkedList[Int]
+    prefix.add(3)
+    Chapter4Solutions.weaveSequences(list1, list2, Lists.newLinkedList[LinkedList[Int]](), prefix).map(_.toList).toSet shouldBe Set(List(3,1,2), List(3,2,1))
+  }
+
+  "isSubtree" should "check if t2 is a subtree of t1" in {
+    val t1 = new Tree(1, new Tree(2, new Tree(4), null), new Tree(3, new Tree(6), new Tree(7)))
+    Chapter4Solutions.isSubtree(t1, null) shouldBe false
+    Chapter4Solutions.isSubtree(t1, t1.getRight) shouldBe true
+    Chapter4Solutions.isSubtree(t1, t1.getLeft) shouldBe true
+    Chapter4Solutions.isSubtree(t1, t1) shouldBe true
+    Chapter4Solutions.isSubtree(t1, t1.getLeft.getLeft) shouldBe true
+    Chapter4Solutions.isSubtree(t1, t1.getRight.getLeft) shouldBe true
+    Chapter4Solutions.isSubtree(t1, t1.getRight.getRight) shouldBe true
   }
 }
