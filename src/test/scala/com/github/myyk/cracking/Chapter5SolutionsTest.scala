@@ -29,7 +29,6 @@ class Chapter5SolutionsTest extends FlatSpec with Matchers {
   }
 
   "insert" should "insert the integer into the other" in {
-    //    Chapter5Solutions.insert(0, 0, 0, 0) shouldBe 0
     Chapter5Solutions.insert(1, 1, 0, 0) shouldBe 1
     Chapter5Solutions.insert(1, 1, 0, 0) shouldBe 1
     Chapter5Solutions.insert(2, 1, 0, 0) shouldBe 3
@@ -40,4 +39,12 @@ class Chapter5SolutionsTest extends FlatSpec with Matchers {
     Chapter5Solutions.insert(b"111111", b"1010", 4, 1) shouldBe b"110101"
   }
 
+  "floatToBinaryString" should "convert a double to a string" in {
+    Chapter5Solutions.floatToBinaryString(1) shouldBe ("ERROR")
+    Chapter5Solutions.floatToBinaryString(0.5) shouldBe (".1")
+    Chapter5Solutions.floatToBinaryString(0.75) shouldBe (".11")
+    Chapter5Solutions.floatToBinaryString(0.25) shouldBe (".01")
+    Chapter5Solutions.floatToBinaryString(0.72) shouldBe ("ERROR")
+    Chapter5Solutions.floatToBinaryString(b"10101010".toDouble/Math.pow(2, 8)) shouldBe (".1010101")
+  }
 }
