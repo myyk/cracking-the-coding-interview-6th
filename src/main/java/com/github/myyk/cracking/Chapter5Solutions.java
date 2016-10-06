@@ -54,4 +54,62 @@ public class Chapter5Solutions {
     }
     return buf.toString();
   }
+
+  /**
+   * Flip Bit to Win: Given a 32-bit integer and the ability to flip one bit from a 0 to a 1, find the
+   *   longest length of sequences of 1s.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(n) where n is the number of bits, which means O(1) for 32-bit, but this could be
+   *   general enough to use for longer inputs
+   * Space complexity: O(1)
+   *
+   * Note: Unless I've done something wrong that I don't understand at all. I think my algorithm is much
+   *   better/simpler than the book's optimal answer.
+   */
+  public static int flipBitToWin(int num) {
+    if (num == -1) {
+      return 32;
+    }
+
+    int longest = 1;
+    int last = 0;
+    int current = 0;
+
+    for (int i = 0; i < 32; i++) {
+      int mask = 1 << i;
+      int bitSet = num & mask;
+      if (bitSet != 0) {
+        current++;
+        longest = Math.max(longest, last + current + 1);
+      } else {
+        last = current;
+        current = 0;
+      }
+    }
+
+    return longest;
+  }
+
+  public static class NextNumberResult {
+    int smaller;
+    int larger;
+  }
+
+  /**
+   * Next Number: Given a positive integer, return the next smaller and next larger integer that have the
+   *   same number of 1s as the given integer.
+   *
+   * Assumptions:
+   *   0 should return null
+   *   positive number
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   *
+   */
+  public static NextNumberResult nextNumber(int num) {
+    return null;
+  }
 }
