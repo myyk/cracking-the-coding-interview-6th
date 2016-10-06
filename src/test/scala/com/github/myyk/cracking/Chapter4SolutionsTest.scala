@@ -1,19 +1,22 @@
 package com.github.myyk.cracking
 
+import java.util.LinkedList
+
+import scala.annotation.tailrec
+import scala.collection.JavaConversions._
+import scala.util.Random
+
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
+
+import com.github.myyk.cracking.Chapter4Solutions.BinarySearchTree
+import com.github.myyk.cracking.Chapter4Solutions.Graph
 import com.github.myyk.cracking.Chapter4Solutions.IntGraph
 import com.github.myyk.cracking.Chapter4Solutions.IntNode
 import com.github.myyk.cracking.Chapter4Solutions.Node
-import com.github.myyk.cracking.Chapter4Solutions.Tree
-import scala.annotation.tailrec
-import scala.util.Random
-import scala.collection.JavaConversions._
-import com.github.myyk.cracking.Chapter4Solutions.BinarySearchTree
-import com.github.myyk.cracking.Chapter4Solutions.Graph
-import com.google.common.collect.Lists
-import java.util.LinkedList
 import com.github.myyk.cracking.Chapter4Solutions.RandomTree
+import com.github.myyk.cracking.Chapter4Solutions.Tree
+import com.google.common.collect.Lists
 
 class Chapter4SolutionsTest extends FlatSpec with Matchers {
   def createMediumDirectionalTestGraph: (IntGraph, Seq[IntNode]) = {
