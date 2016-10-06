@@ -13,6 +13,7 @@ import com.github.myyk.cracking.Chapter4Solutions.BinarySearchTree
 import com.github.myyk.cracking.Chapter4Solutions.Graph
 import com.google.common.collect.Lists
 import java.util.LinkedList
+import com.github.myyk.cracking.Chapter4Solutions.RandomTree
 
 class Chapter4SolutionsTest extends FlatSpec with Matchers {
   def createMediumDirectionalTestGraph: (IntGraph, Seq[IntNode]) = {
@@ -288,14 +289,54 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
     Chapter4Solutions.weaveSequences(list1, list2, Lists.newLinkedList[LinkedList[Int]](), prefix).map(_.toList).toSet shouldBe Set(List(3,1,2), List(3,2,1))
   }
 
-  "isSubtree" should "check if t2 is a subtree of t1" in {
+  def testIsSubtree(isSubtreeOp: (Tree[Int], Tree[Int]) => Boolean): Unit = {
     val t1 = new Tree(1, new Tree(2, new Tree(4), null), new Tree(3, new Tree(6), new Tree(7)))
-    Chapter4Solutions.isSubtree(t1, null) shouldBe false
-    Chapter4Solutions.isSubtree(t1, t1.getRight) shouldBe true
-    Chapter4Solutions.isSubtree(t1, t1.getLeft) shouldBe true
-    Chapter4Solutions.isSubtree(t1, t1) shouldBe true
-    Chapter4Solutions.isSubtree(t1, t1.getLeft.getLeft) shouldBe true
-    Chapter4Solutions.isSubtree(t1, t1.getRight.getLeft) shouldBe true
-    Chapter4Solutions.isSubtree(t1, t1.getRight.getRight) shouldBe true
+    isSubtreeOp(null, t1) shouldBe false
+    isSubtreeOp(t1, null) shouldBe true
+    isSubtreeOp(t1, t1.getRight) shouldBe true
+    isSubtreeOp(t1, t1.getLeft) shouldBe true
+    isSubtreeOp(t1, t1) shouldBe true
+    isSubtreeOp(t1, t1.getLeft.getLeft) shouldBe true
+    isSubtreeOp(t1, t1.getRight.getLeft) shouldBe true
+    isSubtreeOp(t1, t1.getRight.getRight) shouldBe true
+  }
+
+  "isSubtree" should "check if t2 is a subtree of t1" in {
+    testIsSubtree(Chapter4Solutions.isSubtree)
+  }
+
+  "isSubtree2" should "check if t2 is a subtree of t1" in {
+    testIsSubtree(Chapter4Solutions.isSubtree2)
+  }
+
+  "RandomTree" should "be able to return a random number" in {
+    val tree = new RandomTree(1, new RandomTree(2), new RandomTree(3, new RandomTree(4), new RandomTree(5)))
+    val results = for (_ <- 0 until 10000) yield {
+      tree.getRandomNode.getData
+    }
+    val occurences = results.groupBy(a => a).map{case (i, occurences) => (i, occurences.size)}.toList.sortBy{case (a, b) => a}.map{case (_, a) => a}
+    // this should pass most of the time
+    // max freq shouldn't be more than 20% of the samples more than the min
+    (occurences.max - occurences.min) should be < occurences.sum / occurences.size / 5
+  }
+
+  "countPathsWithSum" should "count the number of paths with the provided sum going downwards in the tree" in {
+    /*
+     *            10
+     *         /       \
+     *       5          -3
+     *     /  \            \
+     *   3     2            11
+     *  / \     \
+     * 3  -2      1
+     */
+    val left = new Tree[Integer](5, new Tree(3, new Tree(3), new Tree(-2)), new Tree(2, null, new Tree(1)))
+    val right = new Tree[Integer](-3, null, new Tree(11))
+    val tree = new Tree[Integer](10, left, right)
+    Chapter4Solutions.countPathsWithSum(tree, 10000) shouldBe 0
+    Chapter4Solutions.countPathsWithSum(tree, 10) shouldBe 1
+    Chapter4Solutions.countPathsWithSum(tree, 1) shouldBe 2
+    Chapter4Solutions.countPathsWithSum(tree, 18) shouldBe 3
+    Chapter4Solutions.countPathsWithSum(tree, 6) shouldBe 2
   }
 }

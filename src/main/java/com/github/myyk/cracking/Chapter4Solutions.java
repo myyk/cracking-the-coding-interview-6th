@@ -2,10 +2,13 @@ package com.github.myyk.cracking;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 
@@ -184,6 +187,44 @@ public class Chapter4Solutions {
 
     public void setData(T data) {
       this.data = data;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((data == null) ? 0 : data.hashCode());
+      result = prime * result + ((left == null) ? 0 : left.hashCode());
+      result = prime * result + ((right == null) ? 0 : right.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      @SuppressWarnings("unchecked")
+      Tree<T> other = (Tree<T>) obj;
+      if (data == null) {
+        if (other.data != null)
+          return false;
+      } else if (!data.equals(other.data))
+        return false;
+      if (left == null) {
+        if (other.left != null)
+          return false;
+      } else if (!left.equals(other.left))
+        return false;
+      if (right == null) {
+        if (other.right != null)
+          return false;
+      } else if (!right.equals(other.right))
+        return false;
+      return true;
     }
   }
 
@@ -540,7 +581,6 @@ public class Chapter4Solutions {
    *
    * Notes: Wow, this is hard in Java.
    */
-  @SuppressWarnings("unchecked")
   public static <T> List<LinkedList<T>> bstSequences(Tree<T> tree) {
     if (tree == null) {
       return null;
@@ -603,10 +643,238 @@ public class Chapter4Solutions {
    *
    * Assumptions:
    *
-   * Time complexity: O()
-   * Space complexity: O()
+   * Time complexity: O(n + km) where n is number of nodes in T1, m is number of nodes in T2
+   *   and k is number of nodes in T1 that equal the head of m. Though the bound is actually
+   *   possibly tighter for several reasons. It could be likely that subtrees that match the
+   *   first element of T2 in T1 do not match more nodes, so they fail quicker than m checks.
+   * Space complexity: O(log(n) + log(m)) assuming T1 and T2 are balanced trees
    */
   public static <T> boolean isSubtree(Tree<T> t1, Tree<T> t2) {
-    return false;
+    if (t2 == null) {
+      return true;
+    }
+    return isSubtreeHelper(t1, t2);
+  }
+
+  public static <T> boolean isSubtreeHelper(Tree<T> t1, Tree<T> t2) {
+    if (t1 == null) {
+      return false;
+    }
+
+    if (areTreesEqual(t1, t2)) {
+      return true;
+    }
+
+    return isSubtree(t1.getLeft(), t2) || isSubtree(t1.getRight(), t2);
+  }
+
+  private static <T> boolean areTreesEqual(Tree<T> t1, Tree<T> t2) {
+    if (t1 == null && t2 == null) {
+      return true;
+    } else if (t1.getData().equals(t2.getData()) && areTreesEqual(t1.getLeft(), t2.getLeft()) && areTreesEqual(t1.getRight(), t2.getRight())) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Check Subtree: Given two trees, T1 and T2, where T1 is very large and much larger than T2.
+   *   Find out if T2 is a subtree of T1.
+   *
+   * Assumptions:
+   *  It's okay to use some extra space
+   *  Users will check the same T1 with different T2s
+   *
+   * Time complexity: O(n + m) where n is number of nodes in T1, m is number of nodes in T2
+   * Space complexity: O(n)
+   *
+   * Note: Could just traverse using equals function for the same effect if the subtrees
+   *   were immutable. But because they aren't then the hashcode must be recomputed every
+   *   time.
+   */
+  public static <T> boolean isSubtree2(Tree<T> t1, Tree<T> t2) {
+    return createSubtreesSet(t1).contains(t2);
+  }
+
+  private static <T> Set<Tree<T>> createSubtreesSet(Tree<T> tree) {
+    Set<Tree<T>> subtrees = Sets.newHashSet();
+    return addSubtrees(tree, subtrees);
+  }
+
+  private static <T> Set<Tree<T>> addSubtrees(Tree<T> tree, Set<Tree<T>> subtrees) {
+    subtrees.add(tree);
+    if (tree != null) {
+      addSubtrees(tree.getLeft(), subtrees);
+      addSubtrees(tree.getRight(), subtrees);
+    }
+    return subtrees;
+  }
+
+  /**
+   * Random Node: A binary tree that has insert(), find(), and delete(). It also has a
+   *   getRandomNode which returns a random equally distributed subtree.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(log n)
+   * Space complexity: O(n) - n sizes stored
+   *
+   * Note: Forgot I was implementing from scratch and needed find(). So I should have
+   *   just made this a BST. It is already O(log n) inserts and touches everything
+   *   that needs to update size. It becomes easier, doesn't need parent nodes. It's just
+   *   to easy and boring to implement.
+   */
+  public static class RandomTree<T> extends Tree<T> {
+    private static final Random random = new Random();
+
+    private RandomTree<T> parent = null;
+    private int size = 1;
+
+    public RandomTree(T data) {
+      super(data);
+    }
+
+    public RandomTree(T data, RandomTree<T> left, RandomTree<T> right) {
+      super(data, left, right);
+      if (left != null) {
+        left.setParent(this);
+        size += left.size();
+      }
+      if (right != null) {
+        right.setParent(this);
+        size += right.size();
+      }
+    }
+
+    private void setParent(RandomTree<T> parent) {
+      this.parent = parent;
+    }
+
+    private int size() {
+      return size;
+    }
+
+    public void setSize(int size) {
+      this.size = size;
+    }
+
+    public RandomTree<T> getRandomNode() {
+      int size = size();
+      if (size == 1) {
+        return this;
+      }
+      int num = random.nextInt(size);
+      if (num == size - 1) {
+        return this;
+      } else if (getLeft() != null && num < getLeft().size()) {
+        return getLeft().getRandomNode();
+      } else {
+        return getRight().getRandomNode();
+      }
+    }
+
+    @Override
+    public RandomTree<T> getLeft() {
+      return (RandomTree<T>) super.getLeft();
+    }
+
+    @Override
+    public RandomTree<T> getRight() {
+      return (RandomTree<T>) super.getRight();
+    }
+
+    @Override
+    public void setLeft(Tree<T> left) {
+      int oldSize = size;
+
+      if (!(left instanceof RandomTree)) {
+        throw new IllegalArgumentException();
+      }
+      RandomTree<T> randomLeft = (RandomTree<T>) left;
+      if (this.getLeft() != null) {
+        size -= this.getLeft().size();
+      }
+      super.setLeft(randomLeft);
+      if (randomLeft != null) {
+        size += randomLeft.size();
+      }
+      updateParentSize(size, oldSize);
+    }
+
+    @Override
+    public void setRight(Tree<T> right) {
+      int oldSize = size;
+
+      if (!(right instanceof RandomTree)) {
+        throw new IllegalArgumentException();
+      }
+      RandomTree<T> randomRight = (RandomTree<T>) right;
+      if (this.getRight() != null) {
+        size -= this.getRight().size();
+      }
+      super.setRight(randomRight);
+      if (randomRight != null) {
+        size += randomRight.size();
+      }
+      updateParentSize(size, oldSize);
+    }
+
+    private void updateParentSize(int size, int oldSize) {
+      if (parent != null) {
+        int parentSize = parent.size() - oldSize + size;
+        parent.setSize(parentSize);
+      }
+    }
+  }
+
+  /**
+   * Paths with Sum: Given a binary tree of integers and a sum, count the downward paths
+   *   that sum to the provided sum.
+   *
+   * Assumptions:
+   *   paths must go downward
+   *   paths don't have to start at root and go to leaf, partial is ok
+   *   negative and positive numbers can be in tree
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(n)
+   */
+  public static int countPathsWithSum(Tree<Integer> tree, int targetSum) {
+    if (tree == null) {
+      return 0;
+    }
+
+    final Map<Integer, Integer> runningSums = Maps.newHashMap();
+    incrementRunningSums(0, 1, runningSums);
+    return countPathsWithSum(tree, targetSum, 0, runningSums);
+  }
+
+  private static int countPathsWithSum(Tree<Integer> tree, int targetSum, int mySum, final Map<Integer, Integer> runningSums) {
+    if (tree == null) {
+      return 0;
+    }
+
+    mySum += tree.getData();
+    int diff = mySum - targetSum;
+    int numPaths = runningSums.containsKey(diff) ? runningSums.get(diff) : 0;
+    incrementRunningSums(mySum, 1, runningSums);
+    numPaths += countPathsWithSum(tree.getLeft(), targetSum, mySum, runningSums);
+    numPaths += countPathsWithSum(tree.getRight(), targetSum, mySum, runningSums);
+
+    // fixes runningSums for the recursive calls going down the other branches
+    incrementRunningSums(mySum, -1, runningSums);
+    return numPaths;
+  }
+
+  // return old number of occurences
+  private static int incrementRunningSums(final int sum, final int incrementBy, final Map<Integer, Integer> runningSums) {
+    if (!runningSums.containsKey(sum)) {
+      runningSums.put(sum, incrementBy);
+      return incrementBy;
+    } else {
+      int occurences = runningSums.get(sum);
+      return runningSums.put(sum, occurences + incrementBy);
+    }
   }
 }
