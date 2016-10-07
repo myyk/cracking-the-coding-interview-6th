@@ -72,4 +72,13 @@ class Chapter5SolutionsTest extends FlatSpec with Matchers {
     Chapter5Solutions.nextNumber(1) shouldBe new NextNumberResult(-1, b"10")
     Chapter5Solutions.nextNumber(b"11") shouldBe new NextNumberResult(-1, b"101")
   }
+
+  "bitsToConvert" should "find the number of bits to convert one int to the other" in {
+    Chapter5Solutions.bitsToConvert(9873453, 9873453) shouldBe 0
+    Chapter5Solutions.bitsToConvert(0, 1) shouldBe 1
+    Chapter5Solutions.bitsToConvert(0, b"1010") shouldBe 2
+    Chapter5Solutions.bitsToConvert(0, b"101011") shouldBe 4
+    Chapter5Solutions.bitsToConvert(0, -1) shouldBe 32
+    Chapter5Solutions.bitsToConvert(b"11101", b"01111") shouldBe 2
+  }
 }

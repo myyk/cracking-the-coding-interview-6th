@@ -138,9 +138,8 @@ public class Chapter5Solutions {
    *   if there are no numbers smaller or larger with the same number of 1s, use -1 in that spot
    *   positive number
    *
-   * Time complexity: O()
-   * Space complexity: O()
-   *
+   * Time complexity: O(n) where n is the number of bits in the integer, so O(1) for fixed size
+   * Space complexity: O(1)
    */
   public static NextNumberResult nextNumber(int num) {
     if (num <= 0) {
@@ -192,5 +191,28 @@ public class Chapter5Solutions {
   private static int nextSmallerNumber(int num) {
     int[] c = countBlocks(num, 1);
     return num - (1 << c[0]) - ((1 << (c[1] - 1)) - 1);
+  }
+
+  /**
+   * Debugger: Explain what this code does.
+   */
+  public static boolean doSomethingMysterious(int n) {
+    // this function checks to see if a number is a power of 2.
+    // if it is a power of 2 then (n-1) will be all 1s that don't overlap, so it will AND to 0.
+    // otherwise, it would have at least a 1 still and return false.
+    return ((n & (n-1)) == 0);
+  }
+
+  /**
+   * Conversion: Given two integers, determine the number of bits you would have to flip to convert
+   *   one to the other.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(n) where n is the number of bits in the integer, so O(1) for fixed size
+   * Space complexity: O(1)
+   */
+  public static int bitsToConvert(int a, int b) {
+    return 0;
   }
 }
