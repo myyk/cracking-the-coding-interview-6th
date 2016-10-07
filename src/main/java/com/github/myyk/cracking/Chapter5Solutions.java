@@ -215,10 +215,10 @@ public class Chapter5Solutions {
    * Time to code: ~3 minutes
    */
   public static int bitsToConvert(int a, int b) {
-    int diff = a ^ b;
     int differences = 0;
-    for (int i = 0; i < 32; i++) {
-      differences += (diff >> i) & 1;
+    // diff &= (diff-1)  // clears the least significant 1
+    for (int diff = a ^ b; diff != 0; diff &= (diff-1)) {
+      differences++;
     }
     return differences;
   }
