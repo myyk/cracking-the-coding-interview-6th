@@ -81,4 +81,15 @@ class Chapter5SolutionsTest extends FlatSpec with Matchers {
     Chapter5Solutions.bitsToConvert(0, -1) shouldBe 32
     Chapter5Solutions.bitsToConvert(b"11101", b"01111") shouldBe 2
   }
+
+  "pairwiseSwap" should "swap all the bits in an integer with the neighboring bits" in {
+    Chapter5Solutions.pairwiseSwap(0) shouldBe 0
+    Chapter5Solutions.pairwiseSwap(b"01") shouldBe b"10"
+    Chapter5Solutions.pairwiseSwap(b"10") shouldBe b"01"
+    Chapter5Solutions.pairwiseSwap(b"1011") shouldBe b"0111"
+    Chapter5Solutions.pairwiseSwap(b"1010101010101010101010101010101010101010101010101010101010101010") shouldBe b"0101010101010101010101010101010101010101010101010101010101010101"
+    Chapter5Solutions.pairwiseSwap(b"0101010101010101010101010101010101010101010101010101010101010101") shouldBe b"1010101010101010101010101010101010101010101010101010101010101010"
+    Chapter5Solutions.pairwiseSwap(b"1111111111111111111111111111111100000000000000000000000000000000") shouldBe b"1111111111111111111111111111111100000000000000000000000000000000"
+    Chapter5Solutions.pairwiseSwap(b"0000000000000000000000000000000011111111111111111111111111111111") shouldBe b"0000000000000000000000000000000011111111111111111111111111111111"
+  }
 }

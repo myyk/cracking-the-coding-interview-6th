@@ -222,4 +222,19 @@ public class Chapter5Solutions {
     }
     return differences;
   }
+
+  /**
+   * Pairwise Swap: Given an integer, swap all the even bits with the odd bits. e.g. Bits 1 and 0 swap,
+   * bits 2 and 1 swap, etc.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(1)
+   * Space complexity: O(1)
+   *
+   * Number of operations: 5
+   */
+  public static int pairwiseSwap(int num) {
+    return ((num & 0xAAAAAAAA) >>> 1) | ((num & 0x55555555) << 1);
+  }
 }
