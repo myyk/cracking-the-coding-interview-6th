@@ -2,6 +2,7 @@ package com.github.myyk.cracking
 
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
+import com.github.myyk.cracking.Chapter5Solutions.NextNumberResult
 
 class Chapter5SolutionsTest extends FlatSpec with Matchers {
   implicit def enrichStringContext(sc: StringContext) = new RichStringContext(sc)
@@ -62,6 +63,13 @@ class Chapter5SolutionsTest extends FlatSpec with Matchers {
   }
 
   "nextNumber" should "find the next smaller and next larger integers with the same number of 1s in the binary representation" in {
-    Chapter5Solutions.nextNumber(0) shouldBe null
+    Chapter5Solutions.nextNumber(b"10") shouldBe new NextNumberResult(b"1", b"100")
+    Chapter5Solutions.nextNumber(b"110") shouldBe new NextNumberResult(b"101", b"1001")
+    Chapter5Solutions.nextNumber(b"01010000000000000000000000000000") shouldBe new NextNumberResult(b"01001000000000000000000000000000",b"01100000000000000000000000000000")
+
+    Chapter5Solutions.nextNumber(-1) shouldBe new NextNumberResult(-1, -1)
+    Chapter5Solutions.nextNumber(0) shouldBe new NextNumberResult(-1, -1)
+    Chapter5Solutions.nextNumber(1) shouldBe new NextNumberResult(-1, b"10")
+    Chapter5Solutions.nextNumber(b"11") shouldBe new NextNumberResult(-1, b"101")
   }
 }

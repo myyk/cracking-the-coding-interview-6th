@@ -93,8 +93,41 @@ public class Chapter5Solutions {
   }
 
   public static class NextNumberResult {
-    int smaller;
-    int larger;
+    final int smaller;
+    final int larger;
+
+    @Override
+    public String toString() {
+      return "NextNumberResult [smaller=" + smaller + ", larger=" + larger + "]";
+    }
+    public NextNumberResult(int smaller, int larger) {
+      super();
+      this.smaller = smaller;
+      this.larger = larger;
+    }
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + larger;
+      result = prime * result + smaller;
+      return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      NextNumberResult other = (NextNumberResult) obj;
+      if (larger != other.larger)
+        return false;
+      if (smaller != other.smaller)
+        return false;
+      return true;
+    }
   }
 
   /**
@@ -102,7 +135,7 @@ public class Chapter5Solutions {
    *   same number of 1s as the given integer.
    *
    * Assumptions:
-   *   0 should return null
+   *   if there are no numbers smaller or larger with the same number of 1s, use -1 in that spot
    *   positive number
    *
    * Time complexity: O()
@@ -110,6 +143,54 @@ public class Chapter5Solutions {
    *
    */
   public static NextNumberResult nextNumber(int num) {
-    return null;
+    if (num <= 0) {
+      return new NextNumberResult(-1, -1);
+    }
+
+    int smaller = nextSmallerNumber(num);
+    int larger = nextLargerNumber(num);
+
+    // handle edge cases
+    if (larger <= num) {
+      larger = -1;
+    }
+    if (smaller >= num || smaller <= 0) {
+      smaller = -1;
+    }
+
+    return new NextNumberResult(smaller, larger);
+  }
+
+  // counts first two blocks of 0s and 1s from right to left where it starts with startsWith
+  // array[0] is the first block
+  private static int[] countBlocks(int num, int startsWith) {
+    if (startsWith != 0 && startsWith != 1) { throw new IllegalArgumentException("startsWith = [" + startsWith + "] but should be 0 or 1."); }
+
+    int c0 = 0;
+    int c1 = 0;
+    for (int i = 0; i < 32; i++) {
+      int maskedBit = num>>i & 1;
+      boolean isFirstType = maskedBit == startsWith;
+      if (isFirstType) {
+        if (c1 == 0) {
+          c0++;
+        } else {
+          break;
+        }
+      } else {
+        c1++;
+      }
+    }
+    return new int[] { c0, c1 };
+  }
+
+  private static int nextLargerNumber(int num) {
+    int[] c = countBlocks(num, 0);
+    return num + (1 << c[0]) + ((1 << (c[1] - 1)) - 1);
+  }
+
+  private static int nextSmallerNumber(int num) {
+    int[] c = countBlocks(num, 1);
+    return num - (1 << c[0]) - ((1 << (c[1] - 1)) - 1);
   }
 }
