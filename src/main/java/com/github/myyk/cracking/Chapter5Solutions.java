@@ -211,8 +211,15 @@ public class Chapter5Solutions {
    *
    * Time complexity: O(n) where n is the number of bits in the integer, so O(1) for fixed size
    * Space complexity: O(1)
+   *
+   * Time to code: ~3 minutes
    */
   public static int bitsToConvert(int a, int b) {
-    return 0;
+    int diff = a ^ b;
+    int differences = 0;
+    for (int i = 0; i < 32; i++) {
+      differences += (diff >> i) & 1;
+    }
+    return differences;
   }
 }
