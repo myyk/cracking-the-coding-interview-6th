@@ -92,4 +92,12 @@ class Chapter5SolutionsTest extends FlatSpec with Matchers {
     Chapter5Solutions.pairwiseSwap(b"1111111111111111111111111111111100000000000000000000000000000000") shouldBe b"1111111111111111111111111111111100000000000000000000000000000000"
     Chapter5Solutions.pairwiseSwap(b"0000000000000000000000000000000011111111111111111111111111111111") shouldBe b"0000000000000000000000000000000011111111111111111111111111111111"
   }
+
+  "drawLine" should "draw a line in the screen" in {
+    Chapter5Solutions.drawLine(new Array(2), 8, 0, 8, 0) shouldBe Array[Byte](0xFF.toByte, 0)
+    Chapter5Solutions.drawLine(new Array(2), 8, 0, 8, 1) shouldBe Array[Byte](0, 0xFF.toByte)
+    Chapter5Solutions.drawLine(new Array(2), 8, 2, 6, 1) shouldBe Array[Byte](0, b"00111100".toByte)
+    Chapter5Solutions.drawLine(new Array(4), 16, 1, 6, 1) shouldBe Array[Byte](0, 0, b"01111100".toByte, 0)
+    Chapter5Solutions.drawLine(new Array(8), 32, 1, 31, 1) shouldBe Array[Byte](0, 0, 0, 0, b"01111111".toByte, 0xFF.toByte, 0xFF.toByte, b"11111110".toByte)
+  }
 }

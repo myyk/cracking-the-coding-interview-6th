@@ -237,4 +237,39 @@ public class Chapter5Solutions {
   public static int pairwiseSwap(int num) {
     return ((num & 0xAAAAAAAA) >>> 1) | ((num & 0x55555555) << 1);
   }
+
+  /**
+   * Draw Line: You have a monochrome screen represented by an array. The screen has a width which is
+   *   divisible by 8. A byte will hold 8 consecutive pixels. Draw a horizontal line from (x1, y)
+   *   to (x2, y)
+   *
+   * Assumptions:
+   *   assuming the line is draws with 1s.
+   *   x1 is inclusive
+   *   x2 is exclusive
+   *   x1 is less than x2
+   *   x2 is less than width
+   *
+   * Time complexity: O(n) where n is the number of bytes
+   * Space complexity: O(1)
+   */
+  public static byte[] drawLine(byte[] screen, int width, int x1, int x2, int y) {
+    if (y < 0 || x1 > x2 || x2 > width ) { throw new IllegalArgumentException(); }
+
+    int yOffset = (width * y) / 8;
+    byte firstMask = (byte)(0xFF >>> (x1 % 8));
+    byte lastMask = (byte)(0xFF << (8 - (x2 % 8)));
+    System.out.println(String.format("firstMask = %h, lastMask = %h", firstMask, lastMask));
+    for (int xByteOffset = x1/8; xByteOffset < x2/8 + (x2%8==0 ? 0 : 1); xByteOffset++) {
+      int mask = 0xFF;
+      if (xByteOffset == x1/8) {
+        mask &= firstMask;
+      }
+      if (xByteOffset == x2/8) {
+        mask &= lastMask;
+      }
+      screen[yOffset + xByteOffset] |= mask;
+    }
+    return screen;
+  }
 }
