@@ -12,6 +12,7 @@ import java.util.Set;
  *   need to be able to calculate the value of the had from the cards in it. It would
  *   need the concept of hidden versus revealed cards as well. I'm not sure enough how
  *   split and other more advanced blackjack concepts work.
+ *
  * Differences with the book's answer:
  *   - I forgot about Enums in Java because of the lack of their usage in Scala. I think
  *   using those for Suits is quite appropriate and better than what I did.
