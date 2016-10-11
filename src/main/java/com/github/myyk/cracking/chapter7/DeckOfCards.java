@@ -35,6 +35,11 @@ public class DeckOfCards<T /*extends Card*/ > {
   private ArrayList<T> discard;
   private Set<T> cards;
 
+  public DeckOfCards(Set<T> cards) {
+    super();
+    this.cards = cards;
+  }
+
   public void shuffle() {}
   public void shuffleDiscardWithDeck() {}
 
