@@ -259,7 +259,6 @@ public class Chapter5Solutions {
     int yOffset = (width * y) / 8;
     byte firstMask = (byte)(0xFF >>> (x1 % 8));
     byte lastMask = (byte)(0xFF << (8 - (x2 % 8)));
-    System.out.println(String.format("firstMask = %h, lastMask = %h", firstMask, lastMask));
     for (int xByteOffset = x1/8; xByteOffset < x2/8 + (x2%8==0 ? 0 : 1); xByteOffset++) {
       int mask = 0xFF;
       if (xByteOffset == x1/8) {
