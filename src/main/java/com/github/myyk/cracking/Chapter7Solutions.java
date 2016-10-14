@@ -2,8 +2,10 @@ package com.github.myyk.cracking;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Recursion and Dynamic Programming
@@ -237,5 +239,45 @@ public class Chapter7Solutions {
       }
       return findMagicIndexNonDistinct(a, start, mid -1);
     }
+  }
+
+  /**
+   * Power Set: Write a function to return all subsets of a set.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(2^n)
+   * Space complexity: O(2^n)
+   */
+  public static <T> Set<Set<T>> powerSet(Set<T> set) {
+    Set<Set<T>> result = Sets.newHashSet();
+    return powerSet(set, result);
+  }
+
+  private static <T> Set<Set<T>> powerSet(Set<T> set, Set<Set<T>> result) {
+    if (!result.contains(set)) {
+      result.add(set);
+      for (T next : set) {
+        Set<T> newSet = Sets.newHashSet(set);
+        newSet.remove(next);
+        powerSet(newSet, result);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Recursive Multiply: Write a fuction to multiply two numbers recursively without
+   *   using the '*' operator.
+   *
+   * Assumptions:
+   *   all numbers
+   *   overflow works the same
+   *
+   * Time complexity: O(2^n)
+   * Space complexity: O(2^n)
+   */
+  public static int multiply(int a, int b) {
+    return 0;
   }
 }

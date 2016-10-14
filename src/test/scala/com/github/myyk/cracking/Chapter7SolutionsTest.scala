@@ -3,6 +3,9 @@ package com.github.myyk.cracking
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
 import com.github.myyk.cracking.Chapter7Solutions.Robot
+import scala.collection.JavaConverters._
+import scala.collection.JavaConversions._
+import scala.util.Random
 
 class Chapter7SolutionsTest extends FlatSpec with Matchers {
   def testTripleStep(tripleStep: Int => BigInt): Unit = {
@@ -90,5 +93,31 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
     testFindMagicIndex(Array(1,1,2,4,6), Chapter7Solutions.findMagicIndexNonDistinct) 
     testFindMagicIndex(Array(-1,-1,3,4,6,6,6), Chapter7Solutions.findMagicIndexNonDistinct) 
     testFindMagicIndex(Array(-100,-100,-100,-100,-100,-100,6), Chapter7Solutions.findMagicIndexNonDistinct) 
+  }
+
+  def testPowerSet[T](input: Set[T], expected: Set[Set[T]]) {
+    Chapter7Solutions.powerSet(input).map(_.toSet).toSet shouldBe expected
+  }
+
+  "powerSet" should "get the power set of a set" in {
+    testPowerSet(Set.empty[Int], Set(Set.empty[Int]))
+    testPowerSet(Set(1), Set(Set.empty[Int], Set(1)))
+    testPowerSet(Set(1,2), Set(Set.empty[Int], Set(1), Set(2), Set(1,2)))
+    testPowerSet(Set(1,2,3), Set(Set.empty[Int], Set(1), Set(2), Set(3), Set(1,2), Set(2,3), Set(1,3), Set(1,2,3)))
+  }
+
+  def testMultiply(a: Int, b: Int): Unit = {
+    Chapter7Solutions.multiply(a, b) shouldBe (a * b)
+  }
+
+  "multiply" should "work like * multiply" in {
+    testMultiply(0, 0)
+    testMultiply(0, 1)
+    testMultiply(1, 0)
+    testMultiply(1, 1)
+    testMultiply(123, 312)
+    for (_ <- 1 until 100) {
+      testMultiply(Random.nextInt, Random.nextInt)
+    }
   }
 }
