@@ -32,7 +32,6 @@ class CircularArrayTest extends FlatSpec with Matchers {
     array.rotateLeft(3)
     array.add(10)
     array.add(11)
-    println(array.list.toString)
     it = array.iterator
     for (i <- 4 until 10) {
       it.next() shouldBe i
