@@ -23,7 +23,6 @@ public class Chapter7Solutions {
   }
 
   private static BigInteger tripleStepRecursive(final int steps, final List<BigInteger> stepsToWays) {
-    System.out.println("steps = " + steps + "    stepsToWays = " + stepsToWays.toString());
     if (steps < 0) {
       return BigInteger.ZERO;
     } else if (steps < stepsToWays.size()) {
@@ -63,5 +62,105 @@ public class Chapter7Solutions {
       }
       return nMinus1.add(nMinus2.add(nMinus3));
     }
+  }
+
+  public static class Robot {
+    private int x;
+    private int y;
+
+    public Robot(int x, int y) {
+      this.x = x;
+      this.y = y;
+    }
+
+    public int getX() {
+      return x;
+    }
+
+    public int getY() {
+      return y;
+    }
+
+    public void moveRight() {
+      x++;
+    }
+
+    public void moveDown() {
+      y++;
+    }
+  }
+
+  /**
+   * Robot in a Grid: There's a robot and a grid with r rows and c columns. The robot is
+   *   in the upper left corner. It can move right or down on each move. There are some
+   *   grid locations that are off limits. Design an algorithm to find a path from the
+   *   top to the bottom right corner.
+   *
+   * Assumptions:
+   *   grid is NxM
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(1)
+   */
+  // return sequence of moves n, true means right, false means down. null means no solution.
+  // in the grid, true means off limits
+  public static boolean[] findPath(boolean[][] grid) {
+    if (grid.length == 1 && grid[0].length == 1) {
+      return new boolean[0];
+    }
+    Boolean[][] moves = new Boolean[grid.length][grid[0].length];
+    boolean[] solution = findPath(true, 1, 0, grid, moves);
+    if (solution != null) {
+      return solution;
+    }
+
+    solution = findPath(false, 0, 1, grid, moves);
+    return solution;
+  }
+
+  // moves stores the move to get to the given position
+  private static boolean[] findPath(boolean movedRight, int robotX, int robotY, boolean[][] grid, Boolean[][] moves) {
+    if (robotX >= grid[0].length || robotY >= grid.length) {
+      return null;
+    } else if (moves[robotY][robotX] != null) {
+      // we've already been here
+      return null;
+    } else if (grid[robotY][robotX]) {
+      return null;
+    } else {
+      moves[robotY][robotX] = movedRight;
+      if (robotX == grid[0].length - 1 && robotY == grid.length - 1) {
+        return movesToSolution(moves);
+      } else{
+        moves[robotY][robotX] = movedRight;
+        // try right
+        boolean[] solution = findPath(true, robotX + 1, robotY, grid, moves);
+        if (solution != null) {
+          return solution;
+        }
+    
+        // try left
+        solution = findPath(false, robotX, robotY + 1, grid, moves);
+        return solution;
+      }
+    }
+  }
+
+  protected static boolean[] movesToSolution(Boolean[][] moves) {
+    int x = moves[0].length - 1;
+    int y = moves.length - 1;
+    boolean[] answer = new boolean[moves[0].length + moves.length - 2];
+    int i = answer.length;
+    while (i > 0) {
+      i--;
+      answer[i] = moves[y][x];
+      if (moves[y][x]) {
+        x--;
+      } else {
+        y--;
+      }
+    }
+
+    return answer;
   }
 }
