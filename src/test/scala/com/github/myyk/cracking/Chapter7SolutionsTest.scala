@@ -60,4 +60,35 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
     Chapter7Solutions.movesToSolution(Array(Array(null, true, true))) shouldBe Array(true, true)
     Chapter7Solutions.movesToSolution(Array(Array(null, true, null), Array(null, false, true))) shouldBe Array(true, false, true)
   }
+
+  def testFindMagicIndex(a: Array[Int], op: Array[Int] => Int): Unit = {
+    val i = op(a)
+    i should be >= 0
+    a(i) shouldBe i
+  }
+
+  def testFindMagicIndexNotFound(a: Array[Int], op: Array[Int] => Int): Unit = {
+    op(a) shouldBe -1
+  }
+
+  "findMagicIndexDistinct" should "find a magic index if there's one and elements are distinct" in {
+    testFindMagicIndexNotFound(Array(2), Chapter7Solutions.findMagicIndexDistinct) 
+
+    testFindMagicIndex(Array(0), Chapter7Solutions.findMagicIndexDistinct) 
+    testFindMagicIndex(Array(-1,0,1,2,3,5), Chapter7Solutions.findMagicIndexDistinct) 
+    testFindMagicIndex(Array(-1,0,1,2,4,6), Chapter7Solutions.findMagicIndexDistinct) 
+    testFindMagicIndex(Array(0,2,4,6), Chapter7Solutions.findMagicIndexDistinct) 
+  }
+
+  "findMagicIndexNonDistinct" should "find a magic index if there's one and elements are distinct" in {
+    testFindMagicIndexNotFound(Array(2), Chapter7Solutions.findMagicIndexNonDistinct) 
+
+    testFindMagicIndex(Array(0), Chapter7Solutions.findMagicIndexNonDistinct) 
+    testFindMagicIndex(Array(-1,0,1,2,3,5), Chapter7Solutions.findMagicIndexNonDistinct) 
+    testFindMagicIndex(Array(-1,0,1,2,4,6), Chapter7Solutions.findMagicIndexNonDistinct) 
+    testFindMagicIndex(Array(0,2,4,6), Chapter7Solutions.findMagicIndexNonDistinct) 
+    testFindMagicIndex(Array(1,1,2,4,6), Chapter7Solutions.findMagicIndexNonDistinct) 
+    testFindMagicIndex(Array(-1,-1,3,4,6,6,6), Chapter7Solutions.findMagicIndexNonDistinct) 
+    testFindMagicIndex(Array(-100,-100,-100,-100,-100,-100,6), Chapter7Solutions.findMagicIndexNonDistinct) 
+  }
 }

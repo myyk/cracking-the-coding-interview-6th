@@ -99,8 +99,8 @@ public class Chapter7Solutions {
    * Assumptions:
    *   grid is NxM
    *
-   * Time complexity: O(n)
-   * Space complexity: O(1)
+   * Time complexity: O(nm)
+   * Space complexity: O(n+m)
    */
   // return sequence of moves n, true means right, false means down. null means no solution.
   // in the grid, true means off limits
@@ -162,5 +162,80 @@ public class Chapter7Solutions {
     }
 
     return answer;
+  }
+
+  /**
+   * Magic Index: Given an sorted array A[1, 2, ... , n, n-1] find if it has an
+   *   index such that A[i] = i.
+   *
+   * Assumptions:
+   *   sorted
+   *   distinct
+   *
+   * Time complexity: O(log n)
+   * Space complexity: O(log n)
+   */
+  // -1 means not found
+  public static int findMagicIndexDistinct(final int[] a) {
+    if (a == null) {
+      return -1;
+    }
+    return findMagicIndexDistinct(a, 0, a.length - 1);
+  }
+
+  private static int findMagicIndexDistinct(final int[] a, int start, int end) {
+    int mid = (start + end) / 2;
+    if (start > end) {
+      return -1;
+    } else if (a[mid] == mid) {
+      return mid;
+    } else if (a[mid] > mid) {
+      return findMagicIndexDistinct(a, start, mid - 1);
+    } else {
+      return findMagicIndexDistinct(a, mid + 1, end);
+    }
+  }
+
+  /**
+   * Magic Index: Given an sorted array A[1, 2, ... , n, n-1] find if it has an
+   *   index such that A[i] = i.
+   *
+   * Assumptions:
+   *   sorted
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(log n)
+   */
+  // -1 means not found
+  public static int findMagicIndexNonDistinct(final int[] a) {
+    if (a == null) {
+      return -1;
+    }
+    return findMagicIndexNonDistinct(a, 0, a.length - 1);
+  }
+
+  private static int findMagicIndexNonDistinct(final int[] a, int start, int end) {
+    int mid = (start + end) / 2;
+    if (start > end) {
+      return -1;
+    } else if (a[mid] == mid) {
+      return mid;
+    } else if (a[mid] < mid) {
+      if (a[mid] > 0 && a[mid] < a.length) {
+        int answer = findMagicIndexNonDistinct(a, start, a[mid]);
+        if (answer != -1) {
+          return answer;
+        }
+      }
+      return findMagicIndexNonDistinct(a, mid + 1, end);
+    } else {
+      if (a[mid] > 0 && a[mid] < a.length) {
+        int answer = findMagicIndexNonDistinct(a, a[mid], end);
+        if (answer != -1) {
+          return answer;
+        }
+      }
+      return findMagicIndexNonDistinct(a, start, mid -1);
+    }
   }
 }
