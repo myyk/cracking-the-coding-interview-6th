@@ -274,10 +274,30 @@ public class Chapter7Solutions {
    *   all numbers
    *   overflow works the same
    *
-   * Time complexity: O(2^n)
-   * Space complexity: O(2^n)
+   * Time complexity: O(b) where b is the number of bits in the number
+   * Space complexity: O(b) from the stacks, though this could be tail call optimized in Scala
+   *
+   * Difference with book: If you think of b being composed of bits b31 to b0. Then you
+   *   can think of product = a*b31*1<<31 + ... + a*b0*1<<0. This is pretty straight
+   *   forward to implement and I think less complicated than the book's answer.
    */
   public static int multiply(int a, int b) {
-    return 0;
+    // optimization by reducing bits on second, maybe, would need to perf test.
+    // this could be adding more instructions for all I know.
+    if (Integer.highestOneBit(a) > Integer.highestOneBit(b)) {
+      return multiplyHelper(a, b, 0, 0);
+    } else {
+      return multiplyHelper(b, a, 0, 0);
+    }
+  }
+
+  public static int multiplyHelper(final int a, final int b, final int i, final int product) {
+    if (b == 0) {
+      return product;
+    } else if ((b & 1) == 1) {
+      return multiplyHelper(a, b>>>1, i+1, product + (a<<i));
+    } else {
+      return multiplyHelper(a, b>>>1, i+1, product);
+    }
   }
 }

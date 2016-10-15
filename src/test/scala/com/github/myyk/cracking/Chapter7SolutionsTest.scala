@@ -107,6 +107,7 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
   }
 
   def testMultiply(a: Int, b: Int): Unit = {
+    println(s"${a} * ${b} should be ${a*b}")
     Chapter7Solutions.multiply(a, b) shouldBe (a * b)
   }
 
@@ -116,6 +117,9 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
     testMultiply(1, 0)
     testMultiply(1, 1)
     testMultiply(123, 312)
+    testMultiply(123, -1)
+    testMultiply(-1, 123)
+    testMultiply(-123, -1)
     for (_ <- 1 until 100) {
       testMultiply(Random.nextInt, Random.nextInt)
     }
