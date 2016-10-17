@@ -6,6 +6,7 @@ import com.github.myyk.cracking.Chapter7Solutions.Robot
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
 import scala.util.Random
+import com.github.myyk.cracking.Chapter7Solutions.Color
 
 class Chapter7SolutionsTest extends FlatSpec with Matchers {
   def testTripleStep(tripleStep: Int => BigInt): Unit = {
@@ -138,8 +139,26 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
     Chapter7Solutions.parens(4).toSet shouldBe Set("()()()()", "()(())()", "()()(())", "()((()))", "()(()())",
                                                    "(()()())", "((())())", "(()(()))", "(((())))", "((()()))",
                                                    "(())()()", "((()))()", "(()())()")
-    for (i <- 0 to 15) {
-      println(s"${i} = ${Chapter7Solutions.parens(i).size}    factorial = ${(1 to i).foldRight(1)(_*_)}   quad = ${i*i*i*i}")
-    }
+  }
+
+  "paintFill" should "fill the all the connected old color with the new color" in {
+    val newColor = new Color(255.toByte,255.toByte,255.toByte)
+    val color1 = new Color(1.toByte,1.toByte,1.toByte)
+    val color2 = new Color(2.toByte,2.toByte,2.toByte)
+    val image = Array(
+        Array(color1, color1, color1, color1, color1),
+        Array(color2, color2, color1, color2, color2),
+        Array(color1, color1, color1, color1, color1),
+        Array(color2, color2, color1, color2, color1),
+        Array(color1, color2, color1, color2, color1)
+    )
+    val expectedImage = Array(
+        Array(newColor, newColor, newColor, newColor, newColor),
+        Array(color2,   color2,   newColor, color2,   color2),
+        Array(newColor, newColor, newColor, newColor, newColor),
+        Array(color2,   color2,   newColor, color2,   newColor),
+        Array(color1,   color2,   newColor, color2,   newColor)
+    )
+    Chapter7Solutions.paintFill(image, 2, 2, newColor) shouldBe expectedImage
   }
 }

@@ -458,13 +458,24 @@ public class Chapter7Solutions {
     }
   }
 
-  public static void paintFill(final Color[][] image, final int x, final int y, final Color newColor) {
+  /**
+   * Paint Fill: Given an image, color and x,y coordinate fill the color at the
+   *   coordinates with the new color and touching pixels with the same old color
+   *   and all the pixels touching them and so on.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(n*m) where n and m are the dimensions of the image array
+   * Space complexity: O(1)
+   */
+  public static Color[][] paintFill(final Color[][] image, final int x, final int y, final Color newColor) {
     if (outsideImage(image, x, y)) {
       throw new IllegalArgumentException("x or y is out of range of the image");
     }
 
     final Color oldColor = image[y][x];
     paintFill(image, x, y, newColor, oldColor);
+    return image;
   }
 
   private static void paintFill(final Color[][] image, final int x, final int y, final Color newColor, final Color oldColor) {
@@ -480,5 +491,19 @@ public class Chapter7Solutions {
 
   private static boolean outsideImage(final Color[][] image, final int x, final int y) {
     return x < 0 || x >= image[0].length || y < 0 || y >= image.length;
+  }
+
+  /**
+   * Coins: Given an infinite number of coins of various denominations and a total.
+   *   Find the number of different ways to get that total with coins.
+   *
+   * Assumptions:
+   *   positive value coins
+   *
+   * Time complexity: O(n*m) where n and m are the dimensions of the image array
+   * Space complexity: O(1)
+   */
+  public static int coinsCount(Set<Integer> coins, int total) {
+    return 0;
   }
 }
