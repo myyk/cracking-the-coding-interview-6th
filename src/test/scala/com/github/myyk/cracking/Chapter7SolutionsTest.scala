@@ -107,7 +107,6 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
   }
 
   def testMultiply(a: Int, b: Int): Unit = {
-    println(s"${a} * ${b} should be ${a*b}")
     Chapter7Solutions.multiply(a, b) shouldBe (a * b)
   }
 
@@ -122,6 +121,25 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
     testMultiply(-123, -1)
     for (_ <- 1 until 100) {
       testMultiply(Random.nextInt, Random.nextInt)
+    }
+  }
+
+  "permutationsUnique" should "get all permutations of the string" in {
+    Chapter7Solutions.permutationsUnique("abc").toSet shouldBe "abc".permutations.toSet
+    Chapter7Solutions.permutationsUnique("myyk").toSet shouldBe "myyk".permutations.toSet
+    Chapter7Solutions.permutationsUnique("aaaaa").size shouldBe 1
+  }
+
+  "parens" should "get all legal combinations of n open and close parens" in {
+    Chapter7Solutions.parens(0).toSet shouldBe Set()
+    Chapter7Solutions.parens(1).toSet shouldBe Set("()")
+    Chapter7Solutions.parens(2).toSet shouldBe Set("()()", "(())")
+    Chapter7Solutions.parens(3).toSet shouldBe Set("()()()", "(())()", "()(())", "((()))", "(()())")
+    Chapter7Solutions.parens(4).toSet shouldBe Set("()()()()", "()(())()", "()()(())", "()((()))", "()(()())",
+                                                   "(()()())", "((())())", "(()(()))", "(((())))", "((()()))",
+                                                   "(())()()", "((()))()", "(()())()")
+    for (i <- 0 to 15) {
+      println(s"${i} = ${Chapter7Solutions.parens(i).size}    factorial = ${(1 to i).foldRight(1)(_*_)}   quad = ${i*i*i*i}")
     }
   }
 }
