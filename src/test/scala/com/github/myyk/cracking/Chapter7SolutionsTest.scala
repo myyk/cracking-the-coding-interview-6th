@@ -9,6 +9,7 @@ import scala.util.Random
 import com.github.myyk.cracking.Chapter7Solutions.Color
 import java.lang.{ Integer => JInt }
 import com.github.myyk.cracking.Chapter7Solutions.Box
+import com.google.common.collect.Maps
 
 class Chapter7SolutionsTest extends FlatSpec with Matchers {
   def testTripleStep(tripleStep: Int => BigInt): Unit = {
@@ -200,5 +201,44 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
     Chapter7Solutions.stackHeight(List(new Box(1,1,1), new Box(1,1,1), new Box(3,3,3))) shouldBe 4
     Chapter7Solutions.stackHeight(List(new Box(3,1,1), new Box(2,1,1), new Box(3,3,3))) shouldBe 5
     // could use more and better test cases
+  }
+
+  "countEval" should "work for fundamental operations" in {
+    Chapter7Solutions.countEval("1", false) shouldBe 0
+    Chapter7Solutions.countEval("1", true) shouldBe 1
+    Chapter7Solutions.countEval("0", false) shouldBe 1
+    Chapter7Solutions.countEval("0", true) shouldBe 0
+
+    Chapter7Solutions.countEval("1^1", false) shouldBe 1
+    Chapter7Solutions.countEval("0^0", false) shouldBe 1
+    Chapter7Solutions.countEval("1^0", false) shouldBe 0
+    Chapter7Solutions.countEval("0^1", false) shouldBe 0
+    Chapter7Solutions.countEval("1^1", true) shouldBe 0
+    Chapter7Solutions.countEval("0^0", true) shouldBe 0
+    Chapter7Solutions.countEval("1^0", true) shouldBe 1
+    Chapter7Solutions.countEval("0^1", true) shouldBe 1
+
+    Chapter7Solutions.countEval("1|1", false) shouldBe 0
+    Chapter7Solutions.countEval("0|0", false) shouldBe 1
+    Chapter7Solutions.countEval("1|0", false) shouldBe 0
+    Chapter7Solutions.countEval("0|1", false) shouldBe 0
+    Chapter7Solutions.countEval("1|1", true) shouldBe 1
+    Chapter7Solutions.countEval("0|0", true) shouldBe 0
+    Chapter7Solutions.countEval("1|0", true) shouldBe 1
+    Chapter7Solutions.countEval("0|1", true) shouldBe 1
+
+    Chapter7Solutions.countEval("1&1", false) shouldBe 0
+    Chapter7Solutions.countEval("0&0", false) shouldBe 1
+    Chapter7Solutions.countEval("1&0", false) shouldBe 1
+    Chapter7Solutions.countEval("0&1", false) shouldBe 1
+    Chapter7Solutions.countEval("1&1", true) shouldBe 1
+    Chapter7Solutions.countEval("0&0", true) shouldBe 0
+    Chapter7Solutions.countEval("1&0", true) shouldBe 0
+    Chapter7Solutions.countEval("0&1", true) shouldBe 0
+  }
+    
+  "countEval" should "get the number of ways parens can be added to the expression to get the result" in {
+    Chapter7Solutions.countEval("1^0|0|1", false) shouldBe 2
+    Chapter7Solutions.countEval("0&0&0&1^1|0", true) shouldBe 10
   }
 }

@@ -627,6 +627,12 @@ public class Chapter7Solutions {
    *
    * Time complexity: O()
    * Space complexity: O()
+   *
+   * Note: I thought of another way you could do this. Though, maybe not any better in
+   *   performance would be to construct a directed graph from smaller to larger box.
+   *   Then traverse it from each root (smallest) storing at each node the previous
+   *   Max(height + previous height, previous max). You could also keep track of the
+   *   overall max, so you don't have to search for it later.
    */
   public static int stackHeight(final List<Box> boxes) {
     if (boxes.isEmpty()) {
@@ -650,6 +656,78 @@ public class Chapter7Solutions {
       }
       cache.put(boxes, maxHeight);
       return maxHeight;
+    }
+  }
+
+  /**
+   * Boolean Evaluation: Given a boolean expression and a result. Find how many ways
+   *   parentheses can be added to the expression to get the result.
+   *
+   * Assumptions:
+   *   cannot put parentheses around a unary expression such as a value 0 or 1
+   *   each operator has the same precedence
+   *   expressions are valid
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   *
+   * Note: The answer is also equal to the Catalan number where n is the number of
+   *   operators. That is Cn = (2n)!/((n+1)!n!)
+   *
+   * Difference with books answer:
+   *   They kind of cleverly concatenated the result with the strings for the cache to
+   *   use just one. This seems less clean than using a tuple key as I would in Scala
+   *   but oh well, this isn't Scala. I got the answer on my own after a while, the
+   *   tests really helped. This is one question I didn't write the test first for and
+   *   I regret that. It took longer to develop that it could have otherwise.
+   *   Calculating the total ways to be able to subtract for the negative case is really
+   *   useful. Maybe what I did before was more efficient, but it's doubtful there was
+   *   much work saved compared to this answer which is a couple functions smaller and
+   *   easier to read.
+   */
+  public static int countEval(String expression, boolean result) {
+    final Map<String, Integer> cacheTrue = Maps.newHashMap();
+    cacheTrue.put("0", 0);
+    cacheTrue.put("1", 1);
+    final Map<String, Integer> cacheFalse = Maps.newHashMap();
+    cacheFalse.put("0", 1);
+    cacheFalse.put("1", 0);
+    return countEval(expression, result, cacheTrue, cacheFalse);
+  }
+
+  private static int countEval(String expression, boolean result, Map<String, Integer> cacheTrue, Map<String, Integer> cacheFalse) {
+    if (result && cacheTrue.containsKey(expression)) {
+      return cacheTrue.get(expression);
+    } else if (!result && cacheFalse.containsKey(expression)) {
+      return cacheFalse.get(expression);
+    } else {
+      int count = 0;
+      for (int i = 1; i < expression.length(); i+=2) {
+        final char c = expression.charAt(i);
+        final String left = expression.substring(0, i);
+        final String right = expression.substring(i+1, expression.length());
+        final int leftFalse = countEval(left, false, cacheTrue, cacheFalse);
+        final int rightFalse = countEval(right, false, cacheTrue, cacheFalse);
+        final int leftTrue = countEval(left, true, cacheTrue, cacheFalse);
+        final int rightTrue = countEval(right, true, cacheTrue, cacheFalse);
+        final int totalWays = (leftFalse + leftTrue) * (rightFalse + rightTrue);
+
+        int ways = 0;
+        if (c == '|') {
+          ways = (leftFalse*rightTrue) + (leftTrue*rightFalse) + (leftTrue*rightTrue);
+        } else if (c == '&') {
+          ways = leftTrue * rightTrue;
+        } else if (c == '^') {
+          ways = (leftTrue * rightFalse) + (leftFalse * rightTrue);
+        }
+        count += (result ? ways : totalWays - ways);
+      }
+      if (result) {
+        cacheTrue.put(expression, count);
+      } else {
+        cacheFalse.put(expression, count);
+      }
+      return count;
     }
   }
 }
