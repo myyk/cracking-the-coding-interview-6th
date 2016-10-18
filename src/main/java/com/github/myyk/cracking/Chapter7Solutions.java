@@ -1,11 +1,17 @@
 package com.github.myyk.cracking;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
@@ -500,10 +506,96 @@ public class Chapter7Solutions {
    * Assumptions:
    *   positive value coins
    *
-   * Time complexity: O(n*m) where n and m are the dimensions of the image array
-   * Space complexity: O(1)
+   * Time complexity: O(?)
+   * Space complexity: O(?)
+   *
+   * Note: This is a little trickier than doing it in Scala since if you use a List in
+   *   the helper function you have to be careful to not mutate the list fucking up
+   *   the one of the nested calls since they share the same list.
+   *
+   *   Also if this needs to be done with large coins to smaller coins.
    */
-  public static int coinsCount(Set<Integer> coins, int total) {
-    return 0;
+  public static int coinsCount(final Set<Integer> coins, final int total) {
+    Map<Integer, Integer> cache = Maps.newHashMap(); 
+    cache.put(0, 1); // base case
+    Integer[] coinsArr = new Integer[coins.size()];
+    coins.toArray(coinsArr);
+    Arrays.sort(coinsArr, new Comparator<Integer>() {
+      @Override
+      public int compare(Integer o1, Integer o2) {
+        return o2.compareTo(o1);
+      }
+    });
+    return coinsCount(coinsArr, 0, total, cache);
+  }
+
+  private static int coinsCount(final Integer[] coins, final int index, final int remaining, final Map<Integer, Integer> cache) {
+    if (remaining < 0) {
+      return 0;
+    } else if (cache.containsKey(remaining)) {
+      return cache.get(remaining);
+    } else if (index == coins.length) {
+      return 0;
+    } else {
+      int ways = 0;
+      int coin = coins[index];
+      for (int i = 0; i <= remaining; i += coin) {
+        ways += coinsCount(coins, index + 1, remaining - i, cache);
+      }
+      cache.put(remaining, ways);
+      return ways;
+    }
+  }
+
+  /**
+   * Eight Queens: Find every combination of boards where you can place 8 queens on
+   *   an 8x8 board such that they can't attack each other with standard chess
+   *   moves. A result can be expressed as a single array of the row position of the
+   *   queen on the i-th column where i is the array index.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(n!) where n is the number of moves, but it's pruned, so maybe
+   *   the bound can be expressed tighter than that.
+   * Space complexity: O(n!)
+   *
+   * Notes: Performance could be improved by keeping track of the occupied diagonals and
+   *   rows on the way down so that the isBoardValid would be much faster. 
+   */
+  public static ArrayList<int[]> placeQueens(final int numberOfQueens /* = 8, if we could have defaults*/) {
+    return placeQueens(numberOfQueens, 0, new int[numberOfQueens], new ArrayList<int[]>());
+  }
+
+  private static ArrayList<int[]> placeQueens(final int numberOfQueens, int queenIndex, int[] placedQueens, ArrayList<int[]> result) {
+    if (!isBoardValid(placedQueens, queenIndex, numberOfQueens)) {
+      // do nothing
+    } else if (queenIndex == numberOfQueens) {
+      result.add(placedQueens.clone());
+    } else {
+      for (int i = 0; i < numberOfQueens; i++) {
+        placedQueens[queenIndex] = i;
+        placeQueens(numberOfQueens, queenIndex + 1, placedQueens, result);
+      }
+    }
+    return result;
+  }
+
+  private static boolean isBoardValid(int[] placedQueens, int numPlacedQueens, int boardSize) {
+    boolean[][] board = new boolean[numPlacedQueens][boardSize];
+    for (int i = 0; i < numPlacedQueens; i++) {
+      board[i][placedQueens[i]] = true;
+      for (int j = i-1; j >= 0; j--) {
+        int offset = i - j;
+        if (board[j][placedQueens[i]]) {
+          return false;
+        } else if (placedQueens[i] + offset < boardSize && board[j][placedQueens[i] + offset]) {
+          // right diagonal
+          return false;
+        } else if (placedQueens[i] - offset >= 0 && board[j][placedQueens[i] - offset]) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }

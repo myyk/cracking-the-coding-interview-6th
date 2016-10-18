@@ -7,6 +7,7 @@ import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
 import scala.util.Random
 import com.github.myyk.cracking.Chapter7Solutions.Color
+import java.lang.{ Integer => JInt }
 
 class Chapter7SolutionsTest extends FlatSpec with Matchers {
   def testTripleStep(tripleStep: Int => BigInt): Unit = {
@@ -160,5 +161,36 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
         Array(color1,   color2,   newColor, color2,   newColor)
     )
     Chapter7Solutions.paintFill(image, 2, 2, newColor) shouldBe expectedImage
+  }
+
+  def coinsCount(set: Set[Int], total: Int): Int = {
+    Chapter7Solutions.coinsCount(set.map(JInt.valueOf(_)).asJava, total)
+  }
+
+  "coinsCount" should "get the number of ways to count to the total with the provided coins" in {
+    coinsCount(Set(1, 5, 10, 25), 0) shouldBe 1
+    coinsCount(Set(1, 5, 10, 25), 1) shouldBe 1
+    coinsCount(Set(1, 5, 10, 25), 5) shouldBe 2
+    coinsCount(Set(1, 5, 10, 25), 10) shouldBe 4
+    coinsCount(Set(1, 5, 10, 25), 11) shouldBe 4
+    coinsCount(Set(5, 10, 25), 25) shouldBe Array(25, 10+10+5, 10+5+5+5, 5*5).size
+    coinsCount(Set(5, 10, 25), 26) shouldBe 0
+
+  }
+
+  "placeQueens" should "give all valid combindations of placing n queens on an nxn chess board" in {
+//    val n = 4
+//    for {
+//      board <- Chapter7Solutions.placeQueens(n)
+//      _ <- Some(println("------------"))
+//      queen <- board
+//    } {
+//      println( "o"*queen + "x" + "o"*(n - 1 - queen))
+//    }
+    
+    Chapter7Solutions.placeQueens(4).size shouldBe 2
+    Chapter7Solutions.placeQueens(6).size shouldBe 4
+    Chapter7Solutions.placeQueens(8).size shouldBe 92
+    Chapter7Solutions.placeQueens(10).size shouldBe 724
   }
 }
