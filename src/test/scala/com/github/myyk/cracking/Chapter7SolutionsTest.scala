@@ -8,6 +8,7 @@ import scala.collection.JavaConversions._
 import scala.util.Random
 import com.github.myyk.cracking.Chapter7Solutions.Color
 import java.lang.{ Integer => JInt }
+import com.github.myyk.cracking.Chapter7Solutions.Box
 
 class Chapter7SolutionsTest extends FlatSpec with Matchers {
   def testTripleStep(tripleStep: Int => BigInt): Unit = {
@@ -192,5 +193,12 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
     Chapter7Solutions.placeQueens(6).size shouldBe 4
     Chapter7Solutions.placeQueens(8).size shouldBe 92
     Chapter7Solutions.placeQueens(10).size shouldBe 724
+  }
+
+  "stackHeight" should "give the maximal box stack height where boxes given the constraints" in {
+    Chapter7Solutions.stackHeight(List(new Box(1,1,1), new Box(2,2,2), new Box(3,3,3))) shouldBe 6
+    Chapter7Solutions.stackHeight(List(new Box(1,1,1), new Box(1,1,1), new Box(3,3,3))) shouldBe 4
+    Chapter7Solutions.stackHeight(List(new Box(3,1,1), new Box(2,1,1), new Box(3,3,3))) shouldBe 5
+    // could use more and better test cases
   }
 }

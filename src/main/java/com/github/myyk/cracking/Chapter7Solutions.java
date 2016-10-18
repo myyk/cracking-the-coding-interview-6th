@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -597,5 +598,58 @@ public class Chapter7Solutions {
       }
     }
     return true;
+  }
+
+  public static class Box {
+    public static Box MAX_VALUE = new Box(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+
+    public final int height, width, depth;
+
+    public Box(final int height, final int width, final int depth) {
+      this.height = height;
+      this.width = width;
+      this.depth = depth;
+    }
+
+    public boolean smallerThan(Box other) {
+      return height < other.height && width < other.width && depth < other.depth;
+    }
+  }
+
+  /**
+   * Stack of Boxes: Given a stack of N boxes. Find the maximum height that you can
+   *   stack the boxes given the constraints that you cannot rotate a box and a box
+   *   can only be stacked if the upper box has smaller width, height, and depth than
+   *   the box below it.
+   *
+   * Assumptions:
+   *   boxes have positive values for width, height and depth
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   */
+  public static int stackHeight(final List<Box> boxes) {
+    if (boxes.isEmpty()) {
+      return 0;
+    }
+ 
+    return stackHeight(Sets.newHashSet(boxes), Box.MAX_VALUE, new HashMap<Set<Box>, Integer>());
+  }
+
+  private static int stackHeight(final Set<Box> boxes, final Box bottom, final Map<Set<Box>, Integer> cache) {
+    if (cache.containsKey(boxes)) {
+      return cache.get(boxes);
+    } else {
+      int maxHeight = 0;
+      for (Box box : boxes) {
+        if (box.smallerThan(bottom)) {
+          final Set<Box> newBoxes = Sets.newHashSet(boxes);
+          newBoxes.remove(box);
+          maxHeight = Math.max(maxHeight, box.height + stackHeight(newBoxes, box, cache));
+        }
+      }
+      cache.put(boxes, maxHeight);
+      return maxHeight;
+    }
   }
 }
