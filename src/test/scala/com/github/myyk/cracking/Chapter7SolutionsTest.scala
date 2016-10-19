@@ -1,15 +1,20 @@
 package com.github.myyk.cracking
 
+import java.lang.{ Integer => JInt }
+
+import scala.collection.JavaConversions.asScalaSet
+import scala.collection.JavaConversions.seqAsJavaList
+import scala.collection.JavaConversions.setAsJavaSet
+import scala.collection.JavaConverters.setAsJavaSetConverter
+import scala.math.BigInt.javaBigInteger2bigInt
+import scala.util.Random
+
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
-import com.github.myyk.cracking.Chapter7Solutions.Robot
-import scala.collection.JavaConverters._
-import scala.collection.JavaConversions._
-import scala.util.Random
-import com.github.myyk.cracking.Chapter7Solutions.Color
-import java.lang.{ Integer => JInt }
+
 import com.github.myyk.cracking.Chapter7Solutions.Box
-import com.google.common.collect.Maps
+import com.github.myyk.cracking.Chapter7Solutions.Color
+import com.github.myyk.cracking.Chapter7Solutions.Robot
 
 class Chapter7SolutionsTest extends FlatSpec with Matchers {
   def testTripleStep(tripleStep: Int => BigInt): Unit = {
