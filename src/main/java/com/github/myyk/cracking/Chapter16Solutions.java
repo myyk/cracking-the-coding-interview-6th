@@ -210,4 +210,53 @@ public class Chapter16Solutions {
     }
     return diff;
   }
+
+  /**
+   * Number Max: Find the maximum between two numbers without using any comparators.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(1)
+   * Space complexity: O(1)
+   *
+   * Note: Followed the book very closely in writing this.
+   */
+  public static int numberMax(final int a, final int b) {
+    int c = a-b;
+
+    int signA = getSign(a); // 1 if a >= 0, else 0
+    int signB = getSign(b); // 1 if b >= 0, else 0
+    int signC = getSign(c); // depends on whether a-b overflowed
+    // 1 if a > b and 0 otherwise if no overflow
+    // 0 if a < b and 0 otherwise if overflow
+
+    int aAndBDifferentSigns = signA ^ signB;
+    int aAndBSameSigns = flip(aAndBDifferentSigns);
+
+    int k = aAndBDifferentSigns*signA + aAndBSameSigns*signC;
+
+    return a*k | b*flip(k);
+  }
+
+  // 1 for positive, 0 for negative
+  private static int getSign(int n) {
+    return flip(n>>31 & 0x1);
+  }
+
+  // flips a 0 to a 1 and a 1 to a 0
+  private static int flip(int bit) {
+    return 1^bit;
+  }
+
+  /**
+   * English Int: Given a number, convert it to the English word representation.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(1)
+   * Space complexity: O(1)
+   */
+  public static String englishInt(int num) {
+    return null;
+  }
 }

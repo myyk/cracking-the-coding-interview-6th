@@ -17,6 +17,8 @@ import com.github.myyk.cracking.Chapter16Solutions.isWonTicTacToe
 import com.github.myyk.cracking.Chapter16Solutions.TicTacToe
 import com.github.myyk.cracking.Chapter16Solutions.factorialZeroes
 import com.github.myyk.cracking.Chapter16Solutions.smallestDifference
+import com.github.myyk.cracking.Chapter16Solutions.numberMax
+import com.github.myyk.cracking.Chapter16Solutions.englishInt
 
 class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
@@ -101,5 +103,27 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
     smallestDifference(Array(1,3,15,2), Array(23,127,235,19,8)) shouldBe 4
     smallestDifference(Array(1,3,15,2), Array(23,127,235,3,8)) shouldBe 0
     smallestDifference(Array(1), Array(23,127,235,312,8)) shouldBe 7
+  }
+
+  def testNumberMax(a: Int, b: Int): Unit = {
+    numberMax(a, b) shouldBe (a max b)
+    numberMax(b, a) shouldBe (a max b)
+  }
+
+  "numberMax" should "find the max between two numbers" in {
+    testNumberMax(0, 0)
+    testNumberMax(1, 0)
+    testNumberMax(-1, 0)
+    testNumberMax(-1, -2)
+    testNumberMax(123, 321)
+    testNumberMax(Int.MaxValue - 1, Int.MaxValue)
+    testNumberMax(Int.MinValue + 1, Int.MaxValue)
+  }
+
+  "englishInt" should "get a word representation of an interger" in {
+    englishInt(0) shouldBe "Zero"
+    englishInt(1234) shouldBe "One Thousand, Two Hundred Thrity Four"
+    englishInt(-1234) shouldBe "Negative One Thousand, Two Hundred Thrity Four"
+    englishInt(9341234) shouldBe "Nine Million, Three Hundred Fourty One Thousand, Two Hundred Thrity Four"
   }
 }
