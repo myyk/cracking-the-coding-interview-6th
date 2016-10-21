@@ -16,6 +16,7 @@ import com.github.myyk.cracking.Chapter16Solutions.WordFrequencies
 import com.github.myyk.cracking.Chapter16Solutions.isWonTicTacToe
 import com.github.myyk.cracking.Chapter16Solutions.TicTacToe
 import com.github.myyk.cracking.Chapter16Solutions.factorialZeroes
+import com.github.myyk.cracking.Chapter16Solutions.smallestDifference
 
 class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
@@ -89,10 +90,16 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
       factorialZeroes(i) shouldBe 1
     }
     for (i <- 10 to 14) {
-      println(i)
       factorialZeroes(i) shouldBe 2
     }
     factorialZeroes(25) shouldBe 6
     factorialZeroes(50) shouldBe 12
+  }
+
+  "smallestDifference" should "find the smallest difference between any two numbers in the arrays" in {
+    smallestDifference(Array(1,3,15,11,2), Array(23,127,235,19,8)) shouldBe 3
+    smallestDifference(Array(1,3,15,2), Array(23,127,235,19,8)) shouldBe 4
+    smallestDifference(Array(1,3,15,2), Array(23,127,235,3,8)) shouldBe 0
+    smallestDifference(Array(1), Array(23,127,235,312,8)) shouldBe 7
   }
 }

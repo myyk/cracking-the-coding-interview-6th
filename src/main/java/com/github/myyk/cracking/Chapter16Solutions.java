@@ -1,5 +1,6 @@
 package com.github.myyk.cracking;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
@@ -176,5 +177,37 @@ public class Chapter16Solutions {
       factorsOf5 += n / i;
     }
     return factorsOf5;
+  }
+
+  /**
+   * Smallest Difference: Given two arrays of integers find the two values between them that have the
+   *   smallest difference.
+   *
+   * Assumptions:
+   *   not sorted
+   *   exception for invalid input
+   *   it's okay to sort the inputs (otherwise, we'd just have to copy)
+   *
+   * Time complexity: O(n log n)
+   * Space complexity: O(1) // depending on the sort being used
+   */
+  public static int smallestDifference(final int[] a, final int[] b) {
+    if (a.length == 0 || b.length == 0) {
+      throw new IllegalArgumentException("Cannot compute if one or more arrays are empty.");
+    }
+
+    Arrays.sort(a);
+    Arrays.sort(b);
+    int diff = Integer.MAX_VALUE;
+    for (int i = 0, j = 0; i < a.length && j < b.length && diff != 0;) {
+      if (a[i] < b[j]) {
+        diff = Math.min(diff, b[j] - a[i]);
+        i++;
+      } else {
+        diff = Math.min(diff, a[i] - b[j]);
+        j++;
+      }
+    }
+    return diff;
   }
 }
