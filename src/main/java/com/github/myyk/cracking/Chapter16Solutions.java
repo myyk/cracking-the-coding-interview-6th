@@ -158,4 +158,23 @@ public class Chapter16Solutions {
 
     return false;
   }
+
+  /**
+   * Factorial Zeroes: Figure out how many 0s are at the end of a factorial.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(n/5)
+   * Space complexity: O(1)
+   */
+  public static int factorialZeroes(int n) {
+    // in other words, how many factors of 2 and 5.
+    // it should be obvious that there will always be more factors 2s than 5 since every other number is
+    // a factor of 2, while only ever 5 are factors of 5
+    int factorsOf5 = 0;
+    for (int i = 5; n / i > 0; i*=5) {
+      factorsOf5 += n / i;
+    }
+    return factorsOf5;
+  }
 }

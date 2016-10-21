@@ -15,6 +15,7 @@ import com.github.myyk.cracking.Chapter16Solutions.MutableInteger
 import com.github.myyk.cracking.Chapter16Solutions.WordFrequencies
 import com.github.myyk.cracking.Chapter16Solutions.isWonTicTacToe
 import com.github.myyk.cracking.Chapter16Solutions.TicTacToe
+import com.github.myyk.cracking.Chapter16Solutions.factorialZeroes
 
 class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
@@ -78,5 +79,20 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
     board(1)(1) = TicTacToe.X;
     board(2)(0) = TicTacToe.X;
     isWonTicTacToe(board) shouldBe true
+  }
+
+  "factorialZeroes" should "get the number of trailing 0s of n!" in {
+    for (i <- 0 to 4) {
+      factorialZeroes(i) shouldBe 0
+    }
+    for (i <- 5 to 9) {
+      factorialZeroes(i) shouldBe 1
+    }
+    for (i <- 10 to 14) {
+      println(i)
+      factorialZeroes(i) shouldBe 2
+    }
+    factorialZeroes(25) shouldBe 6
+    factorialZeroes(50) shouldBe 12
   }
 }
