@@ -19,6 +19,9 @@ import com.github.myyk.cracking.Chapter16Solutions.factorialZeroes
 import com.github.myyk.cracking.Chapter16Solutions.smallestDifference
 import com.github.myyk.cracking.Chapter16Solutions.numberMax
 import com.github.myyk.cracking.Chapter16Solutions.EnglishIntMaker
+import com.github.myyk.cracking.Chapter16Solutions.subtract
+import com.github.myyk.cracking.Chapter16Solutions.multiply
+import com.github.myyk.cracking.Chapter16Solutions.divide
 
 class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
@@ -132,5 +135,36 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
     maker.englishInt(Int.MaxValue) shouldBe "Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Seven"
     maker.englishInt(Int.MinValue) shouldBe "Negative Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Eight"
     maker.englishInt(Int.MinValue+1) shouldBe "Negative Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Seven"
+  }
+
+  def testOperations(a: Int, b: Int): Unit = {
+    testOperationsHelper(a, b)
+    testOperationsHelper(b, a)
+  }
+
+  def testOperationsHelper(a: Int, b: Int): Unit = {
+    subtract(a, b) shouldBe (a - b)
+    multiply(a, b) shouldBe (a * b)
+    if (b != 0 && a.abs < 10000) {
+      println(s"a = $a, b = $b")
+      divide(a, b) shouldBe (a / b)
+    }
+  }
+
+  "operations" should "do subtraction, multiplication and division properly" in {
+    testOperations(0, 0)
+    testOperations(1, 0)
+    testOperations(-1, 1)
+    testOperations(-1, 0)
+    testOperations(Integer.MAX_VALUE, 2)
+    testOperations(Integer.MIN_VALUE + 1, 2)
+    testOperations(123, 32)
+    testOperations(123, -32)
+    // these test cases would be too slow to complete
+//    testOperations(Integer.MAX_VALUE, Integer.MAX_VALUE)
+//    testOperations(Integer.MIN_VALUE, Integer.MIN_VALUE)
+//    for (_ <- 1 to 100) {
+//      testOperations(Random.nextInt(), Random.nextInt())
+//    }
   }
 }

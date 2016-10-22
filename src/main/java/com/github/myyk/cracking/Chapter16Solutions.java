@@ -253,8 +253,8 @@ public class Chapter16Solutions {
    *
    * Assumptions:
    *
-   * Time complexity: O(1)
-   * Space complexity: O(1)
+   * Time complexity: O()
+   * Space complexity: O()
    */
   public static class EnglishIntMaker {
     private static Map<Integer, String> lookup = Maps.newHashMap();
@@ -335,6 +335,84 @@ public class Chapter16Solutions {
         sb.append(" ");
         englishInt(remainder, sb);
       }
+    }
+  }
+
+  /**
+   * Operations: Subtract, multiply, and divide all using only add opterator.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(1)
+   * Space complexity: O(1)
+   */
+  public static int subtract(int a, int b) {
+    return a + negate(b);
+  }
+ /**
+  * Time complexity: O(log(n)^2)
+  * Space complexity: O(1)
+  */
+  private static int negate(final int n) {
+    int newSign = n > 0 ? -1 : 1;
+    int delta = newSign;
+    int result = 0;
+    int count = n;
+    while (count != 0) {
+      boolean signsChange = (count + delta > 0) != (n > 0);
+      if (signsChange && count+delta != 0) {
+        delta = newSign;
+      }
+      count += delta;
+      result += delta;
+      delta += delta;
+    }
+    return result;
+  }
+
+  // will not complete for very large numbers
+  public static int multiply(final int a, final int b) {
+    if (abs(a) < abs(b)) {
+      return multiply(b, a);
+    }
+
+    int product = 0;
+    for (int i = 0; i < abs(b); i++) {
+      product += a;
+    }
+    if (b < 0) {
+      return negate(product);
+    } else {
+      return product;
+    }
+  }
+
+  private static int abs(int n) {
+    if (n >= 0) {
+      return n;
+    } else {
+      return negate(n);
+    }
+  }
+
+  // will not complete for very large numbers
+  public static int divide(int a, int b) {
+    if (b == 0) {
+      throw new ArithmeticException("Cannot divide by zero");
+    }
+
+    int quotient = 0;
+    int x = 0;
+    int absA = abs(a);
+    int absB = abs(b);
+    while (x + absB <= absA) {
+      quotient++;
+      x = x + absB;
+    }
+    if (a < 0 != b < 0) {
+      return negate(quotient);
+    } else {
+      return quotient;
     }
   }
 }
