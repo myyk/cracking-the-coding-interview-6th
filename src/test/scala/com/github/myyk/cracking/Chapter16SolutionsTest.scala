@@ -22,6 +22,9 @@ import com.github.myyk.cracking.Chapter16Solutions.EnglishIntMaker
 import com.github.myyk.cracking.Chapter16Solutions.subtract
 import com.github.myyk.cracking.Chapter16Solutions.multiply
 import com.github.myyk.cracking.Chapter16Solutions.divide
+import com.github.myyk.cracking.Chapter16Solutions.livingPeople
+import com.github.myyk.cracking.Chapter16Solutions.livingPeopleBruteForce
+import com.github.myyk.cracking.Chapter16Solutions.Person
 
 class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
@@ -144,9 +147,10 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
 
   def testOperationsHelper(a: Int, b: Int): Unit = {
     subtract(a, b) shouldBe (a - b)
-    multiply(a, b) shouldBe (a * b)
+    if (a.abs < 10000 && b.abs < 10000) {
+      multiply(a, b) shouldBe (a * b)  
+    }
     if (b != 0 && a.abs < 10000) {
-      println(s"a = $a, b = $b")
       divide(a, b) shouldBe (a / b)
     }
   }
@@ -160,11 +164,24 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
     testOperations(Integer.MIN_VALUE + 1, 2)
     testOperations(123, 32)
     testOperations(123, -32)
-    // these test cases would be too slow to complete
-//    testOperations(Integer.MAX_VALUE, Integer.MAX_VALUE)
-//    testOperations(Integer.MIN_VALUE, Integer.MIN_VALUE)
-//    for (_ <- 1 to 100) {
-//      testOperations(Random.nextInt(), Random.nextInt())
-//    }
+    testOperations(Integer.MAX_VALUE, Integer.MAX_VALUE)
+    testOperations(Integer.MIN_VALUE, Integer.MIN_VALUE)
+    for (_ <- 1 to 100) {
+      testOperations(Random.nextInt(), Random.nextInt())
+    }
+  }
+
+  def testLivingPeople(people: Set[Person]): Unit = {
+    livingPeople(people) shouldBe livingPeopleBruteForce(people)
+  }
+
+  "livingPeople" should "return the year where the most people were living" in {
+    livingPeople(Set(new Person(1900, 2000), new Person(1910,1910))) shouldBe 1910
+
+    val people = for (_: Int <- (1 to 10000).toSet) yield {
+      val birth = 1900 + Random.nextInt(100)
+      new Person(birth, birth + Random.nextInt(100))
+    }
+    testLivingPeople(people)
   }
 }

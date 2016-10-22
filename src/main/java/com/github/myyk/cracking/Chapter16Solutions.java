@@ -2,6 +2,7 @@ package com.github.myyk.cracking;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.collect.Maps;
 
@@ -339,11 +340,11 @@ public class Chapter16Solutions {
   }
 
   /**
-   * Operations: Subtract, multiply, and divide all using only add opterator.
+   * Operations: Subtract, multiply, and divide all using only add operator.
    *
    * Assumptions:
    *
-   * Time complexity: O(1)
+   * Time complexity: O(n) where n is 2^32
    * Space complexity: O(1)
    */
   public static int subtract(int a, int b) {
@@ -414,5 +415,70 @@ public class Chapter16Solutions {
     } else {
       return quotient;
     }
+  }
+
+  public static class Person {
+    final int birthYear;
+    final int deathYear;
+
+    public Person(final int birthYear, final int deathYear) {
+      this.birthYear = birthYear;
+      this.deathYear = deathYear;
+    }
+  }
+
+  /**
+   * Living People: Given a bunch of people's birth and death year, find the year where
+   *   the most people were alive.
+   *
+   * Assumptions:
+   *   count the birth and death year as years the person was alive
+   *   people were born between 1900 and 2000 inclusive
+   *   Assume people live no more than 200 years
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   */
+  public static int livingPeople(Set<Person> people) {
+    final int[] births = new int[300];
+    final int[] deaths = new int[300];
+    for (Person person : people) {
+      births[person.birthYear-1900]++;
+      deaths[person.deathYear-1900]++;
+    }
+
+    int maxPop = 0;
+    int population = 0;
+    int yearOffset = 0;
+    for (int i = 0; i < 300; i++) {
+      population += births[i];
+      if (maxPop < population) {
+        maxPop = population;
+        yearOffset = i;
+      }
+      population -= deaths[i];
+    }
+    return 1900 + yearOffset;
+  }
+
+  /**
+   * This can be used to check my answer.
+   */
+  public static int livingPeopleBruteForce(final Set<Person> people) {
+    final int[] populations = new int[300];
+    for (Person person : people) {
+      for (int i = person.birthYear - 1900; i <= person.deathYear - 1900; i++) {
+        populations[i]++;
+      }
+    }
+    int maxPop = 0;
+    int yearOffset = 0;
+    for (int i = 0; i < populations.length; i++) {
+      if (maxPop < populations[i]) {
+        maxPop = populations[i];
+        yearOffset = i;
+      }
+    }
+    return 1900 + yearOffset;
   }
 }
