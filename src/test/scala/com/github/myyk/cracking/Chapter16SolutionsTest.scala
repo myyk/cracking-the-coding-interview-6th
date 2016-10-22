@@ -25,6 +25,7 @@ import com.github.myyk.cracking.Chapter16Solutions.divide
 import com.github.myyk.cracking.Chapter16Solutions.livingPeople
 import com.github.myyk.cracking.Chapter16Solutions.livingPeopleBruteForce
 import com.github.myyk.cracking.Chapter16Solutions.Person
+import com.github.myyk.cracking.Chapter16Solutions.countDivingBoards
 
 class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
@@ -183,5 +184,9 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
       new Person(birth, birth + Random.nextInt(100))
     }
     testLivingPeople(people)
+  }
+
+  "countDivingBoards" should "return the number of ways to build a diving board of size k" in {
+    countDivingBoards(5, 10, 200) shouldBe Chapter7Solutions.coinsCount(Set(5, 10).map(JInt.valueOf(_)).asJava, 200)
   }
 }

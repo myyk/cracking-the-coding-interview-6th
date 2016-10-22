@@ -436,8 +436,8 @@ public class Chapter16Solutions {
    *   people were born between 1900 and 2000 inclusive
    *   Assume people live no more than 200 years
    *
-   * Time complexity: O()
-   * Space complexity: O()
+   * Time complexity: O(max(n, y)) where n is the number of people and y is number of years
+   * Space complexity: O(y) where y is the valid number of years people lived
    */
   public static int livingPeople(Set<Person> people) {
     final int[] births = new int[300];
@@ -480,5 +480,45 @@ public class Chapter16Solutions {
       }
     }
     return 1900 + yearOffset;
+  }
+
+  /**
+   * Diving Board: How many ways can a diving board be built with planks of size
+   *   'smaller' and 'larger' where the board is of size k?
+   *
+   * Assumptions:
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   */
+  public static int countDivingBoards(final int smaller, final int larger, final int k) {
+    if (smaller > larger) {
+      throw new IllegalArgumentException("Smaller cannot be larger than larger.");
+    }
+
+    return countDivingBoards(smaller, larger, k, Maps.<Integer, Integer>newHashMap());
+  }
+
+  private static int countDivingBoards(final int smaller, final int larger, final int k, final Map<Integer, Integer> memo) {
+    if (smaller > larger) {
+      throw new IllegalArgumentException("Smaller cannot be larger than larger.");
+    } else if (k == 0) {
+      return 1;
+    } else if (k < 0) {
+      return 0;
+    } else if (larger == 0) {
+      return 0;
+    } else if (memo.containsKey(k)) {
+      return memo.get(k);
+    } else {
+      int boardRemaining = k;
+      int count = 0;
+      while (boardRemaining >= 0) {
+        count += countDivingBoards(0, smaller, boardRemaining);
+        boardRemaining -= larger;
+      }
+      memo.put(k, count);
+      return count; 
+    }
   }
 }
