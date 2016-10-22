@@ -18,7 +18,7 @@ import com.github.myyk.cracking.Chapter16Solutions.TicTacToe
 import com.github.myyk.cracking.Chapter16Solutions.factorialZeroes
 import com.github.myyk.cracking.Chapter16Solutions.smallestDifference
 import com.github.myyk.cracking.Chapter16Solutions.numberMax
-import com.github.myyk.cracking.Chapter16Solutions.englishInt
+import com.github.myyk.cracking.Chapter16Solutions.EnglishIntMaker
 
 class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
@@ -121,9 +121,16 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
   }
 
   "englishInt" should "get a word representation of an interger" in {
-    englishInt(0) shouldBe "Zero"
-    englishInt(1234) shouldBe "One Thousand, Two Hundred Thrity Four"
-    englishInt(-1234) shouldBe "Negative One Thousand, Two Hundred Thrity Four"
-    englishInt(9341234) shouldBe "Nine Million, Three Hundred Fourty One Thousand, Two Hundred Thrity Four"
+    val maker = new EnglishIntMaker()
+    maker.englishInt(0) shouldBe "Zero"
+    maker.englishInt(1000) shouldBe "One Thousand"
+    maker.englishInt(100) shouldBe "One Hundred"
+    maker.englishInt(101) shouldBe "One Hundred One"
+    maker.englishInt(1234) shouldBe "One Thousand, Two Hundred Thrity Four"
+    maker.englishInt(-1234) shouldBe "Negative One Thousand, Two Hundred Thrity Four"
+    maker.englishInt(9341234) shouldBe "Nine Million, Three Hundred Forty One Thousand, Two Hundred Thrity Four"
+    maker.englishInt(Int.MaxValue) shouldBe "Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Seven"
+    maker.englishInt(Int.MinValue) shouldBe "Negative Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Eight"
+    maker.englishInt(Int.MinValue+1) shouldBe "Negative Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Seven"
   }
 }

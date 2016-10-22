@@ -256,7 +256,85 @@ public class Chapter16Solutions {
    * Time complexity: O(1)
    * Space complexity: O(1)
    */
-  public static String englishInt(int num) {
-    return null;
+  public static class EnglishIntMaker {
+    private static Map<Integer, String> lookup = Maps.newHashMap();
+    {{
+      lookup.put(1, "One");
+      lookup.put(2, "Two");
+      lookup.put(3, "Three");
+      lookup.put(4, "Four");
+      lookup.put(5, "Five");
+      lookup.put(6, "Six");
+      lookup.put(7, "Seven");
+      lookup.put(8, "Eight");
+      lookup.put(9, "Nine");
+      lookup.put(10, "Ten");
+      lookup.put(11, "Eleven");
+      lookup.put(12, "Twelve");
+      lookup.put(13, "Thirteen");
+      lookup.put(14, "Fourteen");
+      lookup.put(15, "Fifteen");
+      lookup.put(16, "Sixteen");
+      lookup.put(17, "Seventeen");
+      lookup.put(18, "Eighteen");
+      lookup.put(19, "Nineteen");
+      lookup.put(20, "Twenty");
+      lookup.put(30, "Thrity");
+      lookup.put(40, "Forty");
+      lookup.put(50, "Fifty");
+      lookup.put(60, "Sixty");
+      lookup.put(70, "Seventy");
+      lookup.put(80, "Eighty");
+      lookup.put(90, "Ninty");
+    }}
+
+    public String englishInt(final int num) {
+      StringBuffer sb = new StringBuffer();
+      if (num == 0) {
+        return "Zero";
+      } else if (num == Integer.MIN_VALUE) {
+        return "Negative Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Eight";
+      } else if (num < 0) {
+        sb.append("Negative ");
+        englishInt(-num, sb);
+      } else {
+        englishInt(num, sb);
+      }
+      return sb.toString();
+    }
+
+    private void englishInt(final int num, final StringBuffer sb) {
+      if (lookup.containsKey(num)) {
+        sb.append(lookup.get(num));
+      } else if (num > 20 && num < 100) {
+        final int onesDigit = num%10;
+        englishInt(num - onesDigit, sb);
+        sb.append(" ");
+        englishInt(onesDigit, sb);
+      } else if (num >= 100 && num < 1000) {
+        englishInt(num, "Hundred", 100, "", sb);
+      } else if (num >= 1000 && num < 1000000) {
+        englishInt(num, "Thousand", 1000, ",", sb);        
+      } else if (num >= 1000000 && num < 1000000000) {
+        englishInt(num, "Million", 1000000, ",", sb);        
+      } else if (num >= 1000000000) {
+        englishInt(num, "Billion", 1000000000, ",", sb);        
+      } else {
+        throw new RuntimeException("I'm not sure what happened but num is = " + num + " and sb = " + sb.toString());
+      }
+    }
+
+    private void englishInt(final int num, final String scaleStr, final int scale, final String delimiter, final StringBuffer sb) {
+      final int numOfScale = num / scale;
+      final int remainder = num % scale;
+      englishInt(numOfScale, sb);
+      sb.append(" ");
+      sb.append(scaleStr);
+      if (remainder > 0) {
+        sb.append(delimiter);
+        sb.append(" ");
+        englishInt(remainder, sb);
+      }
+    }
   }
 }
