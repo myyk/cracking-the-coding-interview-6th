@@ -2,10 +2,10 @@ package com.github.myyk.cracking
 
 import java.lang.{ Integer => JInt }
 
-import scala.collection.JavaConversions.asScalaSet
+import scala.collection.JavaConversions._
 import scala.collection.JavaConversions.seqAsJavaList
 import scala.collection.JavaConversions.setAsJavaSet
-import scala.collection.JavaConverters.setAsJavaSetConverter
+import scala.collection.JavaConverters._
 import scala.math.BigInt.javaBigInteger2bigInt
 import scala.util.Random
 
@@ -25,7 +25,8 @@ import com.github.myyk.cracking.Chapter16Solutions.divide
 import com.github.myyk.cracking.Chapter16Solutions.livingPeople
 import com.github.myyk.cracking.Chapter16Solutions.livingPeopleBruteForce
 import com.github.myyk.cracking.Chapter16Solutions.Person
-import com.github.myyk.cracking.Chapter16Solutions.countDivingBoards
+import com.github.myyk.cracking.Chapter16Solutions.countDivingBoardsOfKPieces
+import com.github.myyk.cracking.Chapter16Solutions.countDivingBoardsOfSize
 
 class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
@@ -186,7 +187,13 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
     testLivingPeople(people)
   }
 
-  "countDivingBoards" should "return the number of ways to build a diving board of size k" in {
-    countDivingBoards(5, 10, 200) shouldBe Chapter7Solutions.coinsCount(Set(5, 10).map(JInt.valueOf(_)).asJava, 200)
+  "countDivingBoardsOfKPieces" should "return the number of ways to build a diving board of with k boards" in {
+    countDivingBoardsOfKPieces(5, 10, 4).toSet shouldBe Set(20, 25, 30, 35, 40)
+    countDivingBoardsOfKPieces(3, 7, 4).toSet shouldBe Set(12, 16, 20, 24, 28)
+    countDivingBoardsOfKPieces(10, 10, 4).toSet shouldBe Set(40)
+  }
+
+  "countDivingBoardsOfSize" should "return the number of ways to build a diving board of size k" in {
+    countDivingBoardsOfSize(5, 10, 200) shouldBe Chapter7Solutions.coinsCount(Set(5, 10).map(JInt.valueOf(_)).asJava, 200)
   }
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * Moderate
@@ -483,7 +484,33 @@ public class Chapter16Solutions {
   }
 
   /**
-   * Diving Board: How many ways can a diving board be built with planks of size
+   * Diving Board: How many different sized diving board can be built from k planks
+   *   of size 'smaller' and 'larger'?
+   *
+   * Assumptions:
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   *
+   * Note: I found this when writing some test cases and computing it by hand. It's
+   *   pretty simple. The smallest board is k of the smallest piece. The largest is k
+   *   of the largest piece. Any other unique length can be found by removing a board
+   *   of the smaller length and adding the longer one. That would add length of the
+   *   larger - smaller to the previous length.
+   */
+  public static Set<Integer> countDivingBoardsOfKPieces(final int smaller, final int larger, final int k) {
+    final Set<Integer> boards = Sets.newHashSet();
+    if (k > 0) {
+      boards.add(larger*k);
+      for (int i = smaller*k; i < larger*k; i += (larger - smaller)) {
+        boards.add(i);
+      }
+    }
+    return boards;
+  }
+
+  /**
+   * Modified Diving Board: How many ways can a diving board be built with planks of size
    *   'smaller' and 'larger' where the board is of size k?
    *
    * Assumptions:
@@ -491,15 +518,15 @@ public class Chapter16Solutions {
    * Time complexity: O()
    * Space complexity: O()
    */
-  public static int countDivingBoards(final int smaller, final int larger, final int k) {
+  public static int countDivingBoardsOfSize(final int smaller, final int larger, final int k) {
     if (smaller > larger) {
       throw new IllegalArgumentException("Smaller cannot be larger than larger.");
     }
 
-    return countDivingBoards(smaller, larger, k, Maps.<Integer, Integer>newHashMap());
+    return countDivingBoardsOfSize(smaller, larger, k, Maps.<Integer, Integer>newHashMap());
   }
 
-  private static int countDivingBoards(final int smaller, final int larger, final int k, final Map<Integer, Integer> memo) {
+  private static int countDivingBoardsOfSize(final int smaller, final int larger, final int k, final Map<Integer, Integer> memo) {
     if (smaller > larger) {
       throw new IllegalArgumentException("Smaller cannot be larger than larger.");
     } else if (k == 0) {
@@ -514,7 +541,7 @@ public class Chapter16Solutions {
       int boardRemaining = k;
       int count = 0;
       while (boardRemaining >= 0) {
-        count += countDivingBoards(0, smaller, boardRemaining);
+        count += countDivingBoardsOfSize(0, smaller, boardRemaining);
         boardRemaining -= larger;
       }
       memo.put(k, count);
