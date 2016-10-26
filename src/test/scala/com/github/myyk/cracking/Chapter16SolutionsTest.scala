@@ -27,6 +27,12 @@ import com.github.myyk.cracking.Chapter16Solutions.livingPeopleBruteForce
 import com.github.myyk.cracking.Chapter16Solutions.Person
 import com.github.myyk.cracking.Chapter16Solutions.countDivingBoardsOfKPieces
 import com.github.myyk.cracking.Chapter16Solutions.countDivingBoardsOfSize
+import com.github.myyk.cracking.Chapter16Solutions.bestLine
+import com.github.myyk.cracking.Chapter16Solutions.Point
+import com.github.myyk.cracking.Chapter16Solutions.Line
+import com.github.myyk.cracking.Chapter16Solutions.masterMindScore
+import com.github.myyk.cracking.Chapter16Solutions.masterMindScore2
+import com.github.myyk.cracking.Chapter16Solutions.MasterMindResult
 
 class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
@@ -195,5 +201,17 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
 
   "countDivingBoardsOfSize" should "return the number of ways to build a diving board of size k" in {
     countDivingBoardsOfSize(5, 10, 200) shouldBe Chapter7Solutions.coinsCount(Set(5, 10).map(JInt.valueOf(_)).asJava, 200)
+  }
+
+  "bestLine" should "find a line that goes throught the most points" in {
+    bestLine(Set(new Point(1,1), new Point(2,2))) shouldBe new Line(new Point(1,1), new Point(2,2))
+    bestLine(Set(new Point(1,1), new Point(3,3))) shouldBe new Line(new Point(1,1), new Point(2,2))
+    bestLine(Set(new Point(0,1), new Point(0,3))) shouldBe new Line(new Point(0,3), new Point(0,3))
+    bestLine(Set(new Point(1,1), new Point(2,2), new Point(3,3), new Point(0,1), new Point(0,3))) shouldBe new Line(new Point(0,0), new Point(1,1))
+  }
+
+  "masterMindScore" should "compute the game score" in {
+    masterMindScore("RGBY", "GGRR") shouldBe new MasterMindResult(1, 1)
+    masterMindScore2("RGBY", "GGRR") shouldBe new MasterMindResult(1, 1)
   }
 }

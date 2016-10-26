@@ -1,9 +1,14 @@
 package com.github.myyk.cracking;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javafx.util.Pair;
+
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -515,8 +520,8 @@ public class Chapter16Solutions {
    *
    * Assumptions:
    *
-   * Time complexity: O()
-   * Space complexity: O()
+   * Time complexity: O(k)
+   * Space complexity: O(1)
    */
   public static int countDivingBoardsOfSize(final int smaller, final int larger, final int k) {
     if (smaller > larger) {
@@ -547,5 +552,283 @@ public class Chapter16Solutions {
       memo.put(k, count);
       return count; 
     }
+  }
+
+  public static class Line {
+    public static final double epsilon = 0.0001;
+
+    // y intercept unless infiniteSlope == true, then x intercept
+    public final double intercept;
+    public final double slope;
+    public final boolean inifiteSlope;
+
+    public Line(double yIntercept, double slope) {
+      this.intercept = floorDouble(yIntercept);
+      this.slope = floorDouble(slope);
+      this.inifiteSlope = false;
+    }
+
+    // use the yIntercept as an xIntercept in this case.
+    public Line(double intercept) {
+      this.intercept = floorDouble(intercept);
+      this.slope = 0;
+      this.inifiteSlope = true;
+    }
+
+    public Line(final Point a, final Point b) {
+      if (isEquivalent(a.x, b.x)) {
+        this.intercept = floorDouble(a.x);
+        this.slope = 0;
+        this.inifiteSlope = true;
+      } else {
+        this.slope = floorDouble((a.y - b.y) / (a.x - b.x));
+        this.intercept = floorDouble(a.y - this.slope * a.x); // y = mx + b
+        this.inifiteSlope = false;
+      }
+    }
+
+    private static double floorDouble(double n) {
+      int temp = (int) (n / epsilon);
+      return ((double) temp) * epsilon;
+    }
+
+    private static boolean isEquivalent(double a, double b) {
+      return Math.abs(a - b) < epsilon;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + (inifiteSlope ? 1231 : 1237);
+      long temp;
+      temp = Double.doubleToLongBits(intercept);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      temp = Double.doubleToLongBits(slope);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      Line other = (Line) obj;
+      if (inifiteSlope != other.inifiteSlope)
+        return false;
+      if (!isEquivalent(intercept, other.intercept))
+        return false;
+      if (!isEquivalent(slope, other.slope))
+        return false;
+      return true;
+    }
+
+    @Override
+    public String toString() {
+      return "Line [intercept=" + intercept + ", slope=" + slope
+          + ", inifiteSlope=" + inifiteSlope + "]";
+    }
+  }
+
+  public static class Point {
+    final public double x;
+    final public double y;
+
+    public Point(double x, double y) {
+      this.x = x;
+      this.y = y;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      long temp;
+      temp = Double.doubleToLongBits(x);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      temp = Double.doubleToLongBits(y);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      Point other = (Point) obj;
+      if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
+        return false;
+      if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
+        return false;
+      return true;
+    }
+  }
+
+  /**
+   * Best Line: Given a set of points in a 2-D space, find a like that passes through the most points.
+   *
+   * Assumptions:
+   *   at least 1 point
+   *
+   * Time complexity: O(n*n)
+   * Space complexity: O(n*n)
+   *
+   * Note: I think this performance could be improved by skipping points known to be on
+   *  the line from checking a previous point on the line. We already have these in
+   *  lines, but modifying the pointsToCheck while iterating over it gives us a
+   *  concurrent modification error.
+   */
+  public static Line bestLine(final Set<Point> points) {
+    if (points.size() == 1) {
+      return new Line(new Point(0, 0), points.iterator().next());
+    } else {
+      Line bestLineSoFar = null;
+      int maxSetSize = 0;
+      final Map<Line, Set<Point>> lines = Maps.newHashMap();
+      final Set<Point> allPoints = Sets.newHashSet(points);
+      final Iterator<Point> it = allPoints.iterator();
+      Point a;
+      while (it.hasNext()) {
+        a = it.next();
+        it.remove();
+        final Set<Point> pointsToCheck = Sets.newHashSet(allPoints);
+        for (Point b : pointsToCheck) {
+          final Line line = new Line(a, b);
+          Set<Point> pointsOnLine;
+          if (lines.containsKey(line)) {
+            pointsOnLine = lines.get(line);
+            pointsOnLine.add(b);
+          } else {
+            pointsOnLine = Sets.newHashSet(a, b);
+            lines.put(line, pointsOnLine);
+          }
+
+          if (pointsOnLine.size() > maxSetSize) {
+            maxSetSize = pointsOnLine.size();
+            bestLineSoFar = line;
+          }
+        }
+      }
+      return bestLineSoFar;
+    }
+  }
+
+  public static class MasterMindResult {
+    public final int hits;
+    public final int psuedoHits;
+
+    public MasterMindResult(int hits, int pseudoHits) {
+      this.hits = hits;
+      this.psuedoHits = pseudoHits;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + hits;
+      result = prime * result + psuedoHits;
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      MasterMindResult other = (MasterMindResult) obj;
+      if (hits != other.hits)
+        return false;
+      if (psuedoHits != other.psuedoHits)
+        return false;
+      return true;
+    }
+
+    @Override
+    public String toString() {
+      return "MasterMindResult [hits=" + hits + ", psuedoHits=" + psuedoHits
+          + "]";
+    }
+  }
+
+  /**
+   * Master Mind: Write a function to compute the score of a round of Master Mind.
+   *
+   * Assumptions:
+   *   input is valid: solution and guess same length, only valid characters
+   *
+   * Time complexity: O(k) where k is length of solution
+   * Space complexity: O(c) where c is the number of characters possible
+   */
+  public static MasterMindResult masterMindScore(String solution, String guess) {
+    final Set<Character> solutionChars = stringToCharSet(solution);
+    final Set<Character> guessChars = stringToCharSet(guess);
+    final Set<Character> charsInBoth = Sets.intersection(solutionChars, guessChars);
+    final Pair<Integer, Set<Character>> hits = findHits(solution, guess);
+    final Set<Character> charsInPsuedoHit = Sets.difference(charsInBoth, hits.getValue());
+    return new MasterMindResult(hits.getKey(), charsInPsuedoHit.size());
+  }
+
+  private static Set<Character> stringToCharSet(String guess) {
+    final Set<Character> set = Sets.newHashSet();
+    for (int i = 0; i < guess.length(); i++) {
+      set.add(guess.charAt(i));
+    }
+    return set;
+  }
+
+  private static Pair<Integer, Set<Character>> findHits(String solution, String guess) {
+    final Set<Character> hitsChar = Sets.newHashSet();
+    int hitsCount = 0;
+    for (int i = 0; i < solution.length(); i++) {
+      if (solution.charAt(i) == guess.charAt(i)) {
+        hitsChar.add(solution.charAt(i));
+        hitsCount++;
+      }
+    }
+    return new Pair<Integer, Set<Character>>(hitsCount, hitsChar);
+  }
+
+  /**
+   * Master Mind: Write a function to compute the score of a round of Master Mind.
+   *
+   * Assumptions:
+   *   input is valid: solution and guess same length, only valid characters
+   *
+   * Time complexity: O(k) where k is length of solution
+   * Space complexity: O(c) where c is the number of characters possible
+   *
+   * Note: Wrote this as one function as a comparison.
+   */
+  public static MasterMindResult masterMindScore2(String solution, String guess) {
+    final Set<Character> seenInHits = Sets.newHashSet();
+    final Set<Character> guesses  = Sets.newHashSet();
+    final Set<Character> seenInSolution  = Sets.newHashSet();
+    int hits = 0;
+
+    for (int i = 0; i < solution.length(); i++) {
+      char nextSolution = solution.charAt(i);
+      char nextGuess = guess.charAt(i);
+      guesses.add(nextGuess);
+      seenInSolution.add(nextSolution);
+      if (nextSolution == nextGuess) {
+        hits++;
+        seenInHits.add(nextSolution);
+      }
+    }
+
+    final Set<Character> psuedoHits  = Sets.difference(Sets.intersection(guesses, seenInSolution), seenInHits);
+    return new MasterMindResult(hits, psuedoHits.size());
   }
 }
