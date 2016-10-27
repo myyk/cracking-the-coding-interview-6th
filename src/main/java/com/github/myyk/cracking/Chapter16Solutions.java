@@ -831,4 +831,50 @@ public class Chapter16Solutions {
     final Set<Character> psuedoHits  = Sets.difference(Sets.intersection(guesses, seenInSolution), seenInHits);
     return new MasterMindResult(hits, psuedoHits.size());
   }
+
+  /**
+   * Sub Sort: Given an integer array that is unsorted, give the indexes n and m such
+   *   that sorting the sub-array from n to m would give a sorted array..
+   *
+   * Assumptions:
+   *   if unsorted length = 1 is ok
+   *   indices are inclusive
+   *   array is not empty
+   *
+   * Time complexity: O(n) where n is the size of the array
+   * Space complexity: O(1)
+   */
+  public static Pair<Integer, Integer> subSortIndexes(final int[] array) {
+    final int firstUnsorted = findFirstUnsortedIndex(array);
+    final int lastUnsorted = findLastUnsortedIndex(array);
+    return new Pair<Integer, Integer>(firstUnsorted, lastUnsorted);
+  }
+
+  private static int findFirstUnsortedIndex(final int[] array) {
+    int firstUnsorted = array.length - 1;
+    int minimum = array[firstUnsorted];
+  
+    for (int i = array.length - 2; i >= 0; i--) {
+      if (array[i] > minimum) {
+        firstUnsorted = i;
+      }
+      minimum = Math.min(array[i], minimum);
+    }
+    return firstUnsorted;
+  }
+
+  private static int findLastUnsortedIndex(int[] array) {
+    int lastUnsorted = 0;
+    int maximum = array[lastUnsorted];
+  
+    for (int i = 1; i < array.length; i++) {
+      if (array[i] < maximum) {
+        lastUnsorted = i;
+      }
+      maximum = Math.max(array[i], maximum);
+    }
+    return lastUnsorted;
+  }
+
+  
 }

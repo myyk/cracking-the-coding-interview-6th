@@ -33,6 +33,8 @@ import com.github.myyk.cracking.Chapter16Solutions.Line
 import com.github.myyk.cracking.Chapter16Solutions.masterMindScore
 import com.github.myyk.cracking.Chapter16Solutions.masterMindScore2
 import com.github.myyk.cracking.Chapter16Solutions.MasterMindResult
+import com.github.myyk.cracking.Chapter16Solutions._
+import javafx.util.Pair
 
 class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
@@ -213,5 +215,12 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "masterMindScore" should "compute the game score" in {
     masterMindScore("RGBY", "GGRR") shouldBe new MasterMindResult(1, 1)
     masterMindScore2("RGBY", "GGRR") shouldBe new MasterMindResult(1, 1)
+  }
+
+  "subSortIndexes" should "give the indexes of the minimum subarray to get a sorted array" in {
+    subSortIndexes(Array(1, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19)) shouldBe new Pair(3, 9)
+    subSortIndexes(Array(1, 2, 4, 7, 10, 11, 7, 12, 7, 7, 16, 18, 19)) shouldBe new Pair(4, 9)
+    subSortIndexes(Array(1, 2, 4, 7, 10, 11, 7, 12, 7, 7, 16, 18, 5)) shouldBe new Pair(3, 12)
+    subSortIndexes(Array(3, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19)) shouldBe new Pair(0, 9)
   }
 }
