@@ -834,7 +834,7 @@ public class Chapter16Solutions {
 
   /**
    * Sub Sort: Given an integer array that is unsorted, give the indexes n and m such
-   *   that sorting the sub-array from n to m would give a sorted array..
+   *   that sorting the sub-array from n to m would give a sorted array.
    *
    * Assumptions:
    *   if unsorted length = 1 is ok
@@ -843,6 +843,10 @@ public class Chapter16Solutions {
    *
    * Time complexity: O(n) where n is the size of the array
    * Space complexity: O(1)
+   *
+   * Difference with book: I like my solution better than the book's. Mine iterates
+   *   through the array twice instead of 4 times. I also find mine a bit easier to
+   *   read at a little over half as many lines of code and less loops.
    */
   public static Pair<Integer, Integer> subSortIndexes(final int[] array) {
     final int firstUnsorted = findFirstUnsortedIndex(array);
@@ -876,5 +880,47 @@ public class Chapter16Solutions {
     return lastUnsorted;
   }
 
-  
+  /**
+   * Contiguous Sequence: Given an array of integers (positive and negative) find the
+   *   contiguous sequence with the highest sum and return the sum.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(n*n) where n is the size of the array
+   * Space complexity: O(n*n)
+   */
+  public static int maxContiguousSequenceSum(final int[] array) {
+    return maxContiguousSequenceSum(array, 0, array.length-1, new Integer[array.length][array.length], new Integer[array.length][array.length]);
+  }
+
+  private static int maxContiguousSequenceSum(final int[] array, final int i, final int j, final Integer[][] memo, final Integer[][] sums) {
+    if (i == j) {
+      return array[i];
+    } else if (i > j) {
+      return Integer.MIN_VALUE;
+    } else if (memo[i][j] != null) {
+      return memo[i][j];
+    } else {
+      int max = sumSubArray(array, i, j, sums);
+      for (int k = i; k < j; k++) {
+        max = Math.max(max, maxContiguousSequenceSum(array, i, k, memo, sums));
+        max = Math.max(max, maxContiguousSequenceSum(array, k+1, j, memo, sums));
+      }
+      memo[i][j] = max;
+      return max;
+    }
+  }
+
+  private static int sumSubArray(final int[] array, final int i, final int j, final Integer[][] sums) {
+    if (i == j) {
+      return array[i];
+    } else if (i > j) {
+      return 0;
+    } else if (sums[i][j] != null) {
+      return sums[i][j];
+    } else {
+      sums[i][j] = array[i] + sumSubArray(array, i+1, j, sums);
+      return sums[i][j];
+    }
+  }
 }
