@@ -224,7 +224,15 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
     subSortIndexes(Array(3, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19)) shouldBe new Pair(0, 9)
   }
 
+  def testMaxContiguousSequenceSum(array: Array[Int], expected: Int): Unit = {
+    maxContiguousSequenceSum(array) shouldBe expected
+    maxContiguousSequenceSum2(array) shouldBe expected
+  }
+
   "maxContiguousSequenceSum" should "get the maximum sum of a contiguous subarray" in {
-    maxContiguousSequenceSum(Array(2, -8, 3, -2, 4, -10)) shouldBe 5
+    testMaxContiguousSequenceSum(Array(2, -8, 3, -2, 4, -10), 5)
+    testMaxContiguousSequenceSum(Array(-10), -10)
+    testMaxContiguousSequenceSum(Array(-10, -2), -2)
+    testMaxContiguousSequenceSum(Array(-2, -10), -2)
   }
 }

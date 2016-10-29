@@ -888,6 +888,9 @@ public class Chapter16Solutions {
    *
    * Time complexity: O(n*n) where n is the size of the array
    * Space complexity: O(n*n)
+   *
+   * Note: Dynamic Programming isn't really the best way to do this after reading the
+   *   book's answer. See maxContiguousSequenceSum2 for a faster answer.
    */
   public static int maxContiguousSequenceSum(final int[] array) {
     return maxContiguousSequenceSum(array, 0, array.length-1, new Integer[array.length][array.length], new Integer[array.length][array.length]);
@@ -922,5 +925,34 @@ public class Chapter16Solutions {
       sums[i][j] = array[i] + sumSubArray(array, i+1, j, sums);
       return sums[i][j];
     }
+  }
+
+  /**
+   * Contiguous Sequence: Given an array of integers (positive and negative) find the
+   *   contiguous sequence with the highest sum and return the sum.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(n) where n is the size of the array
+   * Space complexity: O(1)
+   *
+   * Difference with book: I didn't like their choice of all negative arrays returning
+   *   0, it should be as the question states IMO.
+   */
+  public static int maxContiguousSequenceSum2(final int[] array) {
+    if (array == null || array.length == 0) {
+      throw new IllegalArgumentException("array must be non-empty non-null");
+    }
+    int max = array[0];
+    int currentSum = max;
+    for (int i = 1; i < array.length; i++) {
+      if (currentSum + array[i] > 0) {
+        currentSum += array[i];
+      } else {
+        currentSum = array[i];
+      }
+      max = Math.max(max, currentSum);
+    }
+    return max;
   }
 }
