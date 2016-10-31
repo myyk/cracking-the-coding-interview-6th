@@ -35,6 +35,8 @@ import com.github.myyk.cracking.Chapter16Solutions.masterMindScore2
 import com.github.myyk.cracking.Chapter16Solutions.MasterMindResult
 import com.github.myyk.cracking.Chapter16Solutions._
 import javafx.util.Pair
+import com.github.myyk.cracking.Chapter16Solutions.AntGrid.AntGridResult
+import com.github.myyk.cracking.Chapter16Solutions.AntGrid.Direction
 
 class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
@@ -267,5 +269,46 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
 
   "sumSwap" should "try to find integers to swap to get arrays of the same sum" in {
     testSumSwap(Array(4, 1, 2, 1, 1, 2), Array(3, 6, 3, 3))
+  }
+
+  def printAntWalk(grid: AntGridResult): Unit = {
+    println(s"ant = (${grid.ant.getKey}, ${grid.ant.getValue}), direction = ${grid.direction}")
+    for {
+      col <- 0 until grid.isBlack.length
+      row <- 0 until grid.isBlack(0).length
+    } {
+      if (grid.ant.getKey == col && grid.ant.getValue == row) {
+        if (grid.isBlack(col)(row)) {
+          print('X');
+        } else {
+          print('O');
+        }
+      } else if (grid.isBlack(col)(row)) {
+        print('x');
+      } else {
+        print('o');
+      }
+
+      if (row == grid.isBlack(0).length - 1) {
+        println();
+      }
+    }
+  }
+
+  "antWalk" should "walk the ant according to it's rules and return the result" in {
+    // Useful to manually validate, but too verbose otherwise.
+//    val grid = new AntGrid();
+//    for (i <- 0 to 20) {
+//      println(s"------ k = ${i} ${"-"*25}")
+//      printAntWalk(grid.getResult)
+//      grid.moveAnt()
+//    }
+
+    val expectedArray = Array(
+      Array(false, false, true),
+      Array(true,  true,  true),
+      Array(true,  true,  false)
+    )
+    antWalk(10) shouldBe new AntGridResult(new Pair(0, 0), expectedArray, Direction.Left)
   }
 }

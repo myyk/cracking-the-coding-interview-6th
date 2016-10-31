@@ -3,12 +3,14 @@ package com.github.myyk.cracking;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javafx.util.Pair;
 
+import com.github.myyk.cracking.Chapter16Solutions.AntGrid.AntGridResult;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -1108,5 +1110,172 @@ public class Chapter16Solutions {
       sum += a[i];
     }
     return sum;
+  }
+
+  public static class AntGrid {
+    protected static enum Direction {
+      Right, Down, Left, Up
+    }
+
+    // false == white, black == true
+    private final Map<Pair<Integer, Integer>, Boolean> grid;
+    private int antCol = 0;
+    private int antRow = 0;
+    private Direction antDirection = Direction.Right;
+
+    public AntGrid() {
+      grid = Maps.newHashMap();
+    }
+
+    public void moveAnt() {
+      final boolean isBlack = flipCurrentColor();
+      if (!isBlack) {
+        moveWhite();
+      } else {
+        moveBlack();
+      }
+    }
+
+    // returns old value and flips the current color
+    private boolean flipCurrentColor() {
+      final Pair<Integer, Integer> antPosition = new Pair<Integer, Integer>(antCol, antRow);
+      final boolean oldValue = grid.getOrDefault(antPosition, false);
+      grid.put(antPosition, !oldValue);
+      return oldValue;
+    }
+
+    private void moveWhite() {
+      turnClockwise();
+      moveForward();
+    }
+
+    private void moveBlack() {
+      turnCounterClockwise();
+      moveForward();
+    }
+
+    private void moveForward() {
+      switch (antDirection) {
+        case Right: antRow+=1;
+          break;
+        case Down: antCol+=1;
+          break;
+        case Left: antRow-=1;
+          break;
+        case Up: antCol-=1;
+          break;
+      }
+    }
+
+    private void turnClockwise() {
+      antDirection = Direction.values()[(antDirection.ordinal() + 1) % Direction.values().length];
+    }
+    private void turnCounterClockwise() {
+      antDirection = Direction.values()[(antDirection.ordinal() + Direction.values().length - 1) % Direction.values().length];
+    }
+
+    public AntGridResult getResult() {
+      final GridDimensions dimensions = getGridDemensions();
+      final Pair<Integer, Integer> ant = new Pair<Integer, Integer>(antCol - dimensions.minY, antRow - dimensions.minX);
+      boolean[][] isBlack = new boolean[dimensions.maxY - dimensions.minY + 1][dimensions.maxX - dimensions.minX + 1];
+      for (Map.Entry<Pair<Integer, Integer>, Boolean> entry: grid.entrySet()) {
+        if (entry.getValue()) {
+          isBlack[entry.getKey().getKey() - dimensions.minY][entry.getKey().getValue() - dimensions.minX] = true;
+        }
+      }
+      return new AntGridResult(ant, isBlack, antDirection);
+    }
+
+    private GridDimensions getGridDemensions() {
+      int minX = antRow, maxX = antRow;
+      int minY = antCol, maxY = antCol;
+ 
+      for (Map.Entry<Pair<Integer, Integer>, Boolean> entry: grid.entrySet()) {
+        if (entry.getValue()) {
+          int y = entry.getKey().getKey();
+          int x = entry.getKey().getValue();
+          minY = Math.min(minY, y);
+          minX = Math.min(minX, x);
+          maxY = Math.max(maxY, y);
+          maxX = Math.max(maxX, x);
+        }
+      }
+      return new GridDimensions(minX, maxX, minY, maxY);
+    }
+
+    private static class GridDimensions {
+      public final int minX, maxX, minY, maxY;
+
+      public GridDimensions(int minX, int maxX, int minY, int maxY) {
+        this.minX = minX;
+        this.maxX = maxX;
+        this.minY = minY;
+        this.maxY = maxY;
+      }
+    }
+
+    public static class AntGridResult {
+      public final Pair<Integer, Integer> ant;
+      public final boolean[][] isBlack;
+      public final Direction direction;
+
+      public AntGridResult(Pair<Integer, Integer> ant, boolean[][] isBlack, Direction direction) {
+        this.ant = ant;
+        this.isBlack = isBlack;
+        this.direction = direction;
+      }
+
+      @Override
+      public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((ant == null) ? 0 : ant.hashCode());
+        result = prime * result
+            + ((direction == null) ? 0 : direction.hashCode());
+        result = prime * result + Arrays.hashCode(isBlack);
+        return result;
+      }
+
+      @Override
+      public boolean equals(Object obj) {
+        if (this == obj)
+          return true;
+        if (obj == null)
+          return false;
+        if (getClass() != obj.getClass())
+          return false;
+        AntGridResult other = (AntGridResult) obj;
+        if (ant == null) {
+          if (other.ant != null)
+            return false;
+        } else if (!ant.equals(other.ant))
+          return false;
+        if (direction != other.direction)
+          return false;
+        if (!Arrays.deepEquals(isBlack, other.isBlack))
+          return false;
+        return true;
+      }      
+    }
+  }
+
+  /**
+   * Langton's Ant: Given an infinite black and white grid and an and facing to the
+   *   right, simulate the effect of the ant moving around follow it's rules:
+   *     1. At white, flip the color to black, turn 90 CW and move forward 1.
+   *     2. At black, flip the color to white, turn 90 CCW and move forward 1.
+   *   Simulate the first k moves of the ant and return the grid.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   */
+  public static AntGridResult antWalk(final int k) {
+    final AntGrid grid = new AntGrid();
+    for (int i = 0; i < k; i++) {
+      grid.moveAnt();
+    }
+    return grid.getResult();
   }
 }
