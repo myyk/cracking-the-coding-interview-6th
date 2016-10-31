@@ -1117,14 +1117,14 @@ public class Chapter16Solutions {
       Right, Down, Left, Up
     }
 
-    // false == white, black == true
-    private final Map<Pair<Integer, Integer>, Boolean> grid;
+    // if in the set, it's black
+    private final Set<Pair<Integer, Integer>> grid;
     private int antCol = 0;
     private int antRow = 0;
     private Direction antDirection = Direction.Right;
 
     public AntGrid() {
-      grid = Maps.newHashMap();
+      grid = Sets.newHashSet();
     }
 
     public void moveAnt() {
@@ -1139,8 +1139,10 @@ public class Chapter16Solutions {
     // returns old value and flips the current color
     private boolean flipCurrentColor() {
       final Pair<Integer, Integer> antPosition = new Pair<Integer, Integer>(antCol, antRow);
-      final boolean oldValue = grid.getOrDefault(antPosition, false);
-      grid.put(antPosition, !oldValue);
+      final boolean oldValue = grid.remove(antPosition);
+      if (!oldValue) {
+        grid.add(antPosition);
+      }
       return oldValue;
     }
 
@@ -1178,10 +1180,8 @@ public class Chapter16Solutions {
       final GridDimensions dimensions = getGridDemensions();
       final Pair<Integer, Integer> ant = new Pair<Integer, Integer>(antCol - dimensions.minY, antRow - dimensions.minX);
       boolean[][] isBlack = new boolean[dimensions.maxY - dimensions.minY + 1][dimensions.maxX - dimensions.minX + 1];
-      for (Map.Entry<Pair<Integer, Integer>, Boolean> entry: grid.entrySet()) {
-        if (entry.getValue()) {
-          isBlack[entry.getKey().getKey() - dimensions.minY][entry.getKey().getValue() - dimensions.minX] = true;
-        }
+      for (Pair<Integer, Integer> black: grid) {
+        isBlack[black.getKey() - dimensions.minY][black.getValue() - dimensions.minX] = true;
       }
       return new AntGridResult(ant, isBlack, antDirection);
     }
@@ -1190,15 +1190,13 @@ public class Chapter16Solutions {
       int minX = antRow, maxX = antRow;
       int minY = antCol, maxY = antCol;
  
-      for (Map.Entry<Pair<Integer, Integer>, Boolean> entry: grid.entrySet()) {
-        if (entry.getValue()) {
-          int y = entry.getKey().getKey();
-          int x = entry.getKey().getValue();
-          minY = Math.min(minY, y);
-          minX = Math.min(minX, x);
-          maxY = Math.max(maxY, y);
-          maxX = Math.max(maxX, x);
-        }
+      for (Pair<Integer, Integer> black: grid) {
+        int y = black.getKey();
+        int x = black.getValue();
+        minY = Math.min(minY, y);
+        minX = Math.min(minX, x);
+        maxY = Math.max(maxY, y);
+        maxX = Math.max(maxX, x);
       }
       return new GridDimensions(minX, maxX, minY, maxY);
     }
