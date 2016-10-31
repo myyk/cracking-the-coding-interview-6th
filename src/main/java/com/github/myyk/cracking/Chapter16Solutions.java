@@ -1266,8 +1266,8 @@ public class Chapter16Solutions {
    *
    * Assumptions:
    *
-   * Time complexity: O()
-   * Space complexity: O()
+   * Time complexity: O(1) for each move
+   * Space complexity: O() impact minimized by using hashset
    */
   public static AntGridResult antWalk(final int k) {
     final AntGrid grid = new AntGrid();
