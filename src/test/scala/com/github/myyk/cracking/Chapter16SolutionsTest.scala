@@ -235,4 +235,25 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
     testMaxContiguousSequenceSum(Array(-10, -2), -2)
     testMaxContiguousSequenceSum(Array(-2, -10), -2)
   }
+
+  "doesPatternMatch" should "determine if the pattern matches the value" in {
+    doesPatternMatch("", "catcatgocatgo") shouldBe false
+    doesPatternMatch("a", "catcatgocatgo") shouldBe true
+    doesPatternMatch("b", "catcatgocatgo") shouldBe true
+    doesPatternMatch("ab", "catcatgocatgo") shouldBe true
+    doesPatternMatch("aabab", "catcatgocatgo") shouldBe true
+    doesPatternMatch("aabac", "catcatgocatgo") shouldBe false
+  }
+
+  "findPondSizes" should "find the sizes of the various ponds in the topography" in {
+    findPondSizes(Array(Array(1))).toSet shouldBe Set()
+    findPondSizes(Array(Array(0))).toSet shouldBe Set(1)
+    findPondSizes(Array(Array(0, 0), Array(0, 0))).toSet shouldBe Set(4)
+
+    findPondSizes(Array(
+        Array(0, 2, 1, 0),
+        Array(0, 1, 0, 1),
+        Array(1, 1, 0, 1),
+        Array(0, 1, 0, 1))).toSet shouldBe Set(1,2,4)
+  }
 }

@@ -955,4 +955,104 @@ public class Chapter16Solutions {
     }
     return max;
   }
+
+  /**
+   * Pattern Matching: Given a pattern and a value, see if the pattern can match the
+   *   value. Each character in the pattern needs to be uniquely mapped to a
+   *   sequence of characters.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O() // not very good because of all the 'substring's as coded
+   * Space complexity: O()
+   *
+   * Difference with book: I modified this to allow patterns to have many
+   *   different characters instead of just 'a' and 'b'.
+   */
+  public static boolean doesPatternMatch(final String pattern, final String value) {
+    if (pattern.isEmpty()) {
+      return false;
+    }
+
+    return doesPatternMatch(pattern, value, Maps.<Character, String>newHashMap());
+  }
+
+  private static boolean doesPatternMatch(final String pattern, final String value, final Map<Character, String> mappings) {
+    if (pattern.isEmpty() && value.isEmpty()) {
+      return true;
+    } else if (pattern.isEmpty() || value.isEmpty()) {
+      return false;
+    }
+
+    char next = pattern.charAt(0);
+    if (mappings.containsKey(next)) {
+      String prefix = mappings.get(next);
+      if (!value.startsWith(prefix)) {
+        // this mapping is wrong
+        return false;
+      } else {
+        return doesPatternMatch(pattern.substring(1), value.substring(prefix.length()), mappings);
+      }
+    } else {
+      for (int i = value.length(); i >= 1; i--) {
+        String nextPrefix = value.substring(0, i);
+        if (!mappings.containsValue(nextPrefix)) { //TODO: make O(n) by using a bi-map
+          mappings.put(next, nextPrefix);
+          if (doesPatternMatch(pattern.substring(1), value.substring(nextPrefix.length()), mappings)) {
+            return true;
+          } else {
+            mappings.remove(next);
+          }
+        }
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Pond Sizes: Provided a matrix of land heights where 0 represents water and
+   *   water connected adjacently or diagonally are considered a pond. Write a
+   *   function to return all pond sizes in the matrix.
+   *
+   * Assumptions:
+   *   valid input, square and proper values, at least 1x1
+   *   can modify the input
+   *
+   * Time complexity: O(CR) where C is number of columns and R is number of rows.
+   * Space complexity: O(1)
+   *
+   * Difference with book: I don't look at 8 spaces around the position in
+   *   'findPondSize' because I'm traversing downward in the matrix.
+   */
+  public static Set<Integer> findPondSizes(final int[][] topography) {
+    final Set<Integer> pondSizes = Sets.newHashSet();
+    for (int col = 0; col < topography.length; col++) {
+      for (int row = 0; row < topography[0].length; row++) {
+        if (topography[col][row] == 0) { // not necessary, probably slightly less comparisons though
+          int size = findPondSize(topography, col, row, topography.length, topography[0].length);
+          pondSizes.add(size);
+        }
+      }
+    }
+    return pondSizes;
+  }
+
+  private static int findPondSize(int[][] topography, int col, int row, int colSize, int rowSize) {
+    if (col >= colSize || row >= rowSize || row < 0 || topography[col][row] != 0) {
+      return 0;
+    } else {
+      topography[col][row] = -1;
+      return 1 +
+        // below
+        findPondSize(topography, col+1, row, colSize, rowSize) +
+        // right
+        findPondSize(topography, col, row+1, colSize, rowSize) +
+        // left
+        findPondSize(topography, col, row-1, colSize, rowSize) +
+        // diagonal right
+        findPondSize(topography, col+1, row+1, colSize, rowSize) +
+        // diagonal left
+        findPondSize(topography, col+1, row-1, colSize, rowSize);
+    }
+  }
 }
