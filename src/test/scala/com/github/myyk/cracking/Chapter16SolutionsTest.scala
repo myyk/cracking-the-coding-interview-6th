@@ -256,4 +256,16 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
         Array(1, 1, 0, 1),
         Array(0, 1, 0, 1))).toSet shouldBe Set(1,2,4)
   }
+
+  def testSumSwap(a: Array[Int], b: Array[Int]): Unit = {
+    val result = sumSwap(a, b)
+    val swappedA =  -result(0) :: result(1) :: a.toList
+    val swappedB =  result(0) :: -result(1) :: b.toList
+
+    swappedA.sum shouldBe swappedB.sum
+  }
+
+  "sumSwap" should "try to find integers to swap to get arrays of the same sum" in {
+    testSumSwap(Array(4, 1, 2, 1, 1, 2), Array(3, 6, 3, 3))
+  }
 }

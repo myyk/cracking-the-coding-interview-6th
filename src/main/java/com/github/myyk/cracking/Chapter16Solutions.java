@@ -1,5 +1,6 @@
 package com.github.myyk.cracking;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -1037,7 +1038,11 @@ public class Chapter16Solutions {
     return pondSizes;
   }
 
-  private static int findPondSize(int[][] topography, int col, int row, int colSize, int rowSize) {
+  private static int findPondSize(
+      final int[][] topography,
+      final int col, final int row,
+      final int colSize, final int rowSize
+  ) {
     if (col >= colSize || row >= rowSize || row < 0 || topography[col][row] != 0) {
       return 0;
     } else {
@@ -1054,5 +1059,54 @@ public class Chapter16Solutions {
         // diagonal left
         findPondSize(topography, col+1, row-1, colSize, rowSize);
     }
+  }
+
+  /**
+   * Sum Swap: Given two arrays of integers, find an integer in both arrays such that
+   *   if they were swapped the arrays would have the same sum.
+   *
+   * Assumptions:
+   *   if no such integers, return null
+   *
+   * Time complexity: O(a + b)
+   * Space complexity: O(b) could be improved to choose the shorter at the cost of a little complexity
+   *
+   * Note: If I sort, could use O(1) space, but at cost of O(a log a + b log b) for the sort.
+   */
+  public static int[] sumSwap(final int[] a, final int[] b) {
+    final int sumA = sum(a);
+    final int sumB = sum(b);
+    if ((sumA + sumB) % 2 != 0) {
+      // odd total sum, can't make these equal
+      return null;
+    }
+    final int targetSum = (sumA + sumB)/2;
+    return findDifference(targetSum - sumA, a, b);
+  }
+
+  private static int[] findDifference(final int difference, final int[] a, final int[] b) {
+    final Set<Integer> bSet = toSet(b);
+    for (int i = 0; i < a.length; i++) {
+      if (bSet.contains(a[i] + difference)) {
+        return new int[] {a[i], a[i] + difference};
+      }
+    }
+    return null;
+  }
+
+  private static Set<Integer> toSet(int[] a) {
+    final Set<Integer> set = Sets.newHashSet();
+    for (int i = 0; i < a.length; i++) {
+      set.add(a[i]);
+    }
+    return set;
+  }
+
+  private static int sum(final int[] a) {
+    int sum = 0;
+    for (int i = 0; i < a.length; i++) {
+      sum += a[i];
+    }
+    return sum;
   }
 }
