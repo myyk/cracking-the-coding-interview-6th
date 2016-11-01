@@ -311,4 +311,15 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
     )
     antWalk(10) shouldBe new AntGridResult(new Pair(0, 0), expectedArray, Direction.Left)
   }
+
+  "rand7" should "return random numbers 0 until 7" in {
+    val values = for {
+      i <- (0 until 1000)
+    } yield {
+      rand7()
+    }
+//    println(values.groupBy { a => a }.map{case(a, b) => (a, b.size)}.toList.sortBy{case (a, b) => a})
+
+    values.toSet shouldBe (0 until 7).toSet
+  }
 }

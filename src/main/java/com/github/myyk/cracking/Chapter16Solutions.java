@@ -1,17 +1,14 @@
 package com.github.myyk.cracking;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import javafx.util.Pair;
 
 import com.github.myyk.cracking.Chapter16Solutions.AntGrid.AntGridResult;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -1275,5 +1272,31 @@ public class Chapter16Solutions {
       grid.moveAnt();
     }
     return grid.getResult();
+  }
+
+  /**
+   * Rand7 from Rand5: Given a 'rand5' function that give random numbers from 0 until
+   *  5, create a function that creates a random number 0 until 7 using 'rand5' with
+   *  an equal probability across all possible values.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O() - non-deterministic
+   * Space complexity: O(1)
+   */
+  public static int rand7() {
+    int num = rand5() + 5*rand5();
+    if (num >= (25/7) * 7) {
+      // non-deterministic finish
+      return rand7();
+    }
+
+    return num % 7;
+  }
+
+  private static Random random = new Random();
+
+  private static int rand5() {
+    return random.nextInt(5);
   }
 }
