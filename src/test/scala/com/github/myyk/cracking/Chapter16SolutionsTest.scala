@@ -326,4 +326,43 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "findPairsWithSum" should "find all the pairs with the sum in the array" in {
     findPairsWithSum(Array(2, -3, 5, -7, 8, -1, 0, 1), 1).toMap shouldBe Map(-1 -> 2, -7 -> 8, 0 -> 1)
   }
+
+  "LRUCache" should "work like a LRU cache with a max size" in {
+    val cache = new LRUCache[Integer, Integer](5)
+    // test basic fill
+    for (i <- 1 to 5) {
+      cache.put(i, i) shouldBe null
+      cache.containsKey(i) shouldBe true
+      cache.get(i) shouldBe i
+    }
+
+    // test evict all
+    for (i <- 6 to 10) {
+      cache.put(i, i) shouldBe null
+      cache.containsKey(i) shouldBe true
+      cache.get(i) shouldBe i
+    }
+    for (i <- 1 to 5) {
+      cache.containsKey(i) shouldBe false
+    }
+
+    // test update beginning
+    cache.put(6, 8)
+    cache.get(6) shouldBe 8
+    for (i <- 7 to 10) {
+      cache.containsKey(i) shouldBe true
+      cache.get(i) shouldBe i
+    }
+    cache.get(6) shouldBe 8
+    cache.put(6, 6)
+
+    // test update end
+    cache.put(10, 11)
+    cache.get(10) shouldBe 11
+    for (i <- 6 to 9) {
+      cache.containsKey(i) shouldBe true
+      cache.get(i) shouldBe i
+    }
+    cache.get(10) shouldBe 11
+  }
 }

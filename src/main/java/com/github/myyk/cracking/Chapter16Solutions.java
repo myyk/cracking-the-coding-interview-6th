@@ -1307,6 +1307,8 @@ public class Chapter16Solutions {
    *
    * Time complexity: O(n)
    * Space complexity: O(n)
+   *
+   * Note: This is all about trade offs with time complexity and space.
    */
   public static Map<Integer, Integer> findPairsWithSum(final int[] a, final int sum) {
     final Set<Integer> seen = Sets.newHashSet();
@@ -1323,5 +1325,109 @@ public class Chapter16Solutions {
       }
     }
     return pairs;
+  }
+
+  /**
+   * LRU Cache: Make a LRU cache with a max size.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(n)
+   *
+   * Note: This is a bit sloppy but trying to do this quickly as if in an interview.
+   */
+  public static class LRUCache<K, V> {
+    final int maxSize;
+    final Map<K, Node<K,V>> cache = Maps.newHashMap();
+    Node<K, V> queueHead = null;
+    Node<K, V> queueTail = null;
+    int queueSize = 0;
+
+    private class Node<A, B> {
+      final A key;
+      B value;
+      Node<A, B> next;
+      Node<A, B> previous;
+
+      public Node(final A key) {
+        this.key = key;
+      }
+
+      public B updateValue(B value) {
+        final B oldValue = this.value;
+        this.value = value;
+        return oldValue;
+      }
+    }
+
+    public LRUCache(int maxSize) {
+      super();
+      this.maxSize = maxSize;
+    }
+
+    public V get(K key) {
+      return moveToRearOfQueue(key).value;
+    }
+
+    public V put(K key, V value) {
+      Node<K, V> node;
+      if (containsKey(key)) {
+        node = moveToRearOfQueue(key);
+      } else {
+        node = new Node<K, V>(key);
+        addToRear(node);
+        cache.put(key, node);
+      }
+      return node.updateValue(value);
+    }
+
+    private Node<K, V> moveToRearOfQueue(K key) {
+      final Node<K, V> node = cache.get(key);
+      if (queueTail != node) {
+        if (node != queueHead) {
+          node.previous.next = node.next;
+        } else {
+          queueHead = node.next;
+        }
+
+        node.next.previous = node.previous;
+        node.next = null;
+        node.previous = null;
+        queueSize--;
+        addToRear(node);
+      }
+      return node;
+    }
+
+    private void addToRear(LRUCache<K, V>.Node<K, V> node) {
+      evict();
+      if (queueTail == null) {
+        queueHead = node;
+        queueTail = node;
+      } else {
+        queueTail.next = node;
+        node.previous = queueTail;
+        queueTail = node;
+      }
+      queueSize++;
+    }
+
+    private void evict() {
+      if (queueSize + 1 > maxSize) {
+        removeHead();
+      }
+    }
+
+    private void removeHead() {
+      final Node<K, V> toRemove = queueHead;
+      queueHead = queueHead.next;
+      cache.remove(toRemove.key);
+      queueSize--;      
+    }
+
+    public boolean containsKey(K key) {
+      return cache.containsKey(key);
+    }
   }
 }
