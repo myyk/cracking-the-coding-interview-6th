@@ -322,4 +322,8 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
 
     values.toSet shouldBe (0 until 7).toSet
   }
+
+  "findPairsWithSum" should "find all the pairs with the sum in the array" in {
+    findPairsWithSum(Array(2, -3, 5, -7, 8, -1, 0, 1), 1).toMap shouldBe Map(-1 -> 2, -7 -> 8, 0 -> 1)
+  }
 }

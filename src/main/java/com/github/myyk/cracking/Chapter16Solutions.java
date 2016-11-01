@@ -1299,4 +1299,29 @@ public class Chapter16Solutions {
   private static int rand5() {
     return random.nextInt(5);
   }
+
+  /**
+   * Pairs with Sum: Given an integer array and a sum, find all pairs with the sum.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(n)
+   */
+  public static Map<Integer, Integer> findPairsWithSum(final int[] a, final int sum) {
+    final Set<Integer> seen = Sets.newHashSet();
+    final Map<Integer, Integer> pairs = Maps.newHashMap();
+    for (int i = 0; i < a.length; i++) {
+      int next = a[i];
+      if (!pairs.containsKey(next) || !pairs.containsKey(sum - next)) {
+        if (seen.contains(sum - next)) {
+          pairs.put(Math.min(next, sum - next), Math.max(next, sum - next));
+          seen.remove(sum - next);
+        } else {
+          seen.add(next);
+        }
+      }
+    }
+    return pairs;
+  }
 }
