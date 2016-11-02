@@ -365,4 +365,21 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
     }
     cache.get(10) shouldBe 11
   }
+
+  def testCalculate(expression: String, result: Double) {
+    calculate(expression) shouldBe result
+    calculate2(expression) shouldBe result
+  }
+
+  "calculate" should "compute the value of an expression" in {
+    testCalculate("2", 2)
+    testCalculate("2*3", 6)
+    testCalculate("3/2", 1.5)
+    testCalculate("3+2", 5)
+    testCalculate("2-3", -1)
+    testCalculate("2*3+5/6*3+15", 23.5)
+    testCalculate("1/0", Double.PositiveInfinity)
+    testCalculate("2*2-5/0", Double.NegativeInfinity)
+    testCalculate("2*2-5/0+20", Double.NegativeInfinity)
+  }
 }

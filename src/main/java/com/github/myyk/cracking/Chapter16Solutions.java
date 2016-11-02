@@ -2,13 +2,16 @@ package com.github.myyk.cracking;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javafx.util.Pair;
 
 import com.github.myyk.cracking.Chapter16Solutions.AntGrid.AntGridResult;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -1429,5 +1432,131 @@ public class Chapter16Solutions {
     public boolean containsKey(K key) {
       return cache.containsKey(key);
     }
+  }
+
+  /**
+   * Calculator: Given an arithmetic expression as a String compute it's value. There
+   *   are no parenthesis and valid operators are -,+,* and /. There are only positive
+   *   integers as values.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(c) where c is the number of characters
+   * Space complexity: O(o) where o is the number of addition and subtraction operators
+   *
+   * Note: This is pretty highly tuned. I did a lot of work after solving it to
+   *   reduce the lines of code greatly. It only iterates through the string up to
+   *   three times, first to see where to split, second to subString, third to convert
+   *   strings to integers.
+   */
+  public static double calculate(final String expression) {
+    return calculate(expression, 0);
+  }
+
+  // start-inclusive, end-exclusive
+  private static double calculate(final String expression, final int start) {
+    double value = 0;
+    int valueStart = start;
+    char operation = ' '; // placeholder operation
+    for (int i = start; i < expression.length(); i++) {
+      final char next = expression.charAt(i);
+      double nextValue = 0;
+      if (isOperator(next)) {
+        final char lastOperation = operation;
+        operation = next;
+
+        nextValue = Integer.valueOf(expression.substring(valueStart, i));
+        value = calculate(lastOperation, value, nextValue);
+        valueStart = i + 1;
+
+        if (next == '+') {
+          return value + calculate(expression, i + 1);        
+        } else if (next == '-') {
+          return value - calculate(expression, i + 1);
+        }
+      }
+    }
+    double secondValue = Integer.valueOf(expression.substring(valueStart, expression.length()));
+    return calculate(operation, value, secondValue);
+  }
+
+  private static boolean isOperator(char c) {
+    return (c == '*') || (c == '/') || (c == '+') || (c == '-');
+  }
+
+  private static double calculate(final char operation, final double a, final double b) {
+    if (operation == '*') {
+      return a * b;
+    } else if (operation == '/') {
+      return a / b;
+    } else if (operation == '+') {
+      return a + b;
+    } else if (operation == '-') {
+      return a - b;
+    } else {
+      return b;
+    }
+  }
+
+  /**
+   * Calculator: Given an arithmetic expression as a String compute it's value. There
+   *   are no parenthesis and valid operators are -,+,* and /. There are only positive
+   *   integers as values.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O(c) where c is the number of characters
+   * Space complexity: O(c)
+   *
+   * Note: I think I like this way better, it's a lot more understandable. It uses some
+   *   extra space, but it is way more readable.
+   */
+  public static double calculate2(final String expression) {
+    Pair<List<String>, List<String>> split = splitExpression(expression);
+    final List<String> numbers = split.getKey();
+    final List<String> operators = split.getValue();
+
+    if (numbers.size() != operators.size()+1) {
+      throw new IllegalStateException(String.format("Invalid expression. numbers = %s, ops = %s", numbers.size(), operators.size()));
+    }
+
+    return calculate2(numbers, operators, 0);
+  }
+
+  private static Pair<List<String>, List<String>> splitExpression(final String expression) {
+    List<String> operatorList = Lists.newArrayList();
+    List<String> operandList = Lists.newArrayList();
+    StringTokenizer st = new StringTokenizer(expression, "+-*/", true);
+    while (st.hasMoreTokens()) {
+       String token = st.nextToken();
+
+       if ("+-/*".contains(token)) {
+          operatorList.add(token);
+       } else {
+          operandList.add(token);
+       }
+    }
+    return new Pair<List<String>, List<String>>(operandList, operatorList);
+  }
+
+  private static double calculate2(final List<String> numbers, final List<String> operators, final int start) {
+    double value = Integer.parseInt(numbers.get(start));
+    for (int i = start; i < operators.size(); i++) {
+      String nextOperator = operators.get(i);
+      if ("*".equals(nextOperator)) {
+        double nextValue = Integer.parseInt(numbers.get(i + 1));
+        value *= nextValue;
+      } else if ("/".equals(nextOperator)) {
+        double nextValue = Integer.parseInt(numbers.get(i + 1));
+        value /= nextValue;
+      } else if ("+".equals(nextOperator)) {
+        return value + calculate2(numbers, operators, i + 1);
+      } else if ("-".equals(nextOperator)) {
+        return value - calculate2(numbers, operators, i + 1);
+      } else {
+        throw new IllegalArgumentException("Unknown operator");
+      }
+    }
+    return value;
   }
 }
