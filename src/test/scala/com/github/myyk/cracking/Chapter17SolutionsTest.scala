@@ -49,4 +49,14 @@ class Chapter17SolutionsTest extends FlatSpec with Matchers {
       missingNumber((0 to i).filter(_ != 10).toArray) shouldBe 10
     }
   }
+
+  "findLongestSubArrayWithEqualLettersAndNumbers" should "find longest subarray with equal letters and numbers" in {
+    findLongestSubArrayWithEqualLettersAndNumbers(Array.emptyCharArray) shouldBe Array.emptyCharArray
+    findLongestSubArrayWithEqualLettersAndNumbers(Array('a')) shouldBe Array.emptyCharArray
+    findLongestSubArrayWithEqualLettersAndNumbers(Array('1')) shouldBe Array.emptyCharArray
+    findLongestSubArrayWithEqualLettersAndNumbers(Array('1', 'a')) shouldBe Array('1', 'a')
+    Set(Array('a', '1'), Array('1', 'b')) should contain (findLongestSubArrayWithEqualLettersAndNumbers(Array('a', '1', 'b', 'c')))
+    Set(Array('1', 'a'), Array('2', '3')) should contain (findLongestSubArrayWithEqualLettersAndNumbers(Array('1', 'a', '2', '3')))
+    Set(Array('z', '1', 'a', '2', '3', 'b'), Array('1', 'a', '2', '3', 'b', 'c')) should contain (findLongestSubArrayWithEqualLettersAndNumbers(Array('z', '1', 'a', '2', '3', 'b', 'c', 'z')))
+  }
 }

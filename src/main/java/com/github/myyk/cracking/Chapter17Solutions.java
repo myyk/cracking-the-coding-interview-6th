@@ -1,5 +1,6 @@
 package com.github.myyk.cracking;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -150,4 +151,43 @@ public class Chapter17Solutions {
     return (array[i] >> j) & 1;
   }
 
+  /**
+   * Letters and Numbers: Given an array of letters and numbers, find the longest subarray with an equal
+   *   number of letters and numbers.
+   *
+   * Assumptions:
+   *   only letters and numbers in array
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   */
+  public static char[] findLongestSubArrayWithEqualLettersAndNumbers(final char[] chars) {
+    int longestStart = 0;
+    int longestEnd = 0;
+    for (int i = 0; i < chars.length; i++) {
+      for (int j = i + 1; j <= chars.length; j++) {
+        if (longestEnd - longestStart < j - i && isBalanced(chars, i, j)) {
+          longestStart = i;
+          longestEnd = j;
+        }
+      }
+    }
+    if (longestStart == longestEnd) {
+      return new char[0];
+    } else {
+      return Arrays.copyOfRange(chars, longestStart, longestEnd);
+    }
+  }
+
+  private static boolean isBalanced(final char[] chars, final int from, final int to) {
+    int balance = 0;
+    for (int i = from; i < to; i++) {
+      if (Character.isLetter(chars[i])) {
+        balance += 1;
+      } else {
+        balance -= 1;
+      }
+    }
+    return (balance == 0);
+  }
 }
