@@ -2,10 +2,14 @@ package com.github.myyk.cracking;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import javafx.util.Pair;
+
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
@@ -158,36 +162,62 @@ public class Chapter17Solutions {
    * Assumptions:
    *   only letters and numbers in array
    *
-   * Time complexity: O()
-   * Space complexity: O()
+   * Time complexity: O(n)
+   * Space complexity: O(n)
+   *
+   * Difference with book: In many cases my algorithm has lower constants, but overall is very similar.
+   *   Mine will perform better if the the average chance of any given letter being a letter or a number
+   *   is about even as there will be full traverses through the dataset.
    */
   public static char[] findLongestSubArrayWithEqualLettersAndNumbers(final char[] chars) {
-    int longestStart = 0;
-    int longestEnd = 0;
-    for (int i = 0; i < chars.length; i++) {
-      for (int j = i + 1; j <= chars.length; j++) {
-        if (longestEnd - longestStart < j - i && isBalanced(chars, i, j)) {
-          longestStart = i;
-          longestEnd = j;
-        }
+    final Map<Integer, Pair<Integer, Integer>> excessLettersToIndices = computeExcessLetters(chars);
+    int longestSize = 0;
+    Pair<Integer, Integer> longestIndices = null;
+    for (final Map.Entry<Integer, Pair<Integer, Integer>> next : excessLettersToIndices.entrySet()) {
+      final Pair<Integer, Integer> indices = next.getValue();
+      if (indices.getValue() - indices.getKey() > longestSize) {
+        longestSize = indices.getValue() - indices.getKey();
+        longestIndices = indices;
       }
     }
-    if (longestStart == longestEnd) {
+ 
+    if (longestSize == 0) {
       return new char[0];
     } else {
-      return Arrays.copyOfRange(chars, longestStart, longestEnd);
+      return Arrays.copyOfRange(chars, longestIndices.getKey(), longestIndices.getValue());
     }
   }
 
-  private static boolean isBalanced(final char[] chars, final int from, final int to) {
-    int balance = 0;
-    for (int i = from; i < to; i++) {
-      if (Character.isLetter(chars[i])) {
-        balance += 1;
+  /*
+   * From each character keep track of the number of unpaired letters seen before it. If that number has
+   * been seen before, then there is a equal subarray from when we first had that number of unpaired
+   * letters until this index. As we find new subarrays that overlap, we can always take the new end index
+   * as the new array should include all of the old array to be the longest.
+   */
+  private static Map<Integer, Pair<Integer, Integer>> computeExcessLetters(char[] chars) {
+    final Map<Integer, Pair<Integer, Integer>> excessLettersToIndices = Maps.newHashMap();
+    int excessLetters = 0;
+    for (int i = 0; i <= chars.length; i++) {
+      final Pair<Integer, Integer> indices = excessLettersToIndices.getOrDefault(excessLetters, new Pair<Integer, Integer>(i, i));
+      excessLettersToIndices.put(excessLetters, new Pair<Integer, Integer>(indices.getKey(), i));
+      if (i < chars.length && Character.isLetter(chars[i])) {
+        excessLetters += 1;
       } else {
-        balance -= 1;
+        excessLetters -= 1;
       }
     }
-    return (balance == 0);
+    return excessLettersToIndices;
+  }
+
+  /**
+   * Counts of 2: Find the number of 2s in numbers 0 to n inclusive.
+   *
+   * Assumptions:
+   *
+   * Time complexity: O()
+   * Space complexity: O()
+   */
+  public static int countsOfTwo(final int n) {
+    return 0;
   }
 }
