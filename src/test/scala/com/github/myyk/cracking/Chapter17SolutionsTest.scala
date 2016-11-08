@@ -4,6 +4,10 @@ import org.scalatest.Matchers
 import org.scalatest.FlatSpec
 import scala.util.Random
 import com.github.myyk.cracking.Chapter17Solutions._
+import scala.collection.JavaConversions._
+import java.lang.{ Integer => JInt }
+import java.util.{ Map => JMap }
+import javafx.util.Pair
 
 class Chapter17SolutionsTest extends FlatSpec with Matchers {
   "addWithoutPlus" should "add two integers" in {
@@ -81,5 +85,19 @@ class Chapter17SolutionsTest extends FlatSpec with Matchers {
     testCountsOfTwo(12314)
     testCountsOfTwo(22314)
     testCountsOfTwo(52314)
+  }
+
+  def babyNameFrequencyReductionScala(freqs: Map[String, Int], syn: List[(String, String)]): Map[String, Int] = {
+    babyNameFrequencyReduction(
+      freqs.map { case (name, freq) => name -> JInt.valueOf(freq)},
+      syn.map { case (a, b) => new Pair(a, b) }
+    ).map { case(name, freq) => name -> Int.unbox(freq) }.toMap
+  }
+
+  "babyNameFrequencyReduction" should "reduce baby name frequencies to one of the synonyms to the total of the synonym frequencies" in {
+    babyNameFrequencyReductionScala(
+      Map("Myyk" -> 1, "John" -> 15, "Jon" -> 12, "Chris" -> 13, "Kris" -> 4, "Christopher" -> 19),
+      List("Jon" -> "John", "John" -> "Johnny", "Chris" -> "Kris", "Chris" -> "Christopher", "Poop" -> "Poo")
+    ) shouldBe Map("John" -> 27, "Chris" -> 36, "Myyk" -> 1)
   }
 }

@@ -3,11 +3,13 @@ package com.github.myyk.cracking;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
 import javafx.util.Pair;
 
+import com.github.myyk.cracking.Chapter16Solutions.MutableInteger;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -214,8 +216,8 @@ public class Chapter17Solutions {
    *
    * Assumptions:
    *
-   * Time complexity: O()
-   * Space complexity: O()
+   * Time complexity: O(log10(n))
+   * Space complexity: O(1)
    */
   public static int countsOfTwo(final int n) {
     if (n < 0) {
@@ -238,5 +240,72 @@ public class Chapter17Solutions {
       magnitude *= 10;
     }
     return twos;
+  }
+
+  /**
+   * Baby Names: Given baby names and their frequency and a list of equivalent name pairs. Reduce the data
+   *   to a synonym to the total of all equivalent synonym to that name.
+   *
+   * Assumptions:
+   *  synonym relationships are transitive
+   *  all data is valid
+   *  remove names with no frequency
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(n)
+   */
+  public static Map<String, Integer> babyNameFrequencyReduction(final Map<String, Integer> frequencies, final List<Pair<String, String>> synonmys) {
+    final Map<String, Set<String>> nameSets = Maps.newHashMap();
+    for (final Pair<String, String> syn: synonmys) {
+      mergeSets(nameSets, syn.getKey(), syn.getValue());
+    }
+    // add missing nameSets that have no syn
+    for (final Map.Entry<String, Integer> nameFreq: frequencies.entrySet()) {
+      if (!nameSets.containsKey(nameFreq.getKey())) {
+        nameSets.put(nameFreq.getKey(), Sets.newHashSet(nameFreq.getKey()));
+      }
+    }
+
+    return babyNameFrequencyReduction(nameSets, frequencies);
+  }
+
+  private static Map<String, Integer> babyNameFrequencyReduction(final Map<String, Set<String>> nameSets, final Map<String, Integer> frequencies) {
+    final Map<String, Integer> result = Maps.newHashMap();
+    for (final Set<String> nameSet : Sets.newHashSet(nameSets.values())) {
+      int total = 0;
+      String minName = null;
+      for (final String next : nameSet) {
+        if (minName == null || next.compareTo(minName) < 0) {
+          minName = next;
+        }
+        total += frequencies.getOrDefault(next, 0);
+      }
+      if (total > 0) {
+        result.put(minName, total);
+      }
+    }
+    return result;
+  }
+
+  private static void mergeSets(final Map<String, Set<String>> nameSets, final String a, final String b) {
+    if (nameSets.containsKey(a) != nameSets.containsKey(b)) {
+      final Set<String> nameSet = nameSets.getOrDefault(a, nameSets.get(b));
+      nameSet.add(a);
+      nameSet.add(b);
+      nameSets.put(a, nameSet);
+      nameSets.put(b, nameSet);
+    } else if (!nameSets.containsKey(a)) {
+      final Set<String> nameSet = Sets.newHashSet(a, b);
+      nameSets.put(a, nameSet);
+      nameSets.put(b, nameSet);
+    } else {
+      // merge 2 sets
+      final Set<String> nameSetA = nameSets.get(a);
+      final Set<String> nameSetB = nameSets.get(b);
+      for (String nextB : nameSetB) {
+        nameSets.put(nextB, nameSetA);
+        nameSetA.add(nextB);
+      }
+    }
   }
 }
