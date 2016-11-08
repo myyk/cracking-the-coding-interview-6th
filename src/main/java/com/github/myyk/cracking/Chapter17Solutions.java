@@ -218,6 +218,25 @@ public class Chapter17Solutions {
    * Space complexity: O()
    */
   public static int countsOfTwo(final int n) {
-    return 0;
+    if (n < 0) {
+      return 0;
+    }
+
+    int remaining = n;
+    int magnitude = 1;
+    int twos = 0;
+    while (remaining > 0) {
+      final int digit = remaining % 10;
+      if (digit >= 3) {
+        twos += magnitude;
+      } else if (digit == 2) {
+        twos += (n % (magnitude * 10)) - (2 * magnitude) + 1;
+      }
+
+      twos += remaining/10 * magnitude;
+      remaining /= 10;
+      magnitude *= 10;
+    }
+    return twos;
   }
 }

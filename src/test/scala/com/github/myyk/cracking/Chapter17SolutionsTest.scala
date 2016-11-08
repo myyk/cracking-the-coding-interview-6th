@@ -59,4 +59,27 @@ class Chapter17SolutionsTest extends FlatSpec with Matchers {
     Set(Array('1', 'a'), Array('2', '3')) should contain (findLongestSubArrayWithEqualLettersAndNumbers(Array('1', 'a', '2', '3')))
     Set(Array('z', '1', 'a', '2', '3', 'b'), Array('1', 'a', '2', '3', 'b', 'c')) should contain (findLongestSubArrayWithEqualLettersAndNumbers(Array('z', '1', 'a', '2', '3', 'b', 'c', 'z')))
   }
+
+  def countsOfTwoBruteForce(n: Int): Int = {
+    if (n <= 0) {
+      0
+    } else {
+      (0 to n).map(_.toString).view.flatten.count(_ == '2')
+    }
+  }
+
+  def testCountsOfTwo(n: Int): Unit = {
+    countsOfTwo(n) shouldBe countsOfTwoBruteForce(n)
+  }
+
+  "countsOfTwo" should "find the number of 2s in all the numbers 0 to n" in {
+    countsOfTwoBruteForce(25) shouldBe 9
+    testCountsOfTwo(25)
+    testCountsOfTwo(125)
+    testCountsOfTwo(325)
+    testCountsOfTwo(1125)
+    testCountsOfTwo(12314)
+    testCountsOfTwo(22314)
+    testCountsOfTwo(52314)
+  }
 }
