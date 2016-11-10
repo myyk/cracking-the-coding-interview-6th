@@ -1,6 +1,7 @@
 package com.github.myyk.cracking;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -251,8 +252,8 @@ public class Chapter17Solutions {
    *  all data is valid
    *  remove names with no frequency
    *
-   * Time complexity: O(n)
-   * Space complexity: O(n)
+   * Time complexity: O(names + synonyms)
+   * Space complexity: O(names)
    */
   public static Map<String, Integer> babyNameFrequencyReduction(final Map<String, Integer> frequencies, final List<Pair<String, String>> synonmys) {
     final Map<String, Set<String>> nameSets = Maps.newHashMap();
@@ -306,6 +307,69 @@ public class Chapter17Solutions {
         nameSets.put(nextB, nameSetA);
         nameSetA.add(nextB);
       }
+    }
+  }
+
+  public static class Person {
+    final int height;
+    final int weight;
+
+    public static final Person MAX_VALUE = new Person(Integer.MAX_VALUE, Integer.MAX_VALUE);
+
+    public Person(final int height, final int weight) {
+      this.height = height;
+      this.weight = weight;
+    }
+
+    public int getHeight() {
+      return height;
+    }
+
+    public int getWeight() {
+      return weight;
+    }
+
+    public boolean smallerThan(final Person other) {
+      return height < other.height && weight < other.weight;
+    }
+  }
+
+  /**
+   * Circus Tower: Given a list of people who have a height and a weight and can stack only where the person on top is
+   *   both shorter and lighter. How many people high can the person tower be?
+   *
+   * Assumptions:
+   *  ties can't stack
+   *
+   * Time complexity: O(?)
+   * Space complexity: O(?) at least p^2
+   *
+   * Note: This could have a better performance. Probably could sort on both dimensions first.
+   */
+  public static int circusTowerHeight(final Set<Person> people) {
+    return circusTowerHeight(Person.MAX_VALUE, people, Maps.<Person, Integer>newHashMap());
+  }
+
+  private static int circusTowerHeight(final Person base, final Set<Person> people, final Map<Person, Integer> memo) {
+    if (people.isEmpty()) {
+      return 0;
+    } else if (memo.containsKey(base)) {
+      return memo.get(base);
+    } else {
+      final Set<Person> smaller = Sets.newHashSet();
+      for (final Person person : people) {
+        if (person.smallerThan(base)) {
+          smaller.add(person);
+        }
+      }
+      int maxHeight = 0;
+      for(Person next : smaller) {
+        final Set<Person> smallerCopy = Sets.newHashSet(smaller);
+        smallerCopy.remove(next);
+        maxHeight = Math.max(maxHeight, circusTowerHeight(next, smallerCopy, memo));
+      }
+      memo.put(base, maxHeight + 1);
+      return maxHeight + 1;
     }
   }
 }

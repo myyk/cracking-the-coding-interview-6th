@@ -100,4 +100,8 @@ class Chapter17SolutionsTest extends FlatSpec with Matchers {
       List("Jon" -> "John", "John" -> "Johnny", "Chris" -> "Kris", "Chris" -> "Christopher", "Poop" -> "Poo")
     ) shouldBe Map("John" -> 27, "Chris" -> 36, "Myyk" -> 1)
   }
+
+  "circusTowerHeight" should "compute the largest human tower height that can be constructed" in {
+    circusTowerHeight(Set(new Person(65, 100), new Person(70, 150), new Person(56, 90), new Person(75, 190), new Person(60, 95), new Person(68, 110))) shouldBe 6
+  }
 }
