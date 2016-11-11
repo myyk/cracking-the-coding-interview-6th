@@ -104,4 +104,16 @@ class Chapter17SolutionsTest extends FlatSpec with Matchers {
   "circusTowerHeight" should "compute the largest human tower height that can be constructed" in {
     circusTowerHeight(Set(new Person(65, 100), new Person(70, 150), new Person(56, 90), new Person(75, 190), new Person(60, 95), new Person(68, 110))) shouldBe 6
   }
+
+  def testKthNumber(k: Int, expected: Int): Unit = {
+    kthNumber(k) shouldBe expected
+    kthNumber2(k) shouldBe expected
+  }
+
+  "kthNumber" should "be the Kth number such that it's only prime factors are 3, 5, and 7" in {
+    for ((expected, kMinus1) <- Seq(1, 3, 5, 7, 9, 15, 21, 25, 27, 35, 45, 49).zipWithIndex) {
+      testKthNumber(kMinus1 + 1, expected)
+    }
+    testKthNumber(100, 33075) 
+  }
 }

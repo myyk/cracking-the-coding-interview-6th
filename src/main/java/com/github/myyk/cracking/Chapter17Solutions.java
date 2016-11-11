@@ -2,9 +2,11 @@ package com.github.myyk.cracking;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Set;
 
@@ -371,5 +373,98 @@ public class Chapter17Solutions {
       memo.put(base, maxHeight + 1);
       return maxHeight + 1;
     }
+  }
+
+  private static class NoDuplicatesPriorityQueue<E> extends PriorityQueue<E> 
+  {
+      @Override
+      public boolean offer(E e) 
+      {
+          boolean isAdded = false;
+          if(!super.contains(e))
+          {
+              isAdded = super.offer(e);
+          }
+          return isAdded;
+      }
+  }
+
+  /**
+   * Kth Multiple: Find the Kth number such that it's only prime factors are 3, 5, and 7.
+   *
+   * Assumptions:
+   *  Just doing this one time, otherwise make this like a Stream, I guess an Iterator in Java.
+   *
+   * Time complexity: O(k log k)
+   * Space complexity: O(?) // something less than k.
+   *
+   * Note: This solution is easy to understand but a little slower than the optimal solution.
+   */
+  public static int kthNumber(final int k) {
+    final PriorityQueue<Integer> numbers = new NoDuplicatesPriorityQueue<Integer>();
+    numbers.offer(1);
+
+    int i = 0;
+    int number = 1;
+    while(i < k) {
+      number = numbers.poll();
+      numbers.offer(number * 3);
+      numbers.offer(number * 5);
+      numbers.offer(number * 7);
+
+      i++;
+    }
+    return number;
+  }
+
+  /**
+   * Kth Multiple: Find the Kth number such that it's only prime factors are 3, 5, and 7.
+   *
+   * Assumptions:
+   *  Just doing this one time, otherwise make this like a Stream, I guess an Iterator in Java.
+   *
+   * Time complexity: O(k)
+   * Space complexity: O(?) // something less than k.
+   */
+  public static int kthNumber2(final int k) {
+    final LinkedList<Integer> q3 = Lists.newLinkedList();
+    final LinkedList<Integer> q5 = Lists.newLinkedList();
+    final LinkedList<Integer> q7 = Lists.newLinkedList();
+    q3.offer(3);
+    q5.offer(5);
+    q7.offer(7);
+
+    int i = 1;
+    int number = 1;
+    while(i < k) {
+      number = popMin(q3, q5, q7);
+      offerEach(number, q3, q5, q7);
+
+      i++;
+    }
+    return number;
+  }
+
+  private static int popMin(final LinkedList<Integer> q3, final LinkedList<Integer> q5, final LinkedList<Integer> q7) {
+    int min = Math.min(Math.min(q3.peek(), q5.peek()), q7.peek());
+    if (q3.peek().equals(min)) {
+      q3.pop();
+      q3.offer(3*min);
+      q5.offer(5*min);
+      q7.offer(7*min);
+    } else if (q5.peek().equals(min)) {
+      q5.pop();
+      q5.offer(5*min);
+      q7.offer(7*min);
+    } else {
+      q7.pop();
+      q7.offer(7*min);
+    }
+    return min;
+  }
+
+  private static void offerEach(final int number, final LinkedList<Integer> q3, final LinkedList<Integer> q5, final LinkedList<Integer> q7) {
+    // TODO Auto-generated method stub
+    
   }
 }
