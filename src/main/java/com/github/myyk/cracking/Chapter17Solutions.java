@@ -437,16 +437,19 @@ public class Chapter17Solutions {
     int i = 1;
     int number = 1;
     while(i < k) {
-      number = popMin(q3, q5, q7);
-      offerEach(number, q3, q5, q7);
+      number = findMin(q3, q5, q7);
+      updateQueues(number, q3, q5, q7);
 
       i++;
     }
     return number;
   }
 
-  private static int popMin(final LinkedList<Integer> q3, final LinkedList<Integer> q5, final LinkedList<Integer> q7) {
-    int min = Math.min(Math.min(q3.peek(), q5.peek()), q7.peek());
+  private static int findMin(final LinkedList<Integer> q3, final LinkedList<Integer> q5, final LinkedList<Integer> q7) {
+    return Math.min(Math.min(q3.peek(), q5.peek()), q7.peek());
+  }
+
+  private static void updateQueues(final int min, final LinkedList<Integer> q3, final LinkedList<Integer> q5, final LinkedList<Integer> q7) {
     if (q3.peek().equals(min)) {
       q3.pop();
       q3.offer(3*min);
@@ -460,11 +463,55 @@ public class Chapter17Solutions {
       q7.pop();
       q7.offer(7*min);
     }
-    return min;
   }
 
-  private static void offerEach(final int number, final LinkedList<Integer> q3, final LinkedList<Integer> q5, final LinkedList<Integer> q7) {
-    // TODO Auto-generated method stub
-    
+  /**
+   * Majority Element: Find an value such that the value represents a majority of the elements in the positive integer
+   *   array. Return -1 if there is no such element.
+   *
+   * Assumptions:
+   *   majority means > array.length / 2
+   *
+   * Time complexity: O(n)
+   * Space complexity: O(1)
+   */
+  public static int findMajority(int[] array) {
+    final int maybeMajority = findPossibleMajority(array);
+    if (maybeMajority > 0 && isValidMajority(maybeMajority, array)) {
+      return maybeMajority;
+    } else {
+      return -1;
+    }
   }
+
+  private static int findPossibleMajority(final int[] a) {
+    int maybeMajority = -1;
+    int majorityCount = 0;
+    for (int i = 0; i < a.length; i++) {
+      if (majorityCount == 0) {
+        maybeMajority = a[i];
+      }
+      
+      if (maybeMajority == a[i]) {
+        majorityCount++;
+      } else {
+        majorityCount--;
+      }
+    }
+    return maybeMajority;
+  }
+
+  private static boolean isValidMajority(final int maybeMajority, final int[] array) {
+    int found = 0;
+    for (int next : array) {
+      if (next == maybeMajority) {
+        found++;
+        if (found > array.length / 2) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
 }

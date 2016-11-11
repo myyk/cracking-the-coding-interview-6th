@@ -116,4 +116,14 @@ class Chapter17SolutionsTest extends FlatSpec with Matchers {
     }
     testKthNumber(100, 33075) 
   }
+
+  "findMajority" should "find the majority element in the array if it exitst" in {
+    findMajority(Array(1)) shouldBe 1
+    findMajority(Array(1, 2)) shouldBe -1
+    findMajority(Array(1, 2, 1)) shouldBe 1
+    findMajority(Array(1, 2, 5, 9, 5, 9, 5, 5, 5, 2)) shouldBe -1
+    findMajority(Array(1, 2, 5, 9, 5, 9, 5, 5, 5)) shouldBe 5
+    findMajority(Array(5, 9, 5, 9, 5, 5, 5, 1, 2)) shouldBe 5
+    findMajority(Array(5, 9, 2, 9, 5, 5, 5, 1, 5)) shouldBe 5
+  }
 }
