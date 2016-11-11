@@ -514,4 +514,43 @@ public class Chapter17Solutions {
     return false;
   }
 
+  /**
+   * Word Distance: Given a large text file of words and two words. Find the shortest distance between the two words.
+   *
+   * Assumptions:
+   *   the word exists
+   *   pre-process dictionary
+   *
+   * Pre-processing:
+   * Time complexity: O(w) where is the number of non-distinct words
+   * Space complexity: O(w)
+   *
+   * Time complexity: O(a + b) where a and b are the number of occurrences of the two words
+   * Space complexity: O(1)
+   */
+  public static int wordDistance(final String a, final String b, final Map<String, List<Integer>> wordPositions) {
+    final Iterator<Integer> occA = wordPositions.get(a).iterator();
+    final Iterator<Integer> occB = wordPositions.get(b).iterator();
+    int minDistance = Integer.MAX_VALUE;
+    int nextA = occA.next();
+    int nextB = occB.next();
+    while (occA.hasNext() && occB.hasNext()) {
+      if (nextA > nextB) {
+        minDistance = Math.min(minDistance, nextA - nextB);
+        nextB = occB.next();
+      } else {
+        minDistance = Math.min(minDistance, nextB - nextA);
+        nextA = occA.next();
+      }
+    }
+    return minDistance;
+  }
+
+  public static Map<String, List<Integer>> wordPositions(final String[] words) {
+    final Map<String, List<Integer>> result = Maps.newHashMap();
+    for (int i = 0; i < words.length; i++) {
+      result.getOrDefault(words[i], Lists.<Integer>newLinkedList()).add(i);
+    }
+    return result;
+  }
 }

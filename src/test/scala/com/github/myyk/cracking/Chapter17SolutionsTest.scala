@@ -126,4 +126,8 @@ class Chapter17SolutionsTest extends FlatSpec with Matchers {
     findMajority(Array(5, 9, 5, 9, 5, 5, 5, 1, 2)) shouldBe 5
     findMajority(Array(5, 9, 2, 9, 5, 5, 5, 1, 5)) shouldBe 5
   }
+
+  "wordDistance" should "find the minimum word distance between two words" in {
+    
+  }
 }
