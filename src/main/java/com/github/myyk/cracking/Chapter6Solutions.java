@@ -135,7 +135,7 @@ public class Chapter6Solutions {
    *   i lockers starting at locker 1. To toggle a locker, change it state from closed
    *   to open or open to closed. What lockers are open in the end?
    *
-   * Answer: 10, The only open lockers are those where their number is a power of 2. So
+   * Answer: 10, The only open lockers are those where their number is a square. So
    *   1, 4, 9, 16, 25, 36, 49, 64, 81, 10. The mathematical reasoning behind this is
    *   that the lockers will be toggled once for each distinct factor they have.
    *   Thus only lockers with an odd number of factors will be left in open.
