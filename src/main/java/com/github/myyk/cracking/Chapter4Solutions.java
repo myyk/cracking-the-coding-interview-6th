@@ -79,7 +79,7 @@ public class Chapter4Solutions {
    *
    * Notes: Simple breadth first search.
    */
-  public static boolean pathExistsDirectional(IntNode a, IntNode b, IntGraph graph) {
+  public static boolean pathExistsDirectional(IntNode a, IntNode b) {
     if (a == b) {
       return true;
     }
@@ -220,11 +220,10 @@ public class Chapter4Solutions {
       } else if (!left.equals(other.left))
         return false;
       if (right == null) {
-        if (other.right != null)
-          return false;
-      } else if (!right.equals(other.right))
-        return false;
-      return true;
+        return other.right == null;
+      } else {
+        return right.equals(other.right);
+      }
     }
   }
 
@@ -245,8 +244,8 @@ public class Chapter4Solutions {
       return null;
     } else {
       int mid = (start + end) / 2;
-      return new Tree<Integer>(
-          new Integer(array[mid]),
+      return new Tree<>(
+          array[mid],
           minBinaryTree(array, start, mid),
           minBinaryTree(array, mid + 1, end)
       );
@@ -379,12 +378,12 @@ public class Chapter4Solutions {
     }
 
     public BinarySearchTree<T> setLeft(T value) {
-      setLeft(new BinarySearchTree<T>(value, this));
+      setLeft(new BinarySearchTree<>(value, this));
       return this;
     }
 
     public BinarySearchTree<T> setRight(T value) {
-      setRight(new BinarySearchTree<T>(value, this));
+      setRight(new BinarySearchTree<>(value, this));
       return this;
     }
 
@@ -500,9 +499,7 @@ public class Chapter4Solutions {
   private static <T> Set<Node<T>> findRoots(Set<Node<T>> nodes) {
     final Set<Node<T>> nonRoots = Sets.newHashSet();
     for (Node<T> next : nodes) {
-      for (Node<T> adj : next.getAdjacent()) {
-        nonRoots.add(adj);
-      }
+      nonRoots.addAll(next.getAdjacent());
     }
     nodes.removeAll(nonRoots);
     return nodes;
@@ -543,10 +540,10 @@ public class Chapter4Solutions {
    */
   public static <T> AncestorResult<T> findFirstCommonAncestorHelper(Tree<T> tree, Tree<T> p, Tree<T> q) {
     if (tree == null) {
-      return new AncestorResult<T>(false, null);
+      return new AncestorResult<>(false, null);
     }
     if (tree == p && tree == q) {
-      return new AncestorResult<T>(true, tree);
+      return new AncestorResult<>(true, tree);
     }
 
     AncestorResult<T> resultLeft = findFirstCommonAncestorHelper(tree.getLeft(), p, q);
@@ -560,12 +557,12 @@ public class Chapter4Solutions {
     }
 
     if (resultLeft.tree != null && resultRight.tree != null ) {
-      return new AncestorResult<T>(true, tree);
+      return new AncestorResult<>(true, tree);
     } else if (q == tree || p == tree) {
       boolean isAncestor = resultLeft.tree != null || resultRight.tree != null;
-      return new AncestorResult<T>(isAncestor, tree);
+      return new AncestorResult<>(isAncestor, tree);
     } else {
-      return new AncestorResult<T>(false, resultLeft.tree != null ? resultLeft.tree : resultRight.tree);
+      return new AncestorResult<>(false, resultLeft.tree != null ? resultLeft.tree : resultRight.tree);
     }
   }
 
@@ -603,7 +600,7 @@ public class Chapter4Solutions {
     prefix.add(tree.getData());
     for (LinkedList<T> leftSequence : leftSequences) {
       for (LinkedList<T> rightSequence : rightSequences) {
-        List<LinkedList<T>> weaved = weaveSequences(leftSequence, rightSequence, Lists.<LinkedList<T>>newArrayList(), prefix);
+        List<LinkedList<T>> weaved = weaveSequences(leftSequence, rightSequence, Lists.newArrayList(), prefix);
         results.addAll(weaved);
       }
     }
@@ -671,10 +668,8 @@ public class Chapter4Solutions {
   private static <T> boolean areTreesEqual(Tree<T> t1, Tree<T> t2) {
     if (t1 == null && t2 == null) {
       return true;
-    } else if (t1.getData().equals(t2.getData()) && areTreesEqual(t1.getLeft(), t2.getLeft()) && areTreesEqual(t1.getRight(), t2.getRight())) {
-      return true;
     } else {
-      return false;
+      return (t1.getData().equals(t2.getData()) && areTreesEqual(t1.getLeft(), t2.getLeft()) && areTreesEqual(t1.getRight(), t2.getRight()));
     }
   }
 

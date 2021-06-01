@@ -121,10 +121,10 @@ class Chapter2SolutionsTest extends FlatSpec with Matchers {
     val n = toNodes(intersection)
     val list1 = new Node(1, n)
     val list2 = new Node(2, n)
-    Chapter2Solutions.findInteresection(list1, list2) shouldBe n
-    Chapter2Solutions.findInteresection(list1, n) shouldBe n
-    Chapter2Solutions.findInteresection(n, list2) shouldBe n
-    Chapter2Solutions.findInteresection(n, n) shouldBe n
+    Chapter2Solutions.findIntersection(list1, list2) shouldBe n
+    Chapter2Solutions.findIntersection(list1, n) shouldBe n
+    Chapter2Solutions.findIntersection(n, list2) shouldBe n
+    Chapter2Solutions.findIntersection(n, n) shouldBe n
   }
 
   "findInteresection" should "find the intersection of two linked lists" in {

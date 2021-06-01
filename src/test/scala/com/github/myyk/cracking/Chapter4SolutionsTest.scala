@@ -68,14 +68,14 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
 
   "pathExists" should "find if there is a path between a and b" in {
     val (graph, nodes) = createMediumDirectionalTestGraph
-    Chapter4Solutions.pathExistsDirectional(nodes(0), nodes(0), graph) shouldBe true
-    Chapter4Solutions.pathExistsDirectional(nodes(0), nodes(1), graph) shouldBe true
-    Chapter4Solutions.pathExistsDirectional(nodes(1), nodes(0), graph) shouldBe false
-    Chapter4Solutions.pathExistsDirectional(nodes(0), nodes(6), graph) shouldBe true
-    Chapter4Solutions.pathExistsDirectional(nodes(6), nodes(0), graph) shouldBe false
-    Chapter4Solutions.pathExistsDirectional(nodes(0), nodes(7), graph) shouldBe false
-    Chapter4Solutions.pathExistsDirectional(nodes(6), nodes(1), graph) shouldBe true
-    Chapter4Solutions.pathExistsDirectional(nodes(1), nodes(6), graph) shouldBe true
+    Chapter4Solutions.pathExistsDirectional(nodes(0), nodes(0)) shouldBe true
+    Chapter4Solutions.pathExistsDirectional(nodes(0), nodes(1)) shouldBe true
+    Chapter4Solutions.pathExistsDirectional(nodes(1), nodes(0)) shouldBe false
+    Chapter4Solutions.pathExistsDirectional(nodes(0), nodes(6)) shouldBe true
+    Chapter4Solutions.pathExistsDirectional(nodes(6), nodes(0)) shouldBe false
+    Chapter4Solutions.pathExistsDirectional(nodes(0), nodes(7)) shouldBe false
+    Chapter4Solutions.pathExistsDirectional(nodes(6), nodes(1)) shouldBe true
+    Chapter4Solutions.pathExistsDirectional(nodes(1), nodes(6)) shouldBe true
   }
 
   "pathExistsBidirectional" should "find if there is a path between a and b" in {

@@ -103,7 +103,7 @@ public class Chapter3Solutions {
   public static class StackWithMin<T extends Comparable<? super T>> extends Stack<T> {
     private static final long serialVersionUID = -1006279127078761653L;
 
-    private Stack<T> minStack = new Stack<T>();
+    final private Stack<T> minStack = new Stack<>();
 
     public T min() {
       return minStack.peek();
@@ -152,12 +152,11 @@ public class Chapter3Solutions {
         throw new IllegalArgumentException();
       }
       this.threshold = threshold;
-      this.stacks = new Stack<Stack<T>>();
+      this.stacks = new Stack<>();
     }
 
     private void checkConsistency() {
-      for (int i = 0; i < stacks.size(); i++) {
-        Stack<T> stack = stacks.get(i);
+      for (Stack<T> stack : stacks) {
         if (stack.isEmpty()) {
           throw new IllegalStateException("sub-stacks should never be empty");
         }
@@ -181,7 +180,7 @@ public class Chapter3Solutions {
     }
 
     private T pushOnNewStack(T item) {
-      Stack<T> newStack = new Stack<T>();
+      Stack<T> newStack = new Stack<>();
       newStack.push(item);
       stacks.push(newStack);
       return item;
@@ -226,15 +225,15 @@ public class Chapter3Solutions {
    * Design:
    */
   public static class QueueFromStacks<T> implements Queue<T> {
-    final Stack<T> front = new Stack<T>();
-    final Stack<T> back = new Stack<T>();
+    final Stack<T> front = new Stack<>();
+    final Stack<T> back = new Stack<>();
 
     /**
      * Moves front to back.
      */
     private void popAllFront() {
       if (!back.isEmpty()) {
-        new IllegalStateException("Can't pop all from front if there's still elements in the back.");
+        throw new IllegalStateException("Can't pop all from front if there's still elements in the back.");
       }
       while (!front.isEmpty()) {
         back.push(front.pop());
@@ -383,7 +382,7 @@ public class Chapter3Solutions {
    * Space complexity: O(n)
    */
   public static <T extends Comparable<? super T>> void sortStack(Stack<T> stack) {
-    Stack<T> temp = new Stack<T>();
+    Stack<T> temp = new Stack<>();
     while (!stack.isEmpty()) {
       T next = stack.pop();
       while (!temp.isEmpty() && next.compareTo(temp.peek()) >= 0) {

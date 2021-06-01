@@ -189,7 +189,7 @@ public class Chapter1Solutions {
 
     int count = 1;
     char last = str.charAt(0);
-    StringBuffer buf = new StringBuffer(str.length());
+    StringBuilder buf = new StringBuilder(str.length());
     for (int i=1; i<str.length(); i++) {
       char next = str.charAt(i);
       if (last == next) {
@@ -252,8 +252,8 @@ public class Chapter1Solutions {
         break;
       }
     }
-    for (int i = 0; i<m; i++) {
-      if (matrix[i][0] == 0) {
+    for (int[] ints : matrix) {
+      if (ints[0] == 0) {
         firstColumnZero = true;
         break;
       }

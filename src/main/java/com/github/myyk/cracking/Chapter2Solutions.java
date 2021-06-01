@@ -237,7 +237,7 @@ public class Chapter2Solutions {
   }
 
   /**
-   * Palindrome: Are the contents of a singly linked list palindomic.
+   * Palindrome: Are the contents of a singly linked list palindromic.
    *
    * Assumptions:
    *   length is not given
@@ -252,7 +252,7 @@ public class Chapter2Solutions {
 
     Node current = n;
     Node runner = n;
-    Stack<Integer> stack = new Stack<Integer>();
+    Stack<Integer> stack = new Stack<>();
 
     while (runner != null && runner.next != null) {
       stack.push(current.value);
@@ -285,9 +285,9 @@ public class Chapter2Solutions {
    * Time complexity: O(n+m)
    * Space complexity: O(n) when n is the length of the first list
    */
-  public static Node findInteresection(Node a, Node b) {
+  public static Node findIntersection(Node a, Node b) {
     Node current = a;
-    Set<Node> nodes = new HashSet<Node>();
+    Set<Node> nodes = new HashSet<>();
     while (current != null) {
       nodes.add(current);
       current = current.next;
