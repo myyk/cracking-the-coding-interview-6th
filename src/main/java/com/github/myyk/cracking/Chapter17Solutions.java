@@ -5,17 +5,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Set;
 
-import javafx.util.Pair;
-
-import com.github.myyk.cracking.Chapter16Solutions.MutableInteger;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import scala.Tuple2;
 
 /**
  * Hard
@@ -175,13 +172,13 @@ public class Chapter17Solutions {
    *   is about even as there will be full traverses through the dataset.
    */
   public static char[] findLongestSubArrayWithEqualLettersAndNumbers(final char[] chars) {
-    final Map<Integer, Pair<Integer, Integer>> excessLettersToIndices = computeExcessLetters(chars);
+    final Map<Integer, Tuple2<Integer, Integer>> excessLettersToIndices = computeExcessLetters(chars);
     int longestSize = 0;
-    Pair<Integer, Integer> longestIndices = null;
-    for (final Map.Entry<Integer, Pair<Integer, Integer>> next : excessLettersToIndices.entrySet()) {
-      final Pair<Integer, Integer> indices = next.getValue();
-      if (indices.getValue() - indices.getKey() > longestSize) {
-        longestSize = indices.getValue() - indices.getKey();
+    Tuple2<Integer, Integer> longestIndices = null;
+    for (final Map.Entry<Integer, Tuple2<Integer, Integer>> next : excessLettersToIndices.entrySet()) {
+      final Tuple2<Integer, Integer> indices = next.getValue();
+      if (indices._2 - indices._1 > longestSize) {
+        longestSize = indices._2 - indices._1;
         longestIndices = indices;
       }
     }
@@ -189,7 +186,7 @@ public class Chapter17Solutions {
     if (longestSize == 0) {
       return new char[0];
     } else {
-      return Arrays.copyOfRange(chars, longestIndices.getKey(), longestIndices.getValue());
+      return Arrays.copyOfRange(chars, longestIndices._1, longestIndices._2);
     }
   }
 
@@ -199,12 +196,12 @@ public class Chapter17Solutions {
    * letters until this index. As we find new subarrays that overlap, we can always take the new end index
    * as the new array should include all of the old array to be the longest.
    */
-  private static Map<Integer, Pair<Integer, Integer>> computeExcessLetters(char[] chars) {
-    final Map<Integer, Pair<Integer, Integer>> excessLettersToIndices = Maps.newHashMap();
+  private static Map<Integer, Tuple2<Integer, Integer>> computeExcessLetters(char[] chars) {
+    final Map<Integer, Tuple2<Integer, Integer>> excessLettersToIndices = Maps.newHashMap();
     int excessLetters = 0;
     for (int i = 0; i <= chars.length; i++) {
-      final Pair<Integer, Integer> indices = excessLettersToIndices.getOrDefault(excessLetters, new Pair<Integer, Integer>(i, i));
-      excessLettersToIndices.put(excessLetters, new Pair<Integer, Integer>(indices.getKey(), i));
+      final Tuple2<Integer, Integer> indices = excessLettersToIndices.getOrDefault(excessLetters, new Tuple2<>(i, i));
+      excessLettersToIndices.put(excessLetters, new Tuple2<Integer, Integer>(indices._1, i));
       if (i < chars.length && Character.isLetter(chars[i])) {
         excessLetters += 1;
       } else {
@@ -257,10 +254,10 @@ public class Chapter17Solutions {
    * Time complexity: O(names + synonyms)
    * Space complexity: O(names)
    */
-  public static Map<String, Integer> babyNameFrequencyReduction(final Map<String, Integer> frequencies, final List<Pair<String, String>> synonmys) {
+  public static Map<String, Integer> babyNameFrequencyReduction(final Map<String, Integer> frequencies, final List<Tuple2<String, String>> synonmys) {
     final Map<String, Set<String>> nameSets = Maps.newHashMap();
-    for (final Pair<String, String> syn: synonmys) {
-      mergeSets(nameSets, syn.getKey(), syn.getValue());
+    for (final Tuple2<String, String> syn: synonmys) {
+      mergeSets(nameSets, syn._1, syn._2);
     }
     // add missing nameSets that have no syn
     for (final Map.Entry<String, Integer> nameFreq: frequencies.entrySet()) {

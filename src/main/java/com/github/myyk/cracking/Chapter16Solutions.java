@@ -8,12 +8,11 @@ import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javafx.util.Pair;
-
 import com.github.myyk.cracking.Chapter16Solutions.AntGrid.AntGridResult;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import scala.Tuple2;
 
 /**
  * Moderate
@@ -294,13 +293,13 @@ public class Chapter16Solutions {
       lookup.put(18, "Eighteen");
       lookup.put(19, "Nineteen");
       lookup.put(20, "Twenty");
-      lookup.put(30, "Thrity");
+      lookup.put(30, "Thirty");
       lookup.put(40, "Forty");
       lookup.put(50, "Fifty");
       lookup.put(60, "Sixty");
       lookup.put(70, "Seventy");
       lookup.put(80, "Eighty");
-      lookup.put(90, "Ninty");
+      lookup.put(90, "Ninety");
     }}
 
     public String englishInt(final int num) {
@@ -783,9 +782,9 @@ public class Chapter16Solutions {
     final Set<Character> solutionChars = stringToCharSet(solution);
     final Set<Character> guessChars = stringToCharSet(guess);
     final Set<Character> charsInBoth = Sets.intersection(solutionChars, guessChars);
-    final Pair<Integer, Set<Character>> hits = findHits(solution, guess);
-    final Set<Character> charsInPsuedoHit = Sets.difference(charsInBoth, hits.getValue());
-    return new MasterMindResult(hits.getKey(), charsInPsuedoHit.size());
+    final Tuple2<Integer, Set<Character>> hits = findHits(solution, guess);
+    final Set<Character> charsInPsuedoHit = Sets.difference(charsInBoth, hits._2);
+    return new MasterMindResult(hits._1, charsInPsuedoHit.size());
   }
 
   private static Set<Character> stringToCharSet(String guess) {
@@ -796,7 +795,7 @@ public class Chapter16Solutions {
     return set;
   }
 
-  private static Pair<Integer, Set<Character>> findHits(String solution, String guess) {
+  private static Tuple2<Integer, Set<Character>> findHits(String solution, String guess) {
     final Set<Character> hitsChar = Sets.newHashSet();
     int hitsCount = 0;
     for (int i = 0; i < solution.length(); i++) {
@@ -805,7 +804,7 @@ public class Chapter16Solutions {
         hitsCount++;
       }
     }
-    return new Pair<Integer, Set<Character>>(hitsCount, hitsChar);
+    return new Tuple2<Integer, Set<Character>>(hitsCount, hitsChar);
   }
 
   /**
@@ -856,10 +855,10 @@ public class Chapter16Solutions {
    *   through the array twice instead of 4 times. I also find mine a bit easier to
    *   read at a little over half as many lines of code and less loops.
    */
-  public static Pair<Integer, Integer> subSortIndexes(final int[] array) {
+  public static Tuple2<Integer, Integer> subSortIndexes(final int[] array) {
     final int firstUnsorted = findFirstUnsortedIndex(array);
     final int lastUnsorted = findLastUnsortedIndex(array);
-    return new Pair<Integer, Integer>(firstUnsorted, lastUnsorted);
+    return new Tuple2<Integer, Integer>(firstUnsorted, lastUnsorted);
   }
 
   private static int findFirstUnsortedIndex(final int[] array) {
@@ -1118,12 +1117,12 @@ public class Chapter16Solutions {
   }
 
   public static class AntGrid {
-    protected static enum Direction {
+    enum Direction {
       Right, Down, Left, Up
     }
 
     // if in the set, it's black
-    private final Set<Pair<Integer, Integer>> grid;
+    private final Set<Tuple2<Integer, Integer>> grid;
     private int antCol = 0;
     private int antRow = 0;
     private Direction antDirection = Direction.Right;
@@ -1143,7 +1142,7 @@ public class Chapter16Solutions {
 
     // returns old value and flips the current color
     private boolean flipCurrentColor() {
-      final Pair<Integer, Integer> antPosition = new Pair<Integer, Integer>(antCol, antRow);
+      final Tuple2<Integer, Integer> antPosition = new Tuple2<Integer, Integer>(antCol, antRow);
       final boolean oldValue = grid.remove(antPosition);
       if (!oldValue) {
         grid.add(antPosition);
@@ -1183,10 +1182,10 @@ public class Chapter16Solutions {
 
     public AntGridResult getResult() {
       final GridDimensions dimensions = getGridDemensions();
-      final Pair<Integer, Integer> ant = new Pair<Integer, Integer>(antCol - dimensions.minY, antRow - dimensions.minX);
+      final Tuple2<Integer, Integer> ant = new Tuple2<Integer, Integer>(antCol - dimensions.minY, antRow - dimensions.minX);
       boolean[][] isBlack = new boolean[dimensions.maxY - dimensions.minY + 1][dimensions.maxX - dimensions.minX + 1];
-      for (Pair<Integer, Integer> black: grid) {
-        isBlack[black.getKey() - dimensions.minY][black.getValue() - dimensions.minX] = true;
+      for (Tuple2<Integer, Integer> black: grid) {
+        isBlack[black._1 - dimensions.minY][black._2 - dimensions.minX] = true;
       }
       return new AntGridResult(ant, isBlack, antDirection);
     }
@@ -1195,9 +1194,9 @@ public class Chapter16Solutions {
       int minX = antRow, maxX = antRow;
       int minY = antCol, maxY = antCol;
  
-      for (Pair<Integer, Integer> black: grid) {
-        int y = black.getKey();
-        int x = black.getValue();
+      for (Tuple2<Integer, Integer> black: grid) {
+        int y = black._1;
+        int x = black._2;
         minY = Math.min(minY, y);
         minX = Math.min(minX, x);
         maxY = Math.max(maxY, y);
@@ -1218,11 +1217,11 @@ public class Chapter16Solutions {
     }
 
     public static class AntGridResult {
-      public final Pair<Integer, Integer> ant;
+      public final Tuple2<Integer, Integer> ant;
       public final boolean[][] isBlack;
       public final Direction direction;
 
-      public AntGridResult(Pair<Integer, Integer> ant, boolean[][] isBlack, Direction direction) {
+      public AntGridResult(Tuple2<Integer, Integer> ant, boolean[][] isBlack, Direction direction) {
         this.ant = ant;
         this.isBlack = isBlack;
         this.direction = direction;
@@ -1309,7 +1308,7 @@ public class Chapter16Solutions {
   }
 
   /**
-   * Pairs with Sum: Given an integer array and a sum, find all pairs with the sum.
+   * Tuple2s with Sum: Given an integer array and a sum, find all pairs with the sum.
    *
    * Assumptions:
    *
@@ -1517,9 +1516,9 @@ public class Chapter16Solutions {
    *   extra space, but it is way more readable.
    */
   public static double calculate2(final String expression) {
-    Pair<List<String>, List<String>> split = splitExpression(expression);
-    final List<String> numbers = split.getKey();
-    final List<String> operators = split.getValue();
+    Tuple2<List<String>, List<String>> split = splitExpression(expression);
+    final List<String> numbers = split._1;
+    final List<String> operators = split._2;
 
     if (numbers.size() != operators.size()+1) {
       throw new IllegalStateException(String.format("Invalid expression. numbers = %s, ops = %s", numbers.size(), operators.size()));
@@ -1528,7 +1527,7 @@ public class Chapter16Solutions {
     return calculate2(numbers, operators, 0);
   }
 
-  private static Pair<List<String>, List<String>> splitExpression(final String expression) {
+  private static Tuple2<List<String>, List<String>> splitExpression(final String expression) {
     List<String> operatorList = Lists.newArrayList();
     List<String> operandList = Lists.newArrayList();
     StringTokenizer st = new StringTokenizer(expression, "+-*/", true);
@@ -1541,7 +1540,7 @@ public class Chapter16Solutions {
           operandList.add(token);
        }
     }
-    return new Pair<List<String>, List<String>>(operandList, operatorList);
+    return new Tuple2<List<String>, List<String>>(operandList, operatorList);
   }
 
   private static double calculate2(final List<String> numbers, final List<String> operators, final int start) {

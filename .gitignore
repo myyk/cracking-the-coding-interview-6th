@@ -21,3 +21,7 @@ project/plugins/project/
 .project
 .settings
 /bin/
+
+# Intellij specific
+.idea/
+.bsp

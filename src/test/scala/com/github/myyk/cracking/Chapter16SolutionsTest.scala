@@ -1,42 +1,13 @@
 package com.github.myyk.cracking
 
-import java.lang.{ Integer => JInt }
+import com.github.myyk.cracking.Chapter16Solutions.AntGrid.{AntGridResult, Direction}
+import com.github.myyk.cracking.Chapter16Solutions.{EnglishIntMaker, Line, MasterMindResult, MutableInteger, Person, Point, TicTacToe, WordFrequencies, bestLine, countDivingBoardsOfKPieces, countDivingBoardsOfSize, divide, factorialZeroes, isWonTicTacToe, livingPeople, livingPeopleBruteForce, masterMindScore, masterMindScore2, multiply, numberMax, smallestDifference, subtract, _}
+import org.scalatest.{FlatSpec, Matchers}
 
+import java.lang.{Integer => JInt}
 import scala.collection.JavaConversions._
-import scala.collection.JavaConversions.seqAsJavaList
-import scala.collection.JavaConversions.setAsJavaSet
 import scala.collection.JavaConverters._
-import scala.math.BigInt.javaBigInteger2bigInt
 import scala.util.Random
-
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers
-import com.github.myyk.cracking.Chapter16Solutions.MutableInteger
-import com.github.myyk.cracking.Chapter16Solutions.WordFrequencies
-import com.github.myyk.cracking.Chapter16Solutions.isWonTicTacToe
-import com.github.myyk.cracking.Chapter16Solutions.TicTacToe
-import com.github.myyk.cracking.Chapter16Solutions.factorialZeroes
-import com.github.myyk.cracking.Chapter16Solutions.smallestDifference
-import com.github.myyk.cracking.Chapter16Solutions.numberMax
-import com.github.myyk.cracking.Chapter16Solutions.EnglishIntMaker
-import com.github.myyk.cracking.Chapter16Solutions.subtract
-import com.github.myyk.cracking.Chapter16Solutions.multiply
-import com.github.myyk.cracking.Chapter16Solutions.divide
-import com.github.myyk.cracking.Chapter16Solutions.livingPeople
-import com.github.myyk.cracking.Chapter16Solutions.livingPeopleBruteForce
-import com.github.myyk.cracking.Chapter16Solutions.Person
-import com.github.myyk.cracking.Chapter16Solutions.countDivingBoardsOfKPieces
-import com.github.myyk.cracking.Chapter16Solutions.countDivingBoardsOfSize
-import com.github.myyk.cracking.Chapter16Solutions.bestLine
-import com.github.myyk.cracking.Chapter16Solutions.Point
-import com.github.myyk.cracking.Chapter16Solutions.Line
-import com.github.myyk.cracking.Chapter16Solutions.masterMindScore
-import com.github.myyk.cracking.Chapter16Solutions.masterMindScore2
-import com.github.myyk.cracking.Chapter16Solutions.MasterMindResult
-import com.github.myyk.cracking.Chapter16Solutions._
-import javafx.util.Pair
-import com.github.myyk.cracking.Chapter16Solutions.AntGrid.AntGridResult
-import com.github.myyk.cracking.Chapter16Solutions.AntGrid.Direction
 
 class Chapter16SolutionsTest extends FlatSpec with Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
@@ -138,15 +109,15 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
     testNumberMax(Int.MinValue + 1, Int.MaxValue)
   }
 
-  "englishInt" should "get a word representation of an interger" in {
+  "englishInt" should "get a word representation of an integer" in {
     val maker = new EnglishIntMaker()
     maker.englishInt(0) shouldBe "Zero"
     maker.englishInt(1000) shouldBe "One Thousand"
     maker.englishInt(100) shouldBe "One Hundred"
     maker.englishInt(101) shouldBe "One Hundred One"
-    maker.englishInt(1234) shouldBe "One Thousand, Two Hundred Thrity Four"
-    maker.englishInt(-1234) shouldBe "Negative One Thousand, Two Hundred Thrity Four"
-    maker.englishInt(9341234) shouldBe "Nine Million, Three Hundred Forty One Thousand, Two Hundred Thrity Four"
+    maker.englishInt(1234) shouldBe "One Thousand, Two Hundred Thirty Four"
+    maker.englishInt(-1234) shouldBe "Negative One Thousand, Two Hundred Thirty Four"
+    maker.englishInt(9341234) shouldBe "Nine Million, Three Hundred Forty One Thousand, Two Hundred Thirty Four"
     maker.englishInt(Int.MaxValue) shouldBe "Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Seven"
     maker.englishInt(Int.MinValue) shouldBe "Negative Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Eight"
     maker.englishInt(Int.MinValue+1) shouldBe "Negative Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Seven"
@@ -220,10 +191,10 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
   }
 
   "subSortIndexes" should "give the indexes of the minimum subarray to get a sorted array" in {
-    subSortIndexes(Array(1, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19)) shouldBe new Pair(3, 9)
-    subSortIndexes(Array(1, 2, 4, 7, 10, 11, 7, 12, 7, 7, 16, 18, 19)) shouldBe new Pair(4, 9)
-    subSortIndexes(Array(1, 2, 4, 7, 10, 11, 7, 12, 7, 7, 16, 18, 5)) shouldBe new Pair(3, 12)
-    subSortIndexes(Array(3, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19)) shouldBe new Pair(0, 9)
+    subSortIndexes(Array(1, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19)) shouldBe (3, 9)
+    subSortIndexes(Array(1, 2, 4, 7, 10, 11, 7, 12, 7, 7, 16, 18, 19)) shouldBe (4, 9)
+    subSortIndexes(Array(1, 2, 4, 7, 10, 11, 7, 12, 7, 7, 16, 18, 5)) shouldBe (3, 12)
+    subSortIndexes(Array(3, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19)) shouldBe (0, 9)
   }
 
   def testMaxContiguousSequenceSum(array: Array[Int], expected: Int): Unit = {
@@ -272,12 +243,12 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
   }
 
   def printAntWalk(grid: AntGridResult): Unit = {
-    println(s"ant = (${grid.ant.getKey}, ${grid.ant.getValue}), direction = ${grid.direction}")
+    println(s"ant = (${grid.ant._1}, ${grid.ant._2}), direction = ${grid.direction}")
     for {
       col <- 0 until grid.isBlack.length
       row <- 0 until grid.isBlack(0).length
     } {
-      if (grid.ant.getKey == col && grid.ant.getValue == row) {
+      if (grid.ant._1 == col && grid.ant._2 == row) {
         if (grid.isBlack(col)(row)) {
           print('X');
         } else {
@@ -309,7 +280,7 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
       Array(true,  true,  true),
       Array(true,  true,  false)
     )
-    antWalk(10) shouldBe new AntGridResult(new Pair(0, 0), expectedArray, Direction.Left)
+    antWalk(10) shouldBe new AntGridResult((0, 0), expectedArray, Direction.Left)
   }
 
   "rand7" should "return random numbers 0 until 7" in {

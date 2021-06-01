@@ -1,13 +1,11 @@
 package com.github.myyk.cracking
 
-import org.scalatest.Matchers
-import org.scalatest.FlatSpec
-import scala.util.Random
 import com.github.myyk.cracking.Chapter17Solutions._
-import scala.collection.JavaConversions._
-import java.lang.{ Integer => JInt }
-import java.util.{ Map => JMap }
-import javafx.util.Pair
+import org.scalatest.{FlatSpec, Matchers}
+
+import java.lang.{Integer => JInt}
+import scala.collection.JavaConverters._
+import scala.util.Random
 
 class Chapter17SolutionsTest extends FlatSpec with Matchers {
   "addWithoutPlus" should "add two integers" in {
@@ -89,9 +87,9 @@ class Chapter17SolutionsTest extends FlatSpec with Matchers {
 
   def babyNameFrequencyReductionScala(freqs: Map[String, Int], syn: List[(String, String)]): Map[String, Int] = {
     babyNameFrequencyReduction(
-      freqs.map { case (name, freq) => name -> JInt.valueOf(freq)},
-      syn.map { case (a, b) => new Pair(a, b) }
-    ).map { case(name, freq) => name -> Int.unbox(freq) }.toMap
+      freqs.map { case (name, freq) => name -> JInt.valueOf(freq)}.asJava,
+      syn.asJava
+    ).asScala.map { case(name, freq) => name -> Int.unbox(freq) }.toMap
   }
 
   "babyNameFrequencyReduction" should "reduce baby name frequencies to one of the synonyms to the total of the synonym frequencies" in {
@@ -102,7 +100,7 @@ class Chapter17SolutionsTest extends FlatSpec with Matchers {
   }
 
   "circusTowerHeight" should "compute the largest human tower height that can be constructed" in {
-    circusTowerHeight(Set(new Person(65, 100), new Person(70, 150), new Person(56, 90), new Person(75, 190), new Person(60, 95), new Person(68, 110))) shouldBe 6
+    circusTowerHeight(Set(new Person(65, 100), new Person(70, 150), new Person(56, 90), new Person(75, 190), new Person(60, 95), new Person(68, 110)).asJava) shouldBe 6
   }
 
   def testKthNumber(k: Int, expected: Int): Unit = {
