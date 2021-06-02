@@ -4,11 +4,13 @@ import org.scalatest.FlatSpec
 import org.scalatest.Matchers
 import com.github.myyk.cracking.Chapter5Solutions.NextNumberResult
 
+import scala.language.implicitConversions
+
 class Chapter5SolutionsTest extends FlatSpec with Matchers {
-  implicit def enrichStringContext(sc: StringContext) = new RichStringContext(sc)
+  implicit def enrichStringContext(sc: StringContext): RichStringContext = new RichStringContext(sc)
 
   class RichStringContext(sc: StringContext) {
-    def b() = {
+    def b(): Int = {
       def parseBinary(s: String): Int = {
         var i = s.length - 1
         var sum = 0
@@ -40,12 +42,12 @@ class Chapter5SolutionsTest extends FlatSpec with Matchers {
   }
 
   "floatToBinaryString" should "convert a double to a string" in {
-    Chapter5Solutions.floatToBinaryString(1) shouldBe ("ERROR")
-    Chapter5Solutions.floatToBinaryString(0.5) shouldBe (".1")
-    Chapter5Solutions.floatToBinaryString(0.75) shouldBe (".11")
-    Chapter5Solutions.floatToBinaryString(0.25) shouldBe (".01")
-    Chapter5Solutions.floatToBinaryString(0.72) shouldBe ("ERROR")
-    Chapter5Solutions.floatToBinaryString(b"10101010".toDouble/Math.pow(2, 8)) shouldBe (".1010101")
+    Chapter5Solutions.floatToBinaryString(1) shouldBe "ERROR"
+    Chapter5Solutions.floatToBinaryString(0.5) shouldBe ".1"
+    Chapter5Solutions.floatToBinaryString(0.75) shouldBe ".11"
+    Chapter5Solutions.floatToBinaryString(0.25) shouldBe ".01"
+    Chapter5Solutions.floatToBinaryString(0.72) shouldBe "ERROR"
+    Chapter5Solutions.floatToBinaryString(b"10101010".toDouble/Math.pow(2, 8)) shouldBe ".1010101"
   }
 
   "flipBitToWin" should "find the longest sequence possible with one flip" in {

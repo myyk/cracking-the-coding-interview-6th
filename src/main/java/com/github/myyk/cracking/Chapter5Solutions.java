@@ -36,7 +36,7 @@ public class Chapter5Solutions {
       return "ERROR";
     }
 
-    StringBuffer buf = new StringBuffer(32);
+    StringBuilder buf = new StringBuilder(32);
     buf.append('.');
 
     while (num > 0) {
@@ -124,9 +124,7 @@ public class Chapter5Solutions {
       NextNumberResult other = (NextNumberResult) obj;
       if (larger != other.larger)
         return false;
-      if (smaller != other.smaller)
-        return false;
-      return true;
+      return smaller == other.smaller;
     }
   }
 

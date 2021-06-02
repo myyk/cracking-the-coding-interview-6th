@@ -109,12 +109,12 @@ class Chapter2SolutionsTest extends FlatSpec with Matchers {
   }
 
   "isPalindrome" should "determine if a link list contains a palindrome" in {
-    testIsPalindrome(List(), true)
-    testIsPalindrome(List(1), true)
-    testIsPalindrome(List(8,9), false)
-    testIsPalindrome(List(1,2,3), false)
-    testIsPalindrome(List(2,1,3,3,1,2), true)
-    testIsPalindrome(List(2,1,3,1,2), true)
+    testIsPalindrome(List(), expected = true)
+    testIsPalindrome(List(1), expected = true)
+    testIsPalindrome(List(8,9), expected = false)
+    testIsPalindrome(List(1,2,3), expected = false)
+    testIsPalindrome(List(2,1,3,3,1,2), expected = true)
+    testIsPalindrome(List(2,1,3,1,2), expected = true)
   }
 
   def testFindIntersection(intersection: Seq[Int]): Unit = {
@@ -127,7 +127,7 @@ class Chapter2SolutionsTest extends FlatSpec with Matchers {
     Chapter2Solutions.findIntersection(n, n) shouldBe n
   }
 
-  "findInteresection" should "find the intersection of two linked lists" in {
+  "findIntersection" should "find the intersection of two linked lists" in {
     testFindIntersection(List(1,2,3,4))
     testFindIntersection(List(5))
   }

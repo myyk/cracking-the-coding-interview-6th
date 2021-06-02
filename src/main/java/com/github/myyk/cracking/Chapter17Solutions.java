@@ -43,7 +43,6 @@ public class Chapter17Solutions {
         carry = true;
       } else if (x != y) {
         if (!carry) {
-          carry = false;
           sum |= mask;
         }
       } else {
@@ -201,7 +200,7 @@ public class Chapter17Solutions {
     int excessLetters = 0;
     for (int i = 0; i <= chars.length; i++) {
       final Tuple2<Integer, Integer> indices = excessLettersToIndices.getOrDefault(excessLetters, new Tuple2<>(i, i));
-      excessLettersToIndices.put(excessLetters, new Tuple2<Integer, Integer>(indices._1, i));
+      excessLettersToIndices.put(excessLetters, new Tuple2<>(indices._1, i));
       if (i < chars.length && Character.isLetter(chars[i])) {
         excessLetters += 1;
       } else {
@@ -254,9 +253,9 @@ public class Chapter17Solutions {
    * Time complexity: O(names + synonyms)
    * Space complexity: O(names)
    */
-  public static Map<String, Integer> babyNameFrequencyReduction(final Map<String, Integer> frequencies, final List<Tuple2<String, String>> synonmys) {
+  public static Map<String, Integer> babyNameFrequencyReduction(final Map<String, Integer> frequencies, final List<Tuple2<String, String>> synonyms) {
     final Map<String, Set<String>> nameSets = Maps.newHashMap();
-    for (final Tuple2<String, String> syn: synonmys) {
+    for (final Tuple2<String, String> syn: synonyms) {
       mergeSets(nameSets, syn._1, syn._2);
     }
     // add missing nameSets that have no syn
@@ -320,14 +319,6 @@ public class Chapter17Solutions {
       this.weight = weight;
     }
 
-    public int getHeight() {
-      return height;
-    }
-
-    public int getWeight() {
-      return weight;
-    }
-
     public boolean smallerThan(final Person other) {
       return height < other.height && weight < other.weight;
     }
@@ -346,7 +337,7 @@ public class Chapter17Solutions {
    * Note: This could have a better performance. Probably could sort on both dimensions first.
    */
   public static int circusTowerHeight(final Set<Person> people) {
-    return circusTowerHeight(Person.MAX_VALUE, people, Maps.<Person, Integer>newHashMap());
+    return circusTowerHeight(Person.MAX_VALUE, people, Maps.newHashMap());
   }
 
   private static int circusTowerHeight(final Person base, final Set<Person> people, final Map<Person, Integer> memo) {
@@ -398,7 +389,7 @@ public class Chapter17Solutions {
    * Note: This solution is easy to understand but a little slower than the optimal solution.
    */
   public static int kthNumber(final int k) {
-    final PriorityQueue<Integer> numbers = new NoDuplicatesPriorityQueue<Integer>();
+    final PriorityQueue<Integer> numbers = new NoDuplicatesPriorityQueue<>();
     numbers.offer(1);
 
     int i = 0;
@@ -484,12 +475,12 @@ public class Chapter17Solutions {
   private static int findPossibleMajority(final int[] a) {
     int maybeMajority = -1;
     int majorityCount = 0;
-    for (int i = 0; i < a.length; i++) {
+    for (int j : a) {
       if (majorityCount == 0) {
-        maybeMajority = a[i];
+        maybeMajority = j;
       }
-      
-      if (maybeMajority == a[i]) {
+
+      if (maybeMajority == j) {
         majorityCount++;
       } else {
         majorityCount--;
@@ -546,7 +537,7 @@ public class Chapter17Solutions {
   public static Map<String, List<Integer>> wordPositions(final String[] words) {
     final Map<String, List<Integer>> result = Maps.newHashMap();
     for (int i = 0; i < words.length; i++) {
-      result.getOrDefault(words[i], Lists.<Integer>newLinkedList()).add(i);
+      result.getOrDefault(words[i], Lists.newLinkedList()).add(i);
     }
     return result;
   }

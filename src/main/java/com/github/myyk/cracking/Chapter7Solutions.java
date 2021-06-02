@@ -274,7 +274,7 @@ public class Chapter7Solutions {
   }
 
   /**
-   * Recursive Multiply: Write a fuction to multiply two numbers recursively without
+   * Recursive Multiply: Write a function to multiply two numbers recursively without
    *   using the '*' operator.
    *
    * Assumptions:
@@ -343,7 +343,7 @@ public class Chapter7Solutions {
    * Note: This actually works if there are dups. That was sort of a clever accident.
    *   The issue with the code below though is that StringBuffers apparently don't
    *   hash to the same value if they are equal. This makes sense though since they
-   *   are a mutable datas tructure. Very interesting bug, I'm leaving it so I can see
+   *   are a mutable data structure. Very interesting bug, I'm leaving it so I can see
    *   this again.
    */
   public static Set<String> permutationsUnique(final String str) {
@@ -357,7 +357,7 @@ public class Chapter7Solutions {
 
   private static Set<StringBuffer> permutationsUniqueHelper(final String str) {
     if (str.isEmpty()) {
-      return Sets.<StringBuffer>newHashSet();
+      return Sets.newHashSet();
     }
 
     Set<StringBuffer> result = Sets.newHashSet();
@@ -458,9 +458,7 @@ public class Chapter7Solutions {
         return false;
       if (g != other.g)
         return false;
-      if (r != other.r)
-        return false;
-      return true;
+      return r == other.r;
     }
   }
 
@@ -520,12 +518,7 @@ public class Chapter7Solutions {
     cache.put(0, 1); // base case
     Integer[] coinsArr = new Integer[coins.size()];
     coins.toArray(coinsArr);
-    Arrays.sort(coinsArr, new Comparator<Integer>() {
-      @Override
-      public int compare(Integer o1, Integer o2) {
-        return o2.compareTo(o1);
-      }
-    });
+    Arrays.sort(coinsArr, Comparator.reverseOrder());
     return coinsCount(coinsArr, 0, total, cache);
   }
 
@@ -563,7 +556,7 @@ public class Chapter7Solutions {
    *   rows on the way down so that the isBoardValid would be much faster. 
    */
   public static ArrayList<int[]> placeQueens(final int numberOfQueens /* = 8, if we could have defaults*/) {
-    return placeQueens(numberOfQueens, 0, new int[numberOfQueens], new ArrayList<int[]>());
+    return placeQueens(numberOfQueens, 0, new int[numberOfQueens], new ArrayList<>());
   }
 
   private static ArrayList<int[]> placeQueens(final int numberOfQueens, int queenIndex, int[] placedQueens, ArrayList<int[]> result) {
@@ -638,7 +631,7 @@ public class Chapter7Solutions {
       return 0;
     }
  
-    return stackHeight(Sets.newHashSet(boxes), Box.MAX_VALUE, new HashMap<Set<Box>, Integer>());
+    return stackHeight(Sets.newHashSet(boxes), Box.MAX_VALUE, new HashMap<>());
   }
 
   private static int stackHeight(final Set<Box> boxes, final Box bottom, final Map<Set<Box>, Integer> cache) {
@@ -704,7 +697,7 @@ public class Chapter7Solutions {
       for (int i = 1; i < expression.length(); i+=2) {
         final char c = expression.charAt(i);
         final String left = expression.substring(0, i);
-        final String right = expression.substring(i+1, expression.length());
+        final String right = expression.substring(i+1);
         final int leftFalse = countEval(left, false, cacheTrue, cacheFalse);
         final int rightFalse = countEval(right, false, cacheTrue, cacheFalse);
         final int leftTrue = countEval(left, true, cacheTrue, cacheFalse);

@@ -21,12 +21,12 @@ class Chapter17SolutionsTest extends FlatSpec with Matchers {
     testAddWithoutPlus(-1, 1)
     testAddWithoutPlus(1, 1)
 
-    for (i <- 1 to 100) {
+    for (_ <- 1 to 100) {
       testAddWithoutPlus(Random.nextInt(), Random.nextInt())
     }
   }
 
-  "shuffle" should "shuffle a deck with equal probablities" in {
+  "shuffle" should "shuffle a deck with equal probabilities" in {
     val deck: Array[Integer] = (0 to 51).map(new Integer(_)).toArray
     shuffle(deck)
 //    println(deck.mkString(","))
@@ -115,7 +115,7 @@ class Chapter17SolutionsTest extends FlatSpec with Matchers {
     testKthNumber(100, 33075) 
   }
 
-  "findMajority" should "find the majority element in the array if it exitst" in {
+  "findMajority" should "find the majority element in the array if it exists" in {
     findMajority(Array(1)) shouldBe 1
     findMajority(Array(1, 2)) shouldBe -1
     findMajority(Array(1, 2, 1)) shouldBe 1

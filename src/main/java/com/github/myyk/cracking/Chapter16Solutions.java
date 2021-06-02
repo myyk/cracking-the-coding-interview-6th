@@ -123,13 +123,13 @@ public class Chapter16Solutions {
   public static boolean isWonTicTacToe(final TicTacToe[][] board) {
     final int N = board.length;
     // check across
-    for (int i = 0; i < N; i++) {
-      final TicTacToe next = board[i][0];
+    for (TicTacToe[] ticTacToes : board) {
+      final TicTacToe next = ticTacToes[0];
       if (next != null) {
         for (int j = 1; j < N; j++) {
-          if (board[i][j] != next) {
+          if (ticTacToes[j] != next) {
             break;
-          } else if (j == N-1) {
+          } else if (j == N - 1) {
             return true;
           }
         }
@@ -271,8 +271,8 @@ public class Chapter16Solutions {
    * Space complexity: O()
    */
   public static class EnglishIntMaker {
-    private static Map<Integer, String> lookup = Maps.newHashMap();
-    {{
+    private static final Map<Integer, String> lookup = Maps.newHashMap();
+    static {{
       lookup.put(1, "One");
       lookup.put(2, "Two");
       lookup.put(3, "Three");
@@ -535,7 +535,7 @@ public class Chapter16Solutions {
       throw new IllegalArgumentException("Smaller cannot be larger than larger.");
     }
 
-    return countDivingBoardsOfSize(smaller, larger, k, Maps.<Integer, Integer>newHashMap());
+    return countDivingBoardsOfSize(smaller, larger, k, Maps.newHashMap());
   }
 
   private static int countDivingBoardsOfSize(final int smaller, final int larger, final int k, final Map<Integer, Integer> memo) {
@@ -567,30 +567,30 @@ public class Chapter16Solutions {
     // y intercept unless infiniteSlope == true, then x intercept
     public final double intercept;
     public final double slope;
-    public final boolean inifiteSlope;
+    public final boolean infiniteSlope;
 
     public Line(double yIntercept, double slope) {
       this.intercept = floorDouble(yIntercept);
       this.slope = floorDouble(slope);
-      this.inifiteSlope = false;
+      this.infiniteSlope = false;
     }
 
     // use the yIntercept as an xIntercept in this case.
     public Line(double intercept) {
       this.intercept = floorDouble(intercept);
       this.slope = 0;
-      this.inifiteSlope = true;
+      this.infiniteSlope = true;
     }
 
     public Line(final Point a, final Point b) {
       if (isEquivalent(a.x, b.x)) {
         this.intercept = floorDouble(a.x);
         this.slope = 0;
-        this.inifiteSlope = true;
+        this.infiniteSlope = true;
       } else {
         this.slope = floorDouble((a.y - b.y) / (a.x - b.x));
         this.intercept = floorDouble(a.y - this.slope * a.x); // y = mx + b
-        this.inifiteSlope = false;
+        this.infiniteSlope = false;
       }
     }
 
@@ -607,7 +607,7 @@ public class Chapter16Solutions {
     public int hashCode() {
       final int prime = 31;
       int result = 1;
-      result = prime * result + (inifiteSlope ? 1231 : 1237);
+      result = prime * result + (infiniteSlope ? 1231 : 1237);
       long temp;
       temp = Double.doubleToLongBits(intercept);
       result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -625,19 +625,17 @@ public class Chapter16Solutions {
       if (getClass() != obj.getClass())
         return false;
       Line other = (Line) obj;
-      if (inifiteSlope != other.inifiteSlope)
+      if (infiniteSlope != other.infiniteSlope)
         return false;
       if (!isEquivalent(intercept, other.intercept))
         return false;
-      if (!isEquivalent(slope, other.slope))
-        return false;
-      return true;
+      return isEquivalent(slope, other.slope);
     }
 
     @Override
     public String toString() {
       return "Line [intercept=" + intercept + ", slope=" + slope
-          + ", inifiteSlope=" + inifiteSlope + "]";
+          + ", infiniteSlope=" + infiniteSlope + "]";
     }
   }
 
@@ -673,9 +671,7 @@ public class Chapter16Solutions {
       Point other = (Point) obj;
       if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
         return false;
-      if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
-        return false;
-      return true;
+      return Double.doubleToLongBits(y) == Double.doubleToLongBits(other.y);
     }
   }
 
@@ -757,9 +753,7 @@ public class Chapter16Solutions {
       MasterMindResult other = (MasterMindResult) obj;
       if (hits != other.hits)
         return false;
-      if (psuedoHits != other.psuedoHits)
-        return false;
-      return true;
+      return psuedoHits == other.psuedoHits;
     }
 
     @Override
@@ -804,7 +798,7 @@ public class Chapter16Solutions {
         hitsCount++;
       }
     }
-    return new Tuple2<Integer, Set<Character>>(hitsCount, hitsChar);
+    return new Tuple2<>(hitsCount, hitsChar);
   }
 
   /**
@@ -858,7 +852,7 @@ public class Chapter16Solutions {
   public static Tuple2<Integer, Integer> subSortIndexes(final int[] array) {
     final int firstUnsorted = findFirstUnsortedIndex(array);
     final int lastUnsorted = findLastUnsortedIndex(array);
-    return new Tuple2<Integer, Integer>(firstUnsorted, lastUnsorted);
+    return new Tuple2<>(firstUnsorted, lastUnsorted);
   }
 
   private static int findFirstUnsortedIndex(final int[] array) {
@@ -981,7 +975,7 @@ public class Chapter16Solutions {
       return false;
     }
 
-    return doesPatternMatch(pattern, value, Maps.<Character, String>newHashMap());
+    return doesPatternMatch(pattern, value, Maps.newHashMap());
   }
 
   private static boolean doesPatternMatch(final String pattern, final String value, final Map<Character, String> mappings) {
@@ -1092,9 +1086,9 @@ public class Chapter16Solutions {
 
   private static int[] findDifference(final int difference, final int[] a, final int[] b) {
     final Set<Integer> bSet = toSet(b);
-    for (int i = 0; i < a.length; i++) {
-      if (bSet.contains(a[i] + difference)) {
-        return new int[] {a[i], a[i] + difference};
+    for (int j : a) {
+      if (bSet.contains(j + difference)) {
+        return new int[]{j, j + difference};
       }
     }
     return null;
@@ -1102,16 +1096,16 @@ public class Chapter16Solutions {
 
   private static Set<Integer> toSet(int[] a) {
     final Set<Integer> set = Sets.newHashSet();
-    for (int i = 0; i < a.length; i++) {
-      set.add(a[i]);
+    for (int j : a) {
+      set.add(j);
     }
     return set;
   }
 
   private static int sum(final int[] a) {
     int sum = 0;
-    for (int i = 0; i < a.length; i++) {
-      sum += a[i];
+    for (int j : a) {
+      sum += j;
     }
     return sum;
   }
@@ -1142,7 +1136,7 @@ public class Chapter16Solutions {
 
     // returns old value and flips the current color
     private boolean flipCurrentColor() {
-      final Tuple2<Integer, Integer> antPosition = new Tuple2<Integer, Integer>(antCol, antRow);
+      final Tuple2<Integer, Integer> antPosition = new Tuple2<>(antCol, antRow);
       final boolean oldValue = grid.remove(antPosition);
       if (!oldValue) {
         grid.add(antPosition);
@@ -1181,8 +1175,8 @@ public class Chapter16Solutions {
     }
 
     public AntGridResult getResult() {
-      final GridDimensions dimensions = getGridDemensions();
-      final Tuple2<Integer, Integer> ant = new Tuple2<Integer, Integer>(antCol - dimensions.minY, antRow - dimensions.minX);
+      final GridDimensions dimensions = getGridDimensions();
+      final Tuple2<Integer, Integer> ant = new Tuple2<>(antCol - dimensions.minY, antRow - dimensions.minX);
       boolean[][] isBlack = new boolean[dimensions.maxY - dimensions.minY + 1][dimensions.maxX - dimensions.minX + 1];
       for (Tuple2<Integer, Integer> black: grid) {
         isBlack[black._1 - dimensions.minY][black._2 - dimensions.minX] = true;
@@ -1190,7 +1184,7 @@ public class Chapter16Solutions {
       return new AntGridResult(ant, isBlack, antDirection);
     }
 
-    private GridDimensions getGridDemensions() {
+    private GridDimensions getGridDimensions() {
       int minX = antRow, maxX = antRow;
       int minY = antCol, maxY = antCol;
  
@@ -1234,7 +1228,7 @@ public class Chapter16Solutions {
         result = prime * result + ((ant == null) ? 0 : ant.hashCode());
         result = prime * result
             + ((direction == null) ? 0 : direction.hashCode());
-        result = prime * result + Arrays.hashCode(isBlack);
+        result = prime * result + Arrays.deepHashCode(isBlack);
         return result;
       }
 
@@ -1254,9 +1248,7 @@ public class Chapter16Solutions {
           return false;
         if (direction != other.direction)
           return false;
-        if (!Arrays.deepEquals(isBlack, other.isBlack))
-          return false;
-        return true;
+        return Arrays.deepEquals(isBlack, other.isBlack);
       }      
     }
   }
@@ -1301,7 +1293,7 @@ public class Chapter16Solutions {
     return num % 7;
   }
 
-  private static Random random = new Random();
+  private static final Random random = new Random();
 
   private static int rand5() {
     return random.nextInt(5);
@@ -1320,8 +1312,7 @@ public class Chapter16Solutions {
   public static Map<Integer, Integer> findPairsWithSum(final int[] a, final int sum) {
     final Set<Integer> seen = Sets.newHashSet();
     final Map<Integer, Integer> pairs = Maps.newHashMap();
-    for (int i = 0; i < a.length; i++) {
-      int next = a[i];
+    for (int next : a) {
       if (!pairs.containsKey(next) || !pairs.containsKey(sum - next)) {
         if (seen.contains(sum - next)) {
           pairs.put(Math.min(next, sum - next), Math.max(next, sum - next));
@@ -1382,7 +1373,7 @@ public class Chapter16Solutions {
       if (containsKey(key)) {
         node = moveToRearOfQueue(key);
       } else {
-        node = new Node<K, V>(key);
+        node = new Node<>(key);
         addToRear(node);
         cache.put(key, node);
       }
@@ -1411,12 +1402,11 @@ public class Chapter16Solutions {
       evict();
       if (queueTail == null) {
         queueHead = node;
-        queueTail = node;
       } else {
         queueTail.next = node;
         node.previous = queueTail;
-        queueTail = node;
       }
+      queueTail = node;
       queueSize++;
     }
 
@@ -1464,12 +1454,12 @@ public class Chapter16Solutions {
     char operation = ' '; // placeholder operation
     for (int i = start; i < expression.length(); i++) {
       final char next = expression.charAt(i);
-      double nextValue = 0;
+      double nextValue;
       if (isOperator(next)) {
         final char lastOperation = operation;
         operation = next;
 
-        nextValue = Integer.valueOf(expression.substring(valueStart, i));
+        nextValue = Integer.parseInt(expression.substring(valueStart, i));
         value = calculate(lastOperation, value, nextValue);
         valueStart = i + 1;
 
@@ -1480,7 +1470,7 @@ public class Chapter16Solutions {
         }
       }
     }
-    double secondValue = Integer.valueOf(expression.substring(valueStart, expression.length()));
+    double secondValue = Integer.parseInt(expression.substring(valueStart));
     return calculate(operation, value, secondValue);
   }
 
@@ -1540,7 +1530,7 @@ public class Chapter16Solutions {
           operandList.add(token);
        }
     }
-    return new Tuple2<List<String>, List<String>>(operandList, operatorList);
+    return new Tuple2<>(operandList, operatorList);
   }
 
   private static double calculate2(final List<String> numbers, final List<String> operators, final int start) {

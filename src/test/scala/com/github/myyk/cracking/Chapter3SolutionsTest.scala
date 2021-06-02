@@ -1,23 +1,17 @@
 package com.github.myyk.cracking
 
-import java.util.EmptyStackException
-import java.util.LinkedList
-import java.util.Queue
-import java.util.Stack
-
-import scala.collection.JavaConversions.asScalaBuffer
-import scala.collection.JavaConversions.seqAsJavaList
-import scala.util.Random
-
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers
-
 import com.github.myyk.cracking.Chapter3Solutions.FullStackException
+import org.scalatest.{FlatSpec, Matchers}
+
+import java.util
+import java.util.EmptyStackException
+import scala.collection.JavaConverters._
+import scala.util.Random
 
 class Chapter3SolutionsTest extends FlatSpec with Matchers {
 
   // should be empty to start with
-  def testStandardStackBehavior(stack: Stack[Integer]): Unit = {
+  def testStandardStackBehavior(stack: util.Stack[Integer]): Unit = {
     stack.isEmpty shouldBe true
     intercept[EmptyStackException] {
       stack.peek()
@@ -32,13 +26,13 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
   }
 
   // should be empty to start with
-  def testStandardQueueBehavior(queue: Queue[Integer]): Unit = {
+  def testStandardQueueBehavior(queue: util.Queue[Integer]): Unit = {
     queue.isEmpty shouldBe true
     queue.poll() shouldBe null
     intercept[NoSuchElementException] {
       queue.remove()
     }
-    val randomNumbers = for (i <- 1 to 10) yield {
+    val randomNumbers = for (_ <- 1 to 10) yield {
       Random.nextInt()
     }
     for (i <- randomNumbers) {
@@ -61,7 +55,7 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
       queue.add(i)
     }
     val (oddIndex, evenIndex) = randomNumbers.zipWithIndex.partition(_._2%2==1)
-    queue.removeAll(oddIndex.map(_._1))
+    queue.removeAll(oddIndex.map(_._1).asJava)
     for (i <- evenIndex.map(_._1)) {
       queue.poll() shouldBe i
     }
@@ -69,11 +63,11 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
   }
 
   "testStandardStackBehavior" should "work with the standard library" in {
-    testStandardStackBehavior(new Stack[Integer]())
+    testStandardStackBehavior(new util.Stack[Integer]())
   }
 
   "testStandardQueueBehavior" should "work with the standard library" in {
-    testStandardQueueBehavior(new LinkedList[Integer]())
+    testStandardQueueBehavior(new util.LinkedList[Integer]())
   }
 
   "arrayStack" should "be a single array implementing 3 stacks" in {
@@ -158,19 +152,19 @@ class Chapter3SolutionsTest extends FlatSpec with Matchers {
   }
 
   "QueueFromStacks" should "be a Queue" in {
-    val queue = new Chapter3Solutions.QueueFromStacks[Integer]();
+    val queue = new Chapter3Solutions.QueueFromStacks[Integer]()
     testStandardQueueBehavior(queue)
   }
 
   "sortStack" should "sort the stack" in {
-    val stack = new Stack[Integer]()
-    val randomNumbers = for (i <- 1 to 10) yield {
+    val stack = new util.Stack[Integer]()
+    val randomNumbers = for (_ <- 1 to 10) yield {
       Random.nextInt()
     }
     for (i <- randomNumbers) {
       stack.push(i)
     }
     Chapter3Solutions.sortStack(stack)
-    stack.toList shouldBe randomNumbers.toList.sorted
+    stack.asScala.toList shouldBe randomNumbers.toList.sorted
   }
 }

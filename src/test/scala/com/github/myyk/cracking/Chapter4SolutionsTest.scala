@@ -1,22 +1,13 @@
 package com.github.myyk.cracking
 
-import java.util.LinkedList
-
-import scala.annotation.tailrec
-import scala.collection.JavaConversions._
-import scala.util.Random
-
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers
-
-import com.github.myyk.cracking.Chapter4Solutions.BinarySearchTree
-import com.github.myyk.cracking.Chapter4Solutions.Graph
-import com.github.myyk.cracking.Chapter4Solutions.IntGraph
-import com.github.myyk.cracking.Chapter4Solutions.IntNode
-import com.github.myyk.cracking.Chapter4Solutions.Node
-import com.github.myyk.cracking.Chapter4Solutions.RandomTree
-import com.github.myyk.cracking.Chapter4Solutions.Tree
+import com.github.myyk.cracking.Chapter4Solutions._
 import com.google.common.collect.Lists
+import org.scalatest.{FlatSpec, Matchers}
+
+import java.util
+import scala.annotation.tailrec
+import scala.collection.JavaConverters._
+import scala.util.Random
 
 class Chapter4SolutionsTest extends FlatSpec with Matchers {
   def createMediumDirectionalTestGraph: (IntGraph, Seq[IntNode]) = {
@@ -67,28 +58,28 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
   }
 
   "pathExists" should "find if there is a path between a and b" in {
-    val (graph, nodes) = createMediumDirectionalTestGraph
-    Chapter4Solutions.pathExistsDirectional(nodes(0), nodes(0)) shouldBe true
-    Chapter4Solutions.pathExistsDirectional(nodes(0), nodes(1)) shouldBe true
-    Chapter4Solutions.pathExistsDirectional(nodes(1), nodes(0)) shouldBe false
-    Chapter4Solutions.pathExistsDirectional(nodes(0), nodes(6)) shouldBe true
-    Chapter4Solutions.pathExistsDirectional(nodes(6), nodes(0)) shouldBe false
-    Chapter4Solutions.pathExistsDirectional(nodes(0), nodes(7)) shouldBe false
+    val (_, nodes) = createMediumDirectionalTestGraph
+    Chapter4Solutions.pathExistsDirectional(nodes.head, nodes.head) shouldBe true
+    Chapter4Solutions.pathExistsDirectional(nodes.head, nodes(1)) shouldBe true
+    Chapter4Solutions.pathExistsDirectional(nodes(1), nodes.head) shouldBe false
+    Chapter4Solutions.pathExistsDirectional(nodes.head, nodes(6)) shouldBe true
+    Chapter4Solutions.pathExistsDirectional(nodes(6), nodes.head) shouldBe false
+    Chapter4Solutions.pathExistsDirectional(nodes.head, nodes(7)) shouldBe false
     Chapter4Solutions.pathExistsDirectional(nodes(6), nodes(1)) shouldBe true
     Chapter4Solutions.pathExistsDirectional(nodes(1), nodes(6)) shouldBe true
   }
 
   "pathExistsBidirectional" should "find if there is a path between a and b" in {
-    val (graph, nodes) = createMediumBidirectionalTestGraph
-    Chapter4Solutions.pathExistsBidirectional(nodes(0), nodes(0)) shouldBe true
-    Chapter4Solutions.pathExistsBidirectional(nodes(0), nodes(1)) shouldBe true
-    Chapter4Solutions.pathExistsBidirectional(nodes(1), nodes(0)) shouldBe true
-    Chapter4Solutions.pathExistsBidirectional(nodes(0), nodes(6)) shouldBe true
-    Chapter4Solutions.pathExistsBidirectional(nodes(6), nodes(0)) shouldBe true
+    val (_, nodes) = createMediumBidirectionalTestGraph
+    Chapter4Solutions.pathExistsBidirectional(nodes.head, nodes.head) shouldBe true
+    Chapter4Solutions.pathExistsBidirectional(nodes.head, nodes(1)) shouldBe true
+    Chapter4Solutions.pathExistsBidirectional(nodes(1), nodes.head) shouldBe true
+    Chapter4Solutions.pathExistsBidirectional(nodes.head, nodes(6)) shouldBe true
+    Chapter4Solutions.pathExistsBidirectional(nodes(6), nodes.head) shouldBe true
     Chapter4Solutions.pathExistsBidirectional(nodes(6), nodes(1)) shouldBe true
     Chapter4Solutions.pathExistsBidirectional(nodes(1), nodes(6)) shouldBe true
-    Chapter4Solutions.pathExistsBidirectional(nodes(0), nodes(7)) shouldBe false
-    Chapter4Solutions.pathExistsBidirectional(nodes(7), nodes(0)) shouldBe false
+    Chapter4Solutions.pathExistsBidirectional(nodes.head, nodes(7)) shouldBe false
+    Chapter4Solutions.pathExistsBidirectional(nodes(7), nodes.head) shouldBe false
   }
 
   def getHeight(tree: Tree[_]): Int = {
@@ -125,7 +116,7 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
     if (array.isEmpty) {
       getHeight(bst) shouldBe 0
     } else {
-      getHeight(bst) shouldBe (log2(array.size) + 1)
+      getHeight(bst) shouldBe (log2(array.length) + 1)
     }
     for (i <- array) {
       binarySearch(i, bst) shouldBe true
@@ -133,8 +124,8 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
   }
 
   "minBinaryTree" should "produce a minimal height BST" in {
-    for (i <- (0 to 128)) {
-      val numbers = for (j <- (0 until i)) yield {
+    for (i <- 0 to 128) {
+      val numbers = for (_ <- 0 until i) yield {
         Random.nextInt()
       }
       testMinBinaryTree(numbers.sorted.toArray)
@@ -142,7 +133,7 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
   }
 
   def javaListsOfListsToScala[T](lists: java.util.List[java.util.List[T]]): List[List[T]] = {
-    lists.map(_.toList).toList
+    lists.asScala.map(_.asScala.toList).toList
   }
 
   def listsOfDepths[T](tree: Tree[T]): List[List[T]] = {
@@ -198,20 +189,20 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
     Chapter4Solutions.isValidBST(Chapter4Solutions.minBinaryTree((0 until 1000).map(_ => Random.nextInt).toArray)) shouldBe false
 
     // right grandchild greater than node
-    Chapter4Solutions.isValidBST(new Tree[Integer](20, new Tree(10, null, new Tree(25)), new Tree(30))) shouldBe false
+    Chapter4Solutions.isValidBST(new Tree[Integer](20, new Tree[Integer](10, null, new Tree(25)), new Tree(30))) shouldBe false
   }
 
   "findSuccessor" should "find the in-order successor to the node" in {
     Chapter4Solutions.findSuccessor(null: BinarySearchTree[Integer]) shouldBe null
     Chapter4Solutions.findSuccessor(new BinarySearchTree[Integer](1)) shouldBe null
-    Chapter4Solutions.findSuccessor((new BinarySearchTree[Integer](2)).setLeft(1)) shouldBe null
-    val bst1 = (new BinarySearchTree[Integer](2)).setRight(3)
+    Chapter4Solutions.findSuccessor(new BinarySearchTree[Integer](2).setLeft(1)) shouldBe null
+    val bst1 = new BinarySearchTree[Integer](2).setRight(3)
     bst1.getRight.setRight(4)
     Chapter4Solutions.findSuccessor(bst1) shouldBe bst1.getRight
     Chapter4Solutions.findSuccessor(bst1.getRight) shouldBe bst1.getRight.getRight
     Chapter4Solutions.findSuccessor(bst1.getRight.getRight) shouldBe null
-    val bst2 = (new BinarySearchTree[Integer](20)).setLeft(10).setRight(30)
-    bst2.getLeft().setRight(15)
+    val bst2 = new BinarySearchTree[Integer](20).setLeft(10).setRight(30)
+    bst2.getLeft.setRight(15)
     Chapter4Solutions.findSuccessor(bst2.getLeft) shouldBe bst2.getLeft.getRight
     Chapter4Solutions.findSuccessor(bst2.getLeft.getRight) shouldBe bst2
   }
@@ -279,7 +270,7 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
 
   "bstSequences" should "give all the sequences that could have created it" in {
     Chapter4Solutions.bstSequences[Int](null) shouldBe null
-    Chapter4Solutions.bstSequences(new Tree(1, new Tree(2), new Tree(3))).map(_.toList).toSet shouldBe Set(List(1,2,3), List(1,3,2))
+    Chapter4Solutions.bstSequences(new Tree(1, new Tree(2), new Tree(3))).asScala.map(_.asScala.toList).toSet shouldBe Set(List(1,2,3), List(1,3,2))
   }
 
   "weaveSequences" should "weave the two sequences together" in {
@@ -289,7 +280,7 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
     list2.add(2)
     val prefix = Lists.newLinkedList[Int]
     prefix.add(3)
-    Chapter4Solutions.weaveSequences(list1, list2, Lists.newLinkedList[LinkedList[Int]](), prefix).map(_.toList).toSet shouldBe Set(List(3,1,2), List(3,2,1))
+    Chapter4Solutions.weaveSequences(list1, list2, Lists.newLinkedList[util.LinkedList[Int]](), prefix).asScala.map(_.asScala.toList).toSet shouldBe Set(List(3,1,2), List(3,2,1))
   }
 
   def testIsSubtree(isSubtreeOp: (Tree[Int], Tree[Int]) => Boolean): Unit = {
@@ -317,10 +308,10 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
     val results = for (_ <- 0 until 10000) yield {
       tree.getRandomNode.getData
     }
-    val occurences = results.groupBy(a => a).map{case (i, occurences) => (i, occurences.size)}.toList.sortBy{case (a, b) => a}.map{case (_, a) => a}
+    val occurrences = results.groupBy(a => a).map{case (i, occurrences) => (i, occurrences.size)}.toList.sortBy{case (a, _) => a}.map{case (_, a) => a}
     // this should pass most of the time
     // max freq shouldn't be more than 20% of the samples more than the min
-    (occurences.max - occurences.min) should be < occurences.sum / occurences.size / 5
+    (occurrences.max - occurrences.min) should be < occurrences.sum / occurrences.size / 5
   }
 
   "countPathsWithSum" should "count the number of paths with the provided sum going downwards in the tree" in {
@@ -333,7 +324,7 @@ class Chapter4SolutionsTest extends FlatSpec with Matchers {
      *  / \     \
      * 3  -2      1
      */
-    val left = new Tree[Integer](5, new Tree(3, new Tree(3), new Tree(-2)), new Tree(2, null, new Tree(1)))
+    val left = new Tree[Integer](5, new Tree[Integer](3, new Tree(3), new Tree(-2)), new Tree[Integer](2, null, new Tree(1)))
     val right = new Tree[Integer](-3, null, new Tree(11))
     val tree = new Tree[Integer](10, left, right)
     Chapter4Solutions.countPathsWithSum(tree, 10000) shouldBe 0

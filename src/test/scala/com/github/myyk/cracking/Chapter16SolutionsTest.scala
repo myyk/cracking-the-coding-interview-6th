@@ -5,7 +5,6 @@ import com.github.myyk.cracking.Chapter16Solutions.{EnglishIntMaker, Line, Maste
 import org.scalatest.{FlatSpec, Matchers}
 
 import java.lang.{Integer => JInt}
-import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 import scala.util.Random
 
@@ -33,43 +32,43 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
 
   "isWonTicTacToe" should "figure out if a board is won or not already" in {
     // not super proud of these tests, but they will do for now.
-    var board = TicTacToe.newBoard;
+    var board = TicTacToe.newBoard
     isWonTicTacToe(board) shouldBe false
-    board(0)(0) = TicTacToe.X;
+    board(0)(0) = TicTacToe.X
     isWonTicTacToe(board) shouldBe false
-    board(0)(1) = TicTacToe.O;
+    board(0)(1) = TicTacToe.O
     isWonTicTacToe(board) shouldBe false
-    board(0)(2) = TicTacToe.X;
+    board(0)(2) = TicTacToe.X
     isWonTicTacToe(board) shouldBe false
-    board(0)(1) = TicTacToe.X;
+    board(0)(1) = TicTacToe.X
     isWonTicTacToe(board) shouldBe true
 
-    board = TicTacToe.newBoard;
+    board = TicTacToe.newBoard
     isWonTicTacToe(board) shouldBe false
-    board(0)(0) = TicTacToe.X;
-    board(1)(1) = TicTacToe.X;
-    board(2)(2) = TicTacToe.X;
+    board(0)(0) = TicTacToe.X
+    board(1)(1) = TicTacToe.X
+    board(2)(2) = TicTacToe.X
     isWonTicTacToe(board) shouldBe true
 
-    board = TicTacToe.newBoard;
+    board = TicTacToe.newBoard
     isWonTicTacToe(board) shouldBe false
-    board(0)(2) = TicTacToe.X;
-    board(1)(2) = TicTacToe.X;
-    board(2)(2) = TicTacToe.X;
+    board(0)(2) = TicTacToe.X
+    board(1)(2) = TicTacToe.X
+    board(2)(2) = TicTacToe.X
     isWonTicTacToe(board) shouldBe true
 
-    board = TicTacToe.newBoard;
+    board = TicTacToe.newBoard
     isWonTicTacToe(board) shouldBe false
-    board(0)(0) = TicTacToe.X;
-    board(1)(1) = TicTacToe.X;
-    board(2)(2) = TicTacToe.X;
+    board(0)(0) = TicTacToe.X
+    board(1)(1) = TicTacToe.X
+    board(2)(2) = TicTacToe.X
     isWonTicTacToe(board) shouldBe true
 
-    board = TicTacToe.newBoard;
+    board = TicTacToe.newBoard
     isWonTicTacToe(board) shouldBe false
-    board(0)(2) = TicTacToe.X;
-    board(1)(1) = TicTacToe.X;
-    board(2)(0) = TicTacToe.X;
+    board(0)(2) = TicTacToe.X
+    board(1)(1) = TicTacToe.X
+    board(2)(0) = TicTacToe.X
     isWonTicTacToe(board) shouldBe true
   }
 
@@ -155,11 +154,11 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
   }
 
   def testLivingPeople(people: Set[Person]): Unit = {
-    livingPeople(people) shouldBe livingPeopleBruteForce(people)
+    livingPeople(people.asJava) shouldBe livingPeopleBruteForce(people.asJava)
   }
 
   "livingPeople" should "return the year where the most people were living" in {
-    livingPeople(Set(new Person(1900, 2000), new Person(1910,1910))) shouldBe 1910
+    livingPeople(Set(new Person(1900, 2000), new Person(1910,1910)).asJava) shouldBe 1910
 
     val people = for (_: Int <- (1 to 10000).toSet) yield {
       val birth = 1900 + Random.nextInt(100)
@@ -169,20 +168,20 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
   }
 
   "countDivingBoardsOfKPieces" should "return the number of ways to build a diving board of with k boards" in {
-    countDivingBoardsOfKPieces(5, 10, 4).toSet shouldBe Set(20, 25, 30, 35, 40)
-    countDivingBoardsOfKPieces(3, 7, 4).toSet shouldBe Set(12, 16, 20, 24, 28)
-    countDivingBoardsOfKPieces(10, 10, 4).toSet shouldBe Set(40)
+    countDivingBoardsOfKPieces(5, 10, 4).asScala.toSet shouldBe Set(20, 25, 30, 35, 40)
+    countDivingBoardsOfKPieces(3, 7, 4).asScala.toSet shouldBe Set(12, 16, 20, 24, 28)
+    countDivingBoardsOfKPieces(10, 10, 4).asScala.toSet shouldBe Set(40)
   }
 
   "countDivingBoardsOfSize" should "return the number of ways to build a diving board of size k" in {
-    countDivingBoardsOfSize(5, 10, 200) shouldBe Chapter7Solutions.coinsCount(Set(5, 10).map(JInt.valueOf(_)).asJava, 200)
+    countDivingBoardsOfSize(5, 10, 200) shouldBe Chapter7Solutions.coinsCount(Set(5, 10).map(JInt.valueOf).asJava, 200)
   }
 
-  "bestLine" should "find a line that goes throught the most points" in {
-    bestLine(Set(new Point(1,1), new Point(2,2))) shouldBe new Line(new Point(1,1), new Point(2,2))
-    bestLine(Set(new Point(1,1), new Point(3,3))) shouldBe new Line(new Point(1,1), new Point(2,2))
-    bestLine(Set(new Point(0,1), new Point(0,3))) shouldBe new Line(new Point(0,3), new Point(0,3))
-    bestLine(Set(new Point(1,1), new Point(2,2), new Point(3,3), new Point(0,1), new Point(0,3))) shouldBe new Line(new Point(0,0), new Point(1,1))
+  "bestLine" should "find a line that goes through the most points" in {
+    bestLine(Set(new Point(1,1), new Point(2,2)).asJava) shouldBe new Line(new Point(1,1), new Point(2,2))
+    bestLine(Set(new Point(1,1), new Point(3,3)).asJava) shouldBe new Line(new Point(1,1), new Point(2,2))
+    bestLine(Set(new Point(0,1), new Point(0,3)).asJava) shouldBe new Line(new Point(0,3), new Point(0,3))
+    bestLine(Set(new Point(1,1), new Point(2,2), new Point(3,3), new Point(0,1), new Point(0,3)).asJava) shouldBe new Line(new Point(0,0), new Point(1,1))
   }
 
   "masterMindScore" should "compute the game score" in {
@@ -219,15 +218,15 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
   }
 
   "findPondSizes" should "find the sizes of the various ponds in the topography" in {
-    findPondSizes(Array(Array(1))).toSet shouldBe Set()
-    findPondSizes(Array(Array(0))).toSet shouldBe Set(1)
-    findPondSizes(Array(Array(0, 0), Array(0, 0))).toSet shouldBe Set(4)
+    findPondSizes(Array(Array(1))).asScala.toSet shouldBe Set()
+    findPondSizes(Array(Array(0))).asScala.toSet shouldBe Set(1)
+    findPondSizes(Array(Array(0, 0), Array(0, 0))).asScala.toSet shouldBe Set(4)
 
     findPondSizes(Array(
         Array(0, 2, 1, 0),
         Array(0, 1, 0, 1),
         Array(1, 1, 0, 1),
-        Array(0, 1, 0, 1))).toSet shouldBe Set(1,2,4)
+        Array(0, 1, 0, 1))).asScala.toSet shouldBe Set(1,2,4)
   }
 
   def testSumSwap(a: Array[Int], b: Array[Int]): Unit = {
@@ -245,30 +244,30 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
   def printAntWalk(grid: AntGridResult): Unit = {
     println(s"ant = (${grid.ant._1}, ${grid.ant._2}), direction = ${grid.direction}")
     for {
-      col <- 0 until grid.isBlack.length
-      row <- 0 until grid.isBlack(0).length
+      col <- grid.isBlack.indices
+      row <- grid.isBlack(0).indices
     } {
       if (grid.ant._1 == col && grid.ant._2 == row) {
         if (grid.isBlack(col)(row)) {
-          print('X');
+          print('X')
         } else {
-          print('O');
+          print('O')
         }
       } else if (grid.isBlack(col)(row)) {
-        print('x');
+        print('x')
       } else {
-        print('o');
+        print('o')
       }
 
       if (row == grid.isBlack(0).length - 1) {
-        println();
+        println()
       }
     }
   }
 
   "antWalk" should "walk the ant according to it's rules and return the result" in {
     // Useful to manually validate, but too verbose otherwise.
-//    val grid = new AntGrid();
+//    val grid = new AntGrid()
 //    for (i <- 0 to 20) {
 //      println(s"------ k = ${i} ${"-"*25}")
 //      printAntWalk(grid.getResult)
@@ -285,7 +284,7 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
 
   "rand7" should "return random numbers 0 until 7" in {
     val values = for {
-      i <- (0 until 1000)
+      _ <- 0 until 1000
     } yield {
       rand7()
     }
@@ -295,7 +294,7 @@ class Chapter16SolutionsTest extends FlatSpec with Matchers {
   }
 
   "findPairsWithSum" should "find all the pairs with the sum in the array" in {
-    findPairsWithSum(Array(2, -3, 5, -7, 8, -1, 0, 1), 1).toMap shouldBe Map(-1 -> 2, -7 -> 8, 0 -> 1)
+    findPairsWithSum(Array(2, -3, 5, -7, 8, -1, 0, 1), 1).asScala.toMap shouldBe Map(-1 -> 2, -7 -> 8, 0 -> 1)
   }
 
   "LRUCache" should "work like a LRU cache with a max size" in {

@@ -15,7 +15,7 @@ class Chapter1SolutionsTest extends FlatSpec with Matchers {
     Chapter1Solutions.stringHasAllUniqueCharacters("abbc") shouldBe false
   }
 
-  "arePermutations" should "return whether two strings are permuations of each other" in {
+  "arePermutations" should "return whether two strings are permutations of each other" in {
     Chapter1Solutions.arePermutations("", "") shouldBe true
     Chapter1Solutions.arePermutations("a", "") shouldBe false
     Chapter1Solutions.arePermutations("", "a") shouldBe false

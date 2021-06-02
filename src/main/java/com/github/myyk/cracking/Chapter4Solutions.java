@@ -108,7 +108,7 @@ public class Chapter4Solutions {
    *
    * Assumptions:
    *
-   * Time complexity: O(n) where n is numer of nodes
+   * Time complexity: O(n) where n is number of nodes
    * Space complexity: O(n)
    */
   public static boolean pathExistsBidirectional(IntNode a, IntNode b) {
@@ -852,7 +852,7 @@ public class Chapter4Solutions {
 
     mySum += tree.getData();
     int diff = mySum - targetSum;
-    int numPaths = runningSums.containsKey(diff) ? runningSums.get(diff) : 0;
+    int numPaths = runningSums.getOrDefault(diff, 0);
     incrementRunningSums(mySum, 1, runningSums);
     numPaths += countPathsWithSum(tree.getLeft(), targetSum, mySum, runningSums);
     numPaths += countPathsWithSum(tree.getRight(), targetSum, mySum, runningSums);
@@ -862,14 +862,14 @@ public class Chapter4Solutions {
     return numPaths;
   }
 
-  // return old number of occurences
+  // return old number of occurrences
   private static int incrementRunningSums(final int sum, final int incrementBy, final Map<Integer, Integer> runningSums) {
     if (!runningSums.containsKey(sum)) {
       runningSums.put(sum, incrementBy);
       return incrementBy;
     } else {
-      int occurences = runningSums.get(sum);
-      return runningSums.put(sum, occurences + incrementBy);
+      int occurrences = runningSums.get(sum);
+      return runningSums.put(sum, occurrences + incrementBy);
     }
   }
 }

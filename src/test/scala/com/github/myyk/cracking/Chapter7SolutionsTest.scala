@@ -1,20 +1,11 @@
 package com.github.myyk.cracking
 
-import java.lang.{ Integer => JInt }
+import com.github.myyk.cracking.Chapter7Solutions.{Box, Color, Robot}
+import org.scalatest.{FlatSpec, Matchers}
 
-import scala.collection.JavaConversions.asScalaSet
-import scala.collection.JavaConversions.seqAsJavaList
-import scala.collection.JavaConversions.setAsJavaSet
-import scala.collection.JavaConverters.setAsJavaSetConverter
-import scala.math.BigInt.javaBigInteger2bigInt
+import java.lang.{Integer => JInt}
+import scala.collection.JavaConverters._
 import scala.util.Random
-
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers
-
-import com.github.myyk.cracking.Chapter7Solutions.Box
-import com.github.myyk.cracking.Chapter7Solutions.Color
-import com.github.myyk.cracking.Chapter7Solutions.Robot
 
 class Chapter7SolutionsTest extends FlatSpec with Matchers {
   def testTripleStep(tripleStep: Int => BigInt): Unit = {
@@ -36,7 +27,7 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
   def testFindPath(grid: Array[Array[Boolean]]): Unit = {
     val path = Chapter7Solutions.findPath(grid)
     val robot = new Robot(0, 0)
-    path should not be (null)
+    path should not be null
     for (next <- path) {
       if (next) {
         robot.moveRight()
@@ -47,8 +38,8 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
       // check collision
       grid(robot.getY)(robot.getX) shouldBe false
     }
-    robot.getX shouldBe grid(0).size - 1
-    robot.getY shouldBe grid.size - 1
+    robot.getX shouldBe grid(0).length - 1
+    robot.getY shouldBe grid.length - 1
   }
 
   def testFindPathNegative(grid: Array[Array[Boolean]]): Unit = {
@@ -60,8 +51,8 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
     testFindPathNegative(Array(Array(false, true), Array(true, false)))
     testFindPathNegative(Array(Array(false, false), Array(false, true)))
 
-    testFindPath(Array(Array(true)))
-    testFindPath(Array(Array(false)))
+    testFindPath(Array(Array(x = true)))
+    testFindPath(Array(Array(x = false)))
     testFindPath(Array(Array(false, false), Array(false, false)))
 //    testFindPath(Array(Array(false, true), Array(false, false)))
 //    testFindPath(Array(Array(false, false), Array(true, false)))
@@ -105,7 +96,7 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
   }
 
   def testPowerSet[T](input: Set[T], expected: Set[Set[T]]) {
-    Chapter7Solutions.powerSet(input).map(_.toSet).toSet shouldBe expected
+    Chapter7Solutions.powerSet(input.asJava).asScala.map(_.asScala.toSet).toSet shouldBe expected
   }
 
   "powerSet" should "get the power set of a set" in {
@@ -134,17 +125,17 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
   }
 
   "permutationsUnique" should "get all permutations of the string" in {
-    Chapter7Solutions.permutationsUnique("abc").toSet shouldBe "abc".permutations.toSet
-    Chapter7Solutions.permutationsUnique("myyk").toSet shouldBe "myyk".permutations.toSet
+    Chapter7Solutions.permutationsUnique("abc").asScala.toSet shouldBe "abc".permutations.toSet
+    Chapter7Solutions.permutationsUnique("myyk").asScala.toSet shouldBe "myyk".permutations.toSet
     Chapter7Solutions.permutationsUnique("aaaaa").size shouldBe 1
   }
 
   "parens" should "get all legal combinations of n open and close parens" in {
-    Chapter7Solutions.parens(0).toSet shouldBe Set()
-    Chapter7Solutions.parens(1).toSet shouldBe Set("()")
-    Chapter7Solutions.parens(2).toSet shouldBe Set("()()", "(())")
-    Chapter7Solutions.parens(3).toSet shouldBe Set("()()()", "(())()", "()(())", "((()))", "(()())")
-    Chapter7Solutions.parens(4).toSet shouldBe Set("()()()()", "()(())()", "()()(())", "()((()))", "()(()())",
+    Chapter7Solutions.parens(0).asScala.toSet shouldBe Set()
+    Chapter7Solutions.parens(1).asScala.toSet shouldBe Set("()")
+    Chapter7Solutions.parens(2).asScala.toSet shouldBe Set("()()", "(())")
+    Chapter7Solutions.parens(3).asScala.toSet shouldBe Set("()()()", "(())()", "()(())", "((()))", "(()())")
+    Chapter7Solutions.parens(4).asScala.toSet shouldBe Set("()()()()", "()(())()", "()()(())", "()((()))", "()(()())",
                                                    "(()()())", "((())())", "(()(()))", "(((())))", "((()()))",
                                                    "(())()()", "((()))()", "(()())()")
   }
@@ -171,7 +162,7 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
   }
 
   def coinsCount(set: Set[Int], total: Int): Int = {
-    Chapter7Solutions.coinsCount(set.map(JInt.valueOf(_)).asJava, total)
+    Chapter7Solutions.coinsCount(set.map(JInt.valueOf).asJava, total)
   }
 
   "coinsCount" should "get the number of ways to count to the total with the provided coins" in {
@@ -180,12 +171,12 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
     coinsCount(Set(1, 5, 10, 25), 5) shouldBe 2
     coinsCount(Set(1, 5, 10, 25), 10) shouldBe 4
     coinsCount(Set(1, 5, 10, 25), 11) shouldBe 4
-    coinsCount(Set(5, 10, 25), 25) shouldBe Array(25, 10+10+5, 10+5+5+5, 5*5).size
+    coinsCount(Set(5, 10, 25), 25) shouldBe Array(25, 10 + 10 + 5, 10 + 5 + 5 + 5, 5 * 5).length
     coinsCount(Set(5, 10, 25), 26) shouldBe 0
 
   }
 
-  "placeQueens" should "give all valid combindations of placing n queens on an nxn chess board" in {
+  "placeQueens" should "give all valid combinations of placing n queens on an nxn chess board" in {
 //    val n = 4
 //    for {
 //      board <- Chapter7Solutions.placeQueens(n)
@@ -202,9 +193,9 @@ class Chapter7SolutionsTest extends FlatSpec with Matchers {
   }
 
   "stackHeight" should "give the maximal box stack height where boxes given the constraints" in {
-    Chapter7Solutions.stackHeight(List(new Box(1,1,1), new Box(2,2,2), new Box(3,3,3))) shouldBe 6
-    Chapter7Solutions.stackHeight(List(new Box(1,1,1), new Box(1,1,1), new Box(3,3,3))) shouldBe 4
-    Chapter7Solutions.stackHeight(List(new Box(3,1,1), new Box(2,1,1), new Box(3,3,3))) shouldBe 5
+    Chapter7Solutions.stackHeight(List(new Box(1,1,1), new Box(2,2,2), new Box(3,3,3)).asJava) shouldBe 6
+    Chapter7Solutions.stackHeight(List(new Box(1,1,1), new Box(1,1,1), new Box(3,3,3)).asJava) shouldBe 4
+    Chapter7Solutions.stackHeight(List(new Box(3,1,1), new Box(2,1,1), new Box(3,3,3)).asJava) shouldBe 5
     // could use more and better test cases
   }
 
