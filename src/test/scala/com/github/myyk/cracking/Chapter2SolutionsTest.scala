@@ -18,7 +18,7 @@ class Chapter2SolutionsTest extends AnyFlatSpec with should.Matchers {
       builder += prev.value
       prev = prev.next
     }
-    builder.result
+    builder.result()
   }
 
   def test(input: Seq[Int], expected: Seq[Int], testOp: Node => Node): Unit = {

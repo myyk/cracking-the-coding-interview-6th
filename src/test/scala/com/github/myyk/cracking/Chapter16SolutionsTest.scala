@@ -4,7 +4,7 @@ import com.github.myyk.cracking.Chapter16Solutions.AntGrid.{AntGridResult, Direc
 import com.github.myyk.cracking.Chapter16Solutions.{EnglishIntMaker, Line, MasterMindResult, MutableInteger, Person, Point, TicTacToe, WordFrequencies, bestLine, countDivingBoardsOfKPieces, countDivingBoardsOfSize, divide, factorialZeroes, isWonTicTacToe, livingPeople, livingPeopleBruteForce, masterMindScore, masterMindScore2, multiply, numberMax, smallestDifference, subtract, _}
 
 import java.lang.{Integer => JInt}
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.util.Random
 
 import org.scalatest._
@@ -339,7 +339,7 @@ class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
     cache.get(10) shouldBe 11
   }
 
-  def testCalculate(expression: String, result: Double) {
+  def testCalculate(expression: String, result: Double): Unit = {
     calculate(expression) shouldBe result
     calculate2(expression) shouldBe result
   }

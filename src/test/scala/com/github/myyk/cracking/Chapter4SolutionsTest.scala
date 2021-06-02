@@ -5,7 +5,7 @@ import com.google.common.collect.Lists
 
 import java.util
 import scala.annotation.tailrec
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.util.Random
 
 import org.scalatest._
@@ -188,8 +188,8 @@ class Chapter4SolutionsTest extends AnyFlatSpec with should.Matchers {
     Chapter4Solutions.isValidBST(new Tree[Integer](1, null, new Tree(1))) shouldBe false
     Chapter4Solutions.isValidBST(new Tree[Integer](1, new Tree(1), new Tree(1))) shouldBe false
 
-    Chapter4Solutions.isValidBST(Chapter4Solutions.minBinaryTree((0 until 1000).map(_ => Random.nextInt).sorted.toArray)) shouldBe true
-    Chapter4Solutions.isValidBST(Chapter4Solutions.minBinaryTree((0 until 1000).map(_ => Random.nextInt).toArray)) shouldBe false
+    Chapter4Solutions.isValidBST(Chapter4Solutions.minBinaryTree((0 until 1000).map(_ => Random.nextInt()).sorted.toArray)) shouldBe true
+    Chapter4Solutions.isValidBST(Chapter4Solutions.minBinaryTree((0 until 1000).map(_ => Random.nextInt()).toArray)) shouldBe false
 
     // right grandchild greater than node
     Chapter4Solutions.isValidBST(new Tree[Integer](20, new Tree[Integer](10, null, new Tree(25)), new Tree(30))) shouldBe false

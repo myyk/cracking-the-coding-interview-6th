@@ -4,7 +4,7 @@ import com.github.myyk.cracking.Chapter3Solutions.FullStackException
 
 import java.util
 import java.util.EmptyStackException
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.util.Random
 
 import org.scalatest._

@@ -3,7 +3,7 @@ package com.github.myyk.cracking
 import com.github.myyk.cracking.Chapter17Solutions._
 
 import java.lang.{Integer => JInt}
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.util.Random
 
 import org.scalatest._
@@ -30,7 +30,7 @@ class Chapter17SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "shuffle" should "shuffle a deck with equal probabilities" in {
-    val deck: Array[Integer] = (0 to 51).map(new Integer(_)).toArray
+    val deck: Array[Integer] = (0 to 51).map(Integer.valueOf).toArray
     shuffle(deck)
 //    println(deck.mkString(","))
   }

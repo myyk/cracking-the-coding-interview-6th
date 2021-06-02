@@ -3,7 +3,7 @@ package com.github.myyk.cracking
 import com.github.myyk.cracking.Chapter7Solutions.{Box, Color, Robot}
 
 import java.lang.{Integer => JInt}
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.util.Random
 
 import org.scalatest._
@@ -98,7 +98,7 @@ class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
     testFindMagicIndex(Array(-100,-100,-100,-100,-100,-100,6), Chapter7Solutions.findMagicIndexNonDistinct) 
   }
 
-  def testPowerSet[T](input: Set[T], expected: Set[Set[T]]) {
+  def testPowerSet[T](input: Set[T], expected: Set[Set[T]]): Unit = {
     Chapter7Solutions.powerSet(input.asJava).asScala.map(_.asScala.toSet).toSet shouldBe expected
   }
 
@@ -123,7 +123,7 @@ class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
     testMultiply(-1, 123)
     testMultiply(-123, -1)
     for (_ <- 1 until 100) {
-      testMultiply(Random.nextInt, Random.nextInt)
+      testMultiply(Random.nextInt(), Random.nextInt())
     }
   }
 
