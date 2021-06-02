@@ -2,13 +2,16 @@ package com.github.myyk.cracking
 
 import com.github.myyk.cracking.Chapter16Solutions.AntGrid.{AntGridResult, Direction}
 import com.github.myyk.cracking.Chapter16Solutions.{EnglishIntMaker, Line, MasterMindResult, MutableInteger, Person, Point, TicTacToe, WordFrequencies, bestLine, countDivingBoardsOfKPieces, countDivingBoardsOfSize, divide, factorialZeroes, isWonTicTacToe, livingPeople, livingPeopleBruteForce, masterMindScore, masterMindScore2, multiply, numberMax, smallestDifference, subtract, _}
-import org.scalatest.{FlatSpec, Matchers}
 
 import java.lang.{Integer => JInt}
 import scala.collection.JavaConverters._
 import scala.util.Random
 
-class Chapter16SolutionsTest extends FlatSpec with Matchers {
+import org.scalatest._
+import flatspec._
+import matchers._
+
+class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
   "swapInPlace" should "swap the two integers without using additional space" in {
     val originalA = 123456
     val originalB = 67890

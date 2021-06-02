@@ -1,12 +1,14 @@
 package com.github.myyk.cracking
 
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers
 import com.github.myyk.cracking.Chapter5Solutions.NextNumberResult
 
 import scala.language.implicitConversions
 
-class Chapter5SolutionsTest extends FlatSpec with Matchers {
+import org.scalatest._
+import flatspec._
+import matchers._
+
+class Chapter5SolutionsTest extends AnyFlatSpec with should.Matchers {
   implicit def enrichStringContext(sc: StringContext): RichStringContext = new RichStringContext(sc)
 
   class RichStringContext(sc: StringContext) {

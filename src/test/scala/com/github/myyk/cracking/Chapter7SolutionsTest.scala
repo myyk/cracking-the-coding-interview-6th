@@ -1,13 +1,16 @@
 package com.github.myyk.cracking
 
 import com.github.myyk.cracking.Chapter7Solutions.{Box, Color, Robot}
-import org.scalatest.{FlatSpec, Matchers}
 
 import java.lang.{Integer => JInt}
 import scala.collection.JavaConverters._
 import scala.util.Random
 
-class Chapter7SolutionsTest extends FlatSpec with Matchers {
+import org.scalatest._
+import flatspec._
+import matchers._
+
+class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
   def testTripleStep(tripleStep: Int => BigInt): Unit = {
     tripleStep(0) shouldBe 1
     tripleStep(1) shouldBe 1

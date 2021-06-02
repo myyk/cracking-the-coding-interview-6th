@@ -1,9 +1,10 @@
 package com.github.myyk.cracking
 
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers
+import org.scalatest._
+import flatspec._
+import matchers._
 
-class Chapter1SolutionsTest extends FlatSpec with Matchers {
+class Chapter1SolutionsTest extends AnyFlatSpec with should.Matchers {
 
   "stringHasAllUniqueCharacters" should "return whether or not a string has all unique characters" in {
     Chapter1Solutions.stringHasAllUniqueCharacters("") shouldBe true
@@ -31,18 +32,18 @@ class Chapter1SolutionsTest extends FlatSpec with Matchers {
   }
 
   "urlify" should "replace spaces with '%20' in place" in {
-    val chars1 = Array('a', 'b', 'c', '\0')
+    val chars1 = Array('a', 'b', 'c', '\u0000')
     Chapter1Solutions.urlify(chars1, 3)
-    new String(chars1) shouldBe "abc\0"
+    new String(chars1) shouldBe "abc\u0000"
 
-    val chars2 = Array('a', ' ', 'c', '\0', ' ', ' ')
+    val chars2 = Array('a', ' ', 'c', '\u0000', ' ', ' ')
     Chapter1Solutions.urlify(chars2, 3)
-    new String(chars2) shouldBe "a%20c\0"
+    new String(chars2) shouldBe "a%20c\u0000"
 
     // string is "a c d  e "
-    val chars3 = Array('a', ' ', 'c', ' ', 'd', ' ', ' ', 'e', ' ', '\0', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ')
+    val chars3 = Array('a', ' ', 'c', ' ', 'd', ' ', ' ', 'e', ' ', '\u0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ')
     Chapter1Solutions.urlify(chars3, 9)
-    new String(chars3) shouldBe "a%20c%20d%20%20e%20\0"
+    new String(chars3) shouldBe "a%20c%20d%20%20e%20\u0000"
   }
 
   "canHavePalindromePermutation" should "return whether a string can form a palindrome" in {

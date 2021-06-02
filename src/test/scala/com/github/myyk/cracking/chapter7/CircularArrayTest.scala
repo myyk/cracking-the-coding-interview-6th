@@ -1,10 +1,12 @@
 package com.github.myyk.cracking.chapter7
 
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers
+import org.scalatest._
+import flatspec._
+import matchers._
 
-class CircularArrayTest extends FlatSpec with Matchers {
-  "iterator" should "should iterate through the collection" in {
+class CircularArrayTest extends AnyFlatSpec with should.Matchers {
+
+    "iterator" should "should iterate through the collection" in {
     val array = new CircularArray[Int]
     for (i <- 1 until 10) {
       array.add(i)

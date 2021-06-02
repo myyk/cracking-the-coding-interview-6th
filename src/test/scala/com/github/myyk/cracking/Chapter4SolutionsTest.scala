@@ -2,14 +2,17 @@ package com.github.myyk.cracking
 
 import com.github.myyk.cracking.Chapter4Solutions._
 import com.google.common.collect.Lists
-import org.scalatest.{FlatSpec, Matchers}
 
 import java.util
 import scala.annotation.tailrec
 import scala.collection.JavaConverters._
 import scala.util.Random
 
-class Chapter4SolutionsTest extends FlatSpec with Matchers {
+import org.scalatest._
+import flatspec._
+import matchers._
+
+class Chapter4SolutionsTest extends AnyFlatSpec with should.Matchers {
   def createMediumDirectionalTestGraph: (IntGraph, Seq[IntNode]) = {
     val graph = new IntGraph()
 

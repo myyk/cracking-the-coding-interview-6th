@@ -1,14 +1,17 @@
 package com.github.myyk.cracking
 
 import com.github.myyk.cracking.Chapter3Solutions.FullStackException
-import org.scalatest.{FlatSpec, Matchers}
 
 import java.util
 import java.util.EmptyStackException
 import scala.collection.JavaConverters._
 import scala.util.Random
 
-class Chapter3SolutionsTest extends FlatSpec with Matchers {
+import org.scalatest._
+import flatspec._
+import matchers._
+
+class Chapter3SolutionsTest extends AnyFlatSpec with should.Matchers {
 
   // should be empty to start with
   def testStandardStackBehavior(stack: util.Stack[Integer]): Unit = {

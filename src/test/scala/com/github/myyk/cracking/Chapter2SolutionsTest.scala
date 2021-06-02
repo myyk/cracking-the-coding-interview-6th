@@ -1,11 +1,12 @@
 package com.github.myyk.cracking
 
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers
-
 import Chapter2Solutions.Node
 
-class Chapter2SolutionsTest extends FlatSpec with Matchers {
+import org.scalatest._
+import flatspec._
+import matchers._
+
+class Chapter2SolutionsTest extends AnyFlatSpec with should.Matchers {
   def toNodes(iterable: Seq[Int]): Node = {
     iterable.reverse.foldLeft(null: Node)((next, i) => new Node(i, next))
   }

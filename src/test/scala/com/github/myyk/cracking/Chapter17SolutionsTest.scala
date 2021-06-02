@@ -1,13 +1,16 @@
 package com.github.myyk.cracking
 
 import com.github.myyk.cracking.Chapter17Solutions._
-import org.scalatest.{FlatSpec, Matchers}
 
 import java.lang.{Integer => JInt}
 import scala.collection.JavaConverters._
 import scala.util.Random
 
-class Chapter17SolutionsTest extends FlatSpec with Matchers {
+import org.scalatest._
+import flatspec._
+import matchers._
+
+class Chapter17SolutionsTest extends AnyFlatSpec with should.Matchers {
   "addWithoutPlus" should "add two integers" in {
     def testAddWithoutPlus(a: Int, b: Int): Unit = {
       addWithoutPlus(a, b) shouldBe (a + b)
