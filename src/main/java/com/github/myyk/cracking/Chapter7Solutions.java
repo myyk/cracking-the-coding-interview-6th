@@ -122,7 +122,7 @@ public class Chapter7Solutions {
 
     List<List<Optional<Boolean>>> moves = new ArrayList<>();
     for (int i = 0; i < grid.length; i++) {
-      List next = new ArrayList<>();
+      List<Optional<Boolean>> next = new ArrayList<>();
       moves.add(next);
       for (int j = 0; j < grid[0].length; j++) {
         next.add(Optional.empty());
@@ -140,7 +140,6 @@ public class Chapter7Solutions {
 
   // moves stores the move to get to the given position
   private static boolean[] findPath(boolean movedRight, int robotX, int robotY, boolean[][] grid, List<List<Optional<Boolean>>> moves) {
-    System.out.println("findPath ~~~ " + robotY + " ~ " + robotX);
     if (robotX >= grid[0].length || robotY >= grid.length) {
       return null;
     } else if (moves.get(robotY).get(robotX).isPresent()) {

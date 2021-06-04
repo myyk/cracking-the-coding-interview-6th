@@ -73,7 +73,7 @@ class Chapter1SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "rotateMatrix90" should "rotate the input matrix" in {
-    Chapter1Solutions.rotateMatrix90(Array()) shouldBe Array()
+    Chapter1Solutions.rotateMatrix90(Array()) shouldBe Array.empty[Array[Int]]
     Chapter1Solutions.rotateMatrix90(Array(Array(1))) shouldBe Array(Array(1))
     Chapter1Solutions.rotateMatrix90(Array(Array(1,2),
                                            Array(3,4))) shouldBe Array(Array(3,1),

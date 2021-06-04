@@ -5,7 +5,6 @@ import com.github.myyk.cracking.Chapter7Solutions.{Box, Color, Robot}
 import java.lang.{Integer => JInt}
 import scala.jdk.CollectionConverters._
 import scala.util.Random
-
 import org.scalatest._
 import flatspec._
 import matchers._
