@@ -3,10 +3,12 @@ package com.github.myyk.cracking;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 
@@ -111,13 +113,22 @@ public class Chapter7Solutions {
    * Time complexity: O(nm)
    * Space complexity: O(n+m)
    */
-  // return sequence of moves n, true means right, false means down. null means no solution.
+  // return sequence of moves n, Some(true) means right, Some(false) means down. None means no solution.
   // in the grid, true means off limits
   public static boolean[] findPath(boolean[][] grid) {
     if (grid.length == 1 && grid[0].length == 1) {
       return new boolean[0];
     }
-    Boolean[][] moves = new Boolean[grid.length][grid[0].length];
+
+    List<List<Optional<Boolean>>> moves = new ArrayList<>();
+    for (int i = 0; i < grid.length; i++) {
+      List next = new ArrayList<>();
+      moves.add(next);
+      for (int j = 0; j < grid[0].length; j++) {
+        next.add(Optional.empty());
+      }
+    }
+
     boolean[] solution = findPath(true, 1, 0, grid, moves);
     if (solution != null) {
       return solution;
@@ -128,20 +139,21 @@ public class Chapter7Solutions {
   }
 
   // moves stores the move to get to the given position
-  private static boolean[] findPath(boolean movedRight, int robotX, int robotY, boolean[][] grid, Boolean[][] moves) {
+  private static boolean[] findPath(boolean movedRight, int robotX, int robotY, boolean[][] grid, List<List<Optional<Boolean>>> moves) {
+    System.out.println("findPath ~~~ " + robotY + " ~ " + robotX);
     if (robotX >= grid[0].length || robotY >= grid.length) {
       return null;
-    } else if (moves[robotY][robotX] != null) {
+    } else if (moves.get(robotY).get(robotX).isPresent()) {
       // we've already been here
       return null;
     } else if (grid[robotY][robotX]) {
       return null;
     } else {
-      moves[robotY][robotX] = movedRight;
+      moves.get(robotY).set(robotX, Optional.of(movedRight));
       if (robotX == grid[0].length - 1 && robotY == grid.length - 1) {
         return movesToSolution(moves);
       } else{
-        moves[robotY][robotX] = movedRight;
+        moves.get(robotY).set(robotX, Optional.of(movedRight));
         // try right
         boolean[] solution = findPath(true, robotX + 1, robotY, grid, moves);
         if (solution != null) {
@@ -155,15 +167,15 @@ public class Chapter7Solutions {
     }
   }
 
-  protected static boolean[] movesToSolution(Boolean[][] moves) {
-    int x = moves[0].length - 1;
-    int y = moves.length - 1;
-    boolean[] answer = new boolean[moves[0].length + moves.length - 2];
+  protected static boolean[] movesToSolution(List<List<Optional<Boolean>>> moves) {
+    int x = moves.get(0).size() - 1;
+    int y = moves.size() - 1;
+    boolean[] answer = new boolean[x + y];
     int i = answer.length;
     while (i > 0) {
       i--;
-      answer[i] = moves[y][x];
-      if (moves[y][x]) {
+      answer[i] = moves.get(y).get(x).get();
+      if (answer[i]) {
         x--;
       } else {
         y--;

@@ -9,6 +9,8 @@ import scala.util.Random
 import org.scalatest._
 import flatspec._
 import matchers._
+import java.util.Optional
+import java.lang
 
 class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
   def testTripleStep(tripleStep: Int => BigInt): Unit = {
@@ -63,8 +65,10 @@ class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "movesToSolution" should "turn some moves into a solution array" in {
-    Chapter7Solutions.movesToSolution(Array(Array(null, true, true))) shouldBe Array(true, true)
-    Chapter7Solutions.movesToSolution(Array(Array(null, true, null), Array(null, false, true))) shouldBe Array(true, false, true)
+    Chapter7Solutions.movesToSolution(List(List[Optional[lang.Boolean]](Optional.empty, Optional.of(true), Optional.of(true)).asJava).asJava) shouldBe Array(true, true)
+    Chapter7Solutions.movesToSolution(List(
+      List[Optional[lang.Boolean]](Optional.empty, Optional.of(true), Optional.empty).asJava,
+      List[Optional[lang.Boolean]](Optional.empty, Optional.of(false), Optional.of(true)).asJava).asJava) shouldBe Array(true, false, true)
   }
 
   def testFindMagicIndex(a: Array[Int], op: Array[Int] => Int): Unit = {
