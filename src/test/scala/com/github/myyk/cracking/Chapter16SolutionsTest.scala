@@ -1,7 +1,34 @@
 package com.github.myyk.cracking
 
-import com.github.myyk.cracking.Chapter16Solutions.AntGrid.{AntGridResult, Direction}
-import com.github.myyk.cracking.Chapter16Solutions.{EnglishIntMaker, Line, MasterMindResult, MutableInteger, Person, Point, TicTacToe, WordFrequencies, bestLine, countDivingBoardsOfKPieces, countDivingBoardsOfSize, divide, factorialZeroes, isWonTicTacToe, livingPeople, livingPeopleBruteForce, masterMindScore, masterMindScore2, multiply, numberMax, smallestDifference, subtract, _}
+import com.github.myyk.cracking.Chapter16Solutions.AntGrid.{
+  AntGridResult,
+  Direction
+}
+import com.github.myyk.cracking.Chapter16Solutions.{
+  EnglishIntMaker,
+  Line,
+  MasterMindResult,
+  MutableInteger,
+  Person,
+  Point,
+  TicTacToe,
+  WordFrequencies,
+  bestLine,
+  countDivingBoardsOfKPieces,
+  countDivingBoardsOfSize,
+  divide,
+  factorialZeroes,
+  isWonTicTacToe,
+  livingPeople,
+  livingPeopleBruteForce,
+  masterMindScore,
+  masterMindScore2,
+  multiply,
+  numberMax,
+  smallestDifference,
+  subtract,
+  _
+}
 
 import java.lang.{Integer => JInt}
 import scala.jdk.CollectionConverters._
@@ -23,7 +50,8 @@ class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "WordFrequencies" should "be able to get a word's frequency from a given text" in {
-    val wordFreqs = new WordFrequencies("a: b c d, å åå e f g aaa' a a a -aaa- a")
+    val wordFreqs =
+      new WordFrequencies("a: b c d, å åå e f g aaa' a a a -aaa- a")
     wordFreqs.getFrequency("apple") shouldBe 0
     wordFreqs.getFrequency("a") shouldBe 5
     wordFreqs.getFrequency("A") shouldBe 5
@@ -90,10 +118,16 @@ class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "smallestDifference" should "find the smallest difference between any two numbers in the arrays" in {
-    smallestDifference(Array(1,3,15,11,2), Array(23,127,235,19,8)) shouldBe 3
-    smallestDifference(Array(1,3,15,2), Array(23,127,235,19,8)) shouldBe 4
-    smallestDifference(Array(1,3,15,2), Array(23,127,235,3,8)) shouldBe 0
-    smallestDifference(Array(1), Array(23,127,235,312,8)) shouldBe 7
+    smallestDifference(
+      Array(1, 3, 15, 11, 2),
+      Array(23, 127, 235, 19, 8)
+    ) shouldBe 3
+    smallestDifference(
+      Array(1, 3, 15, 2),
+      Array(23, 127, 235, 19, 8)
+    ) shouldBe 4
+    smallestDifference(Array(1, 3, 15, 2), Array(23, 127, 235, 3, 8)) shouldBe 0
+    smallestDifference(Array(1), Array(23, 127, 235, 312, 8)) shouldBe 7
   }
 
   def testNumberMax(a: Int, b: Int): Unit = {
@@ -118,11 +152,21 @@ class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
     maker.englishInt(100) shouldBe "One Hundred"
     maker.englishInt(101) shouldBe "One Hundred One"
     maker.englishInt(1234) shouldBe "One Thousand, Two Hundred Thirty Four"
-    maker.englishInt(-1234) shouldBe "Negative One Thousand, Two Hundred Thirty Four"
-    maker.englishInt(9341234) shouldBe "Nine Million, Three Hundred Forty One Thousand, Two Hundred Thirty Four"
-    maker.englishInt(Int.MaxValue) shouldBe "Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Seven"
-    maker.englishInt(Int.MinValue) shouldBe "Negative Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Eight"
-    maker.englishInt(Int.MinValue+1) shouldBe "Negative Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Seven"
+    maker.englishInt(
+      -1234
+    ) shouldBe "Negative One Thousand, Two Hundred Thirty Four"
+    maker.englishInt(
+      9341234
+    ) shouldBe "Nine Million, Three Hundred Forty One Thousand, Two Hundred Thirty Four"
+    maker.englishInt(
+      Int.MaxValue
+    ) shouldBe "Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Seven"
+    maker.englishInt(
+      Int.MinValue
+    ) shouldBe "Negative Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Eight"
+    maker.englishInt(
+      Int.MinValue + 1
+    ) shouldBe "Negative Two Billion, One Hundred Forty Seven Million, Four Hundred Eighty Three Thousand, Six Hundred Forty Seven"
   }
 
   def testOperations(a: Int, b: Int): Unit = {
@@ -133,7 +177,7 @@ class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
   def testOperationsHelper(a: Int, b: Int): Unit = {
     subtract(a, b) shouldBe (a - b)
     if (a.abs < 10000 && b.abs < 10000) {
-      multiply(a, b) shouldBe (a * b)  
+      multiply(a, b) shouldBe (a * b)
     }
     if (b != 0 && a.abs < 10000) {
       divide(a, b) shouldBe (a / b)
@@ -161,7 +205,9 @@ class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "livingPeople" should "return the year where the most people were living" in {
-    livingPeople(Set(new Person(1900, 2000), new Person(1910,1910)).asJava) shouldBe 1910
+    livingPeople(
+      Set(new Person(1900, 2000), new Person(1910, 1910)).asJava
+    ) shouldBe 1910
 
     val people = for (_: Int <- (1 to 10000).toSet) yield {
       val birth = 1900 + Random.nextInt(100)
@@ -171,20 +217,52 @@ class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "countDivingBoardsOfKPieces" should "return the number of ways to build a diving board of with k boards" in {
-    countDivingBoardsOfKPieces(5, 10, 4).asScala.toSet shouldBe Set(20, 25, 30, 35, 40)
-    countDivingBoardsOfKPieces(3, 7, 4).asScala.toSet shouldBe Set(12, 16, 20, 24, 28)
+    countDivingBoardsOfKPieces(5, 10, 4).asScala.toSet shouldBe Set(
+      20,
+      25,
+      30,
+      35,
+      40
+    )
+    countDivingBoardsOfKPieces(3, 7, 4).asScala.toSet shouldBe Set(
+      12,
+      16,
+      20,
+      24,
+      28
+    )
     countDivingBoardsOfKPieces(10, 10, 4).asScala.toSet shouldBe Set(40)
   }
 
   "countDivingBoardsOfSize" should "return the number of ways to build a diving board of size k" in {
-    countDivingBoardsOfSize(5, 10, 200) shouldBe Chapter7Solutions.coinsCount(Set(5, 10).map(JInt.valueOf).asJava, 200)
+    countDivingBoardsOfSize(5, 10, 200) shouldBe Chapter7Solutions.coinsCount(
+      Set(5, 10).map(JInt.valueOf).asJava,
+      200
+    )
   }
 
   "bestLine" should "find a line that goes through the most points" in {
-    bestLine(Set(new Point(1,1), new Point(2,2)).asJava) shouldBe new Line(new Point(1,1), new Point(2,2))
-    bestLine(Set(new Point(1,1), new Point(3,3)).asJava) shouldBe new Line(new Point(1,1), new Point(2,2))
-    bestLine(Set(new Point(0,1), new Point(0,3)).asJava) shouldBe new Line(new Point(0,3), new Point(0,3))
-    bestLine(Set(new Point(1,1), new Point(2,2), new Point(3,3), new Point(0,1), new Point(0,3)).asJava) shouldBe new Line(new Point(0,0), new Point(1,1))
+    bestLine(Set(new Point(1, 1), new Point(2, 2)).asJava) shouldBe new Line(
+      new Point(1, 1),
+      new Point(2, 2)
+    )
+    bestLine(Set(new Point(1, 1), new Point(3, 3)).asJava) shouldBe new Line(
+      new Point(1, 1),
+      new Point(2, 2)
+    )
+    bestLine(Set(new Point(0, 1), new Point(0, 3)).asJava) shouldBe new Line(
+      new Point(0, 3),
+      new Point(0, 3)
+    )
+    bestLine(
+      Set(
+        new Point(1, 1),
+        new Point(2, 2),
+        new Point(3, 3),
+        new Point(0, 1),
+        new Point(0, 3)
+      ).asJava
+    ) shouldBe new Line(new Point(0, 0), new Point(1, 1))
   }
 
   "masterMindScore" should "compute the game score" in {
@@ -193,10 +271,18 @@ class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "subSortIndexes" should "give the indexes of the minimum subarray to get a sorted array" in {
-    subSortIndexes(Array(1, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19)) shouldBe (3, 9)
-    subSortIndexes(Array(1, 2, 4, 7, 10, 11, 7, 12, 7, 7, 16, 18, 19)) shouldBe (4, 9)
-    subSortIndexes(Array(1, 2, 4, 7, 10, 11, 7, 12, 7, 7, 16, 18, 5)) shouldBe (3, 12)
-    subSortIndexes(Array(3, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19)) shouldBe (0, 9)
+    subSortIndexes(
+      Array(1, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19)
+    ) shouldBe (3, 9)
+    subSortIndexes(
+      Array(1, 2, 4, 7, 10, 11, 7, 12, 7, 7, 16, 18, 19)
+    ) shouldBe (4, 9)
+    subSortIndexes(
+      Array(1, 2, 4, 7, 10, 11, 7, 12, 7, 7, 16, 18, 5)
+    ) shouldBe (3, 12)
+    subSortIndexes(
+      Array(3, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19)
+    ) shouldBe (0, 9)
   }
 
   def testMaxContiguousSequenceSum(array: Array[Int], expected: Int): Unit = {
@@ -225,17 +311,20 @@ class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
     findPondSizes(Array(Array(0))).asScala.toSet shouldBe Set(1)
     findPondSizes(Array(Array(0, 0), Array(0, 0))).asScala.toSet shouldBe Set(4)
 
-    findPondSizes(Array(
+    findPondSizes(
+      Array(
         Array(0, 2, 1, 0),
         Array(0, 1, 0, 1),
         Array(1, 1, 0, 1),
-        Array(0, 1, 0, 1))).asScala.toSet shouldBe Set(1,2,4)
+        Array(0, 1, 0, 1)
+      )
+    ).asScala.toSet shouldBe Set(1, 2, 4)
   }
 
   def testSumSwap(a: Array[Int], b: Array[Int]): Unit = {
     val result = sumSwap(a, b)
-    val swappedA =  -result(0) :: result(1) :: a.toList
-    val swappedB =  result(0) :: -result(1) :: b.toList
+    val swappedA = -result(0) :: result(1) :: a.toList
+    val swappedB = result(0) :: -result(1) :: b.toList
 
     swappedA.sum shouldBe swappedB.sum
   }
@@ -245,7 +334,9 @@ class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   def printAntWalk(grid: AntGridResult): Unit = {
-    println(s"ant = (${grid.ant._1}, ${grid.ant._2}), direction = ${grid.direction}")
+    println(
+      s"ant = (${grid.ant._1}, ${grid.ant._2}), direction = ${grid.direction}"
+    )
     for {
       col <- grid.isBlack.indices
       row <- grid.isBlack(0).indices
@@ -279,10 +370,14 @@ class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
 
     val expectedArray = Array(
       Array(false, false, true),
-      Array(true,  true,  true),
-      Array(true,  true,  false)
+      Array(true, true, true),
+      Array(true, true, false)
     )
-    antWalk(10) shouldBe new AntGridResult((0, 0), expectedArray, Direction.Left)
+    antWalk(10) shouldBe new AntGridResult(
+      (0, 0),
+      expectedArray,
+      Direction.Left
+    )
   }
 
   "rand7" should "return random numbers 0 until 7" in {
@@ -297,7 +392,10 @@ class Chapter16SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "findPairsWithSum" should "find all the pairs with the sum in the array" in {
-    findPairsWithSum(Array(2, -3, 5, -7, 8, -1, 0, 1), 1).asScala.toMap shouldBe Map(-1 -> 2, -7 -> 8, 0 -> 1)
+    findPairsWithSum(
+      Array(2, -3, 5, -7, 8, -1, 0, 1),
+      1
+    ).asScala.toMap shouldBe Map(-1 -> 2, -7 -> 8, 0 -> 1)
   }
 
   "LRUCache" should "work like a LRU cache with a max size" in {

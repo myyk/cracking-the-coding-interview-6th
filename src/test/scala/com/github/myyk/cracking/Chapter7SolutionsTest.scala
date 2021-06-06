@@ -64,10 +64,29 @@ class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "movesToSolution" should "turn some moves into a solution array" in {
-    Chapter7Solutions.movesToSolution(List(List[Optional[lang.Boolean]](Optional.empty, Optional.of(true), Optional.of(true)).asJava).asJava) shouldBe Array(true, true)
-    Chapter7Solutions.movesToSolution(List(
-      List[Optional[lang.Boolean]](Optional.empty, Optional.of(true), Optional.empty).asJava,
-      List[Optional[lang.Boolean]](Optional.empty, Optional.of(false), Optional.of(true)).asJava).asJava) shouldBe Array(true, false, true)
+    Chapter7Solutions.movesToSolution(
+      List(
+        List[Optional[lang.Boolean]](
+          Optional.empty,
+          Optional.of(true),
+          Optional.of(true)
+        ).asJava
+      ).asJava
+    ) shouldBe Array(true, true)
+    Chapter7Solutions.movesToSolution(
+      List(
+        List[Optional[lang.Boolean]](
+          Optional.empty,
+          Optional.of(true),
+          Optional.empty
+        ).asJava,
+        List[Optional[lang.Boolean]](
+          Optional.empty,
+          Optional.of(false),
+          Optional.of(true)
+        ).asJava
+      ).asJava
+    ) shouldBe Array(true, false, true)
   }
 
   def testFindMagicIndex(a: Array[Int], op: Array[Int] => Int): Unit = {
@@ -81,35 +100,84 @@ class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "findMagicIndexDistinct" should "find a magic index if there's one and elements are distinct" in {
-    testFindMagicIndexNotFound(Array(2), Chapter7Solutions.findMagicIndexDistinct) 
+    testFindMagicIndexNotFound(
+      Array(2),
+      Chapter7Solutions.findMagicIndexDistinct
+    )
 
-    testFindMagicIndex(Array(0), Chapter7Solutions.findMagicIndexDistinct) 
-    testFindMagicIndex(Array(-1,0,1,2,3,5), Chapter7Solutions.findMagicIndexDistinct) 
-    testFindMagicIndex(Array(-1,0,1,2,4,6), Chapter7Solutions.findMagicIndexDistinct) 
-    testFindMagicIndex(Array(0,2,4,6), Chapter7Solutions.findMagicIndexDistinct) 
+    testFindMagicIndex(Array(0), Chapter7Solutions.findMagicIndexDistinct)
+    testFindMagicIndex(
+      Array(-1, 0, 1, 2, 3, 5),
+      Chapter7Solutions.findMagicIndexDistinct
+    )
+    testFindMagicIndex(
+      Array(-1, 0, 1, 2, 4, 6),
+      Chapter7Solutions.findMagicIndexDistinct
+    )
+    testFindMagicIndex(
+      Array(0, 2, 4, 6),
+      Chapter7Solutions.findMagicIndexDistinct
+    )
   }
 
   "findMagicIndexNonDistinct" should "find a magic index if there's one and elements are distinct" in {
-    testFindMagicIndexNotFound(Array(2), Chapter7Solutions.findMagicIndexNonDistinct) 
+    testFindMagicIndexNotFound(
+      Array(2),
+      Chapter7Solutions.findMagicIndexNonDistinct
+    )
 
-    testFindMagicIndex(Array(0), Chapter7Solutions.findMagicIndexNonDistinct) 
-    testFindMagicIndex(Array(-1,0,1,2,3,5), Chapter7Solutions.findMagicIndexNonDistinct) 
-    testFindMagicIndex(Array(-1,0,1,2,4,6), Chapter7Solutions.findMagicIndexNonDistinct) 
-    testFindMagicIndex(Array(0,2,4,6), Chapter7Solutions.findMagicIndexNonDistinct) 
-    testFindMagicIndex(Array(1,1,2,4,6), Chapter7Solutions.findMagicIndexNonDistinct) 
-    testFindMagicIndex(Array(-1,-1,3,4,6,6,6), Chapter7Solutions.findMagicIndexNonDistinct) 
-    testFindMagicIndex(Array(-100,-100,-100,-100,-100,-100,6), Chapter7Solutions.findMagicIndexNonDistinct) 
+    testFindMagicIndex(Array(0), Chapter7Solutions.findMagicIndexNonDistinct)
+    testFindMagicIndex(
+      Array(-1, 0, 1, 2, 3, 5),
+      Chapter7Solutions.findMagicIndexNonDistinct
+    )
+    testFindMagicIndex(
+      Array(-1, 0, 1, 2, 4, 6),
+      Chapter7Solutions.findMagicIndexNonDistinct
+    )
+    testFindMagicIndex(
+      Array(0, 2, 4, 6),
+      Chapter7Solutions.findMagicIndexNonDistinct
+    )
+    testFindMagicIndex(
+      Array(1, 1, 2, 4, 6),
+      Chapter7Solutions.findMagicIndexNonDistinct
+    )
+    testFindMagicIndex(
+      Array(-1, -1, 3, 4, 6, 6, 6),
+      Chapter7Solutions.findMagicIndexNonDistinct
+    )
+    testFindMagicIndex(
+      Array(-100, -100, -100, -100, -100, -100, 6),
+      Chapter7Solutions.findMagicIndexNonDistinct
+    )
   }
 
   def testPowerSet[T](input: Set[T], expected: Set[Set[T]]): Unit = {
-    Chapter7Solutions.powerSet(input.asJava).asScala.map(_.asScala.toSet).toSet shouldBe expected
+    Chapter7Solutions
+      .powerSet(input.asJava)
+      .asScala
+      .map(_.asScala.toSet)
+      .toSet shouldBe expected
   }
 
   "powerSet" should "get the power set of a set" in {
     testPowerSet(Set.empty[Int], Set(Set.empty[Int]))
     testPowerSet(Set(1), Set(Set.empty[Int], Set(1)))
-    testPowerSet(Set(1,2), Set(Set.empty[Int], Set(1), Set(2), Set(1,2)))
-    testPowerSet(Set(1,2,3), Set(Set.empty[Int], Set(1), Set(2), Set(3), Set(1,2), Set(2,3), Set(1,3), Set(1,2,3)))
+    testPowerSet(Set(1, 2), Set(Set.empty[Int], Set(1), Set(2), Set(1, 2)))
+    testPowerSet(
+      Set(1, 2, 3),
+      Set(
+        Set.empty[Int],
+        Set(1),
+        Set(2),
+        Set(3),
+        Set(1, 2),
+        Set(2, 3),
+        Set(1, 3),
+        Set(1, 2, 3)
+      )
+    )
   }
 
   def testMultiply(a: Int, b: Int): Unit = {
@@ -131,8 +199,14 @@ class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "permutationsUnique" should "get all permutations of the string" in {
-    Chapter7Solutions.permutationsUnique("abc").asScala.toSet shouldBe "abc".permutations.toSet
-    Chapter7Solutions.permutationsUnique("myyk").asScala.toSet shouldBe "myyk".permutations.toSet
+    Chapter7Solutions
+      .permutationsUnique("abc")
+      .asScala
+      .toSet shouldBe "abc".permutations.toSet
+    Chapter7Solutions
+      .permutationsUnique("myyk")
+      .asScala
+      .toSet shouldBe "myyk".permutations.toSet
     Chapter7Solutions.permutationsUnique("aaaaa").size shouldBe 1
   }
 
@@ -140,29 +214,47 @@ class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
     Chapter7Solutions.parens(0).asScala.toSet shouldBe Set()
     Chapter7Solutions.parens(1).asScala.toSet shouldBe Set("()")
     Chapter7Solutions.parens(2).asScala.toSet shouldBe Set("()()", "(())")
-    Chapter7Solutions.parens(3).asScala.toSet shouldBe Set("()()()", "(())()", "()(())", "((()))", "(()())")
-    Chapter7Solutions.parens(4).asScala.toSet shouldBe Set("()()()()", "()(())()", "()()(())", "()((()))", "()(()())",
-                                                   "(()()())", "((())())", "(()(()))", "(((())))", "((()()))",
-                                                   "(())()()", "((()))()", "(()())()")
+    Chapter7Solutions.parens(3).asScala.toSet shouldBe Set(
+      "()()()",
+      "(())()",
+      "()(())",
+      "((()))",
+      "(()())"
+    )
+    Chapter7Solutions.parens(4).asScala.toSet shouldBe Set(
+      "()()()()",
+      "()(())()",
+      "()()(())",
+      "()((()))",
+      "()(()())",
+      "(()()())",
+      "((())())",
+      "(()(()))",
+      "(((())))",
+      "((()()))",
+      "(())()()",
+      "((()))()",
+      "(()())()"
+    )
   }
 
   "paintFill" should "fill the all the connected old color with the new color" in {
-    val newColor = new Color(255.toByte,255.toByte,255.toByte)
-    val color1 = new Color(1.toByte,1.toByte,1.toByte)
-    val color2 = new Color(2.toByte,2.toByte,2.toByte)
+    val newColor = new Color(255.toByte, 255.toByte, 255.toByte)
+    val color1 = new Color(1.toByte, 1.toByte, 1.toByte)
+    val color2 = new Color(2.toByte, 2.toByte, 2.toByte)
     val image = Array(
-        Array(color1, color1, color1, color1, color1),
-        Array(color2, color2, color1, color2, color2),
-        Array(color1, color1, color1, color1, color1),
-        Array(color2, color2, color1, color2, color1),
-        Array(color1, color2, color1, color2, color1)
+      Array(color1, color1, color1, color1, color1),
+      Array(color2, color2, color1, color2, color2),
+      Array(color1, color1, color1, color1, color1),
+      Array(color2, color2, color1, color2, color1),
+      Array(color1, color2, color1, color2, color1)
     )
     val expectedImage = Array(
-        Array(newColor, newColor, newColor, newColor, newColor),
-        Array(color2,   color2,   newColor, color2,   color2),
-        Array(newColor, newColor, newColor, newColor, newColor),
-        Array(color2,   color2,   newColor, color2,   newColor),
-        Array(color1,   color2,   newColor, color2,   newColor)
+      Array(newColor, newColor, newColor, newColor, newColor),
+      Array(color2, color2, newColor, color2, color2),
+      Array(newColor, newColor, newColor, newColor, newColor),
+      Array(color2, color2, newColor, color2, newColor),
+      Array(color1, color2, newColor, color2, newColor)
     )
     Chapter7Solutions.paintFill(image, 2, 2, newColor) shouldBe expectedImage
   }
@@ -177,7 +269,12 @@ class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
     coinsCount(Set(1, 5, 10, 25), 5) shouldBe 2
     coinsCount(Set(1, 5, 10, 25), 10) shouldBe 4
     coinsCount(Set(1, 5, 10, 25), 11) shouldBe 4
-    coinsCount(Set(5, 10, 25), 25) shouldBe Array(25, 10 + 10 + 5, 10 + 5 + 5 + 5, 5 * 5).length
+    coinsCount(Set(5, 10, 25), 25) shouldBe Array(
+      25,
+      10 + 10 + 5,
+      10 + 5 + 5 + 5,
+      5 * 5
+    ).length
     coinsCount(Set(5, 10, 25), 26) shouldBe 0
 
   }
@@ -191,7 +288,7 @@ class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
 //    } {
 //      println( "o"*queen + "x" + "o"*(n - 1 - queen))
 //    }
-    
+
     Chapter7Solutions.placeQueens(4).size shouldBe 2
     Chapter7Solutions.placeQueens(6).size shouldBe 4
     Chapter7Solutions.placeQueens(8).size shouldBe 92
@@ -199,9 +296,15 @@ class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "stackHeight" should "give the maximal box stack height where boxes given the constraints" in {
-    Chapter7Solutions.stackHeight(List(new Box(1,1,1), new Box(2,2,2), new Box(3,3,3)).asJava) shouldBe 6
-    Chapter7Solutions.stackHeight(List(new Box(1,1,1), new Box(1,1,1), new Box(3,3,3)).asJava) shouldBe 4
-    Chapter7Solutions.stackHeight(List(new Box(3,1,1), new Box(2,1,1), new Box(3,3,3)).asJava) shouldBe 5
+    Chapter7Solutions.stackHeight(
+      List(new Box(1, 1, 1), new Box(2, 2, 2), new Box(3, 3, 3)).asJava
+    ) shouldBe 6
+    Chapter7Solutions.stackHeight(
+      List(new Box(1, 1, 1), new Box(1, 1, 1), new Box(3, 3, 3)).asJava
+    ) shouldBe 4
+    Chapter7Solutions.stackHeight(
+      List(new Box(3, 1, 1), new Box(2, 1, 1), new Box(3, 3, 3)).asJava
+    ) shouldBe 5
     // could use more and better test cases
   }
 
@@ -238,7 +341,7 @@ class Chapter7SolutionsTest extends AnyFlatSpec with should.Matchers {
     Chapter7Solutions.countEval("1&0", true) shouldBe 0
     Chapter7Solutions.countEval("0&1", true) shouldBe 0
   }
-    
+
   "countEval" should "get the number of ways parens can be added to the expression to get the result" in {
     Chapter7Solutions.countEval("1^0|0|1", false) shouldBe 2
     Chapter7Solutions.countEval("0&0&0&1^1|0", true) shouldBe 10

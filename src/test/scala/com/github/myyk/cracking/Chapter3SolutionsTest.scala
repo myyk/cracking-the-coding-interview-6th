@@ -57,7 +57,8 @@ class Chapter3SolutionsTest extends AnyFlatSpec with should.Matchers {
     for (i <- randomNumbers) {
       queue.add(i)
     }
-    val (oddIndex, evenIndex) = randomNumbers.zipWithIndex.partition(_._2%2==1)
+    val (oddIndex, evenIndex) =
+      randomNumbers.zipWithIndex.partition(_._2 % 2 == 1)
     queue.removeAll(oddIndex.map(_._1).asJava)
     for (i <- evenIndex.map(_._1)) {
       queue.poll() shouldBe i

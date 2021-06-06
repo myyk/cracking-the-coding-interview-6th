@@ -56,13 +56,32 @@ class Chapter17SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "findLongestSubArrayWithEqualLettersAndNumbers" should "find longest subarray with equal letters and numbers" in {
-    findLongestSubArrayWithEqualLettersAndNumbers(Array.emptyCharArray) shouldBe Array.emptyCharArray
-    findLongestSubArrayWithEqualLettersAndNumbers(Array('a')) shouldBe Array.emptyCharArray
-    findLongestSubArrayWithEqualLettersAndNumbers(Array('1')) shouldBe Array.emptyCharArray
-    findLongestSubArrayWithEqualLettersAndNumbers(Array('1', 'a')) shouldBe Array('1', 'a')
-    Set(Array('a', '1'), Array('1', 'b')) should contain (findLongestSubArrayWithEqualLettersAndNumbers(Array('a', '1', 'b', 'c')))
-    Set(Array('1', 'a'), Array('2', '3')) should contain (findLongestSubArrayWithEqualLettersAndNumbers(Array('1', 'a', '2', '3')))
-    Set(Array('z', '1', 'a', '2', '3', 'b'), Array('1', 'a', '2', '3', 'b', 'c')) should contain (findLongestSubArrayWithEqualLettersAndNumbers(Array('z', '1', 'a', '2', '3', 'b', 'c', 'z')))
+    findLongestSubArrayWithEqualLettersAndNumbers(
+      Array.emptyCharArray
+    ) shouldBe Array.emptyCharArray
+    findLongestSubArrayWithEqualLettersAndNumbers(
+      Array('a')
+    ) shouldBe Array.emptyCharArray
+    findLongestSubArrayWithEqualLettersAndNumbers(
+      Array('1')
+    ) shouldBe Array.emptyCharArray
+    findLongestSubArrayWithEqualLettersAndNumbers(
+      Array('1', 'a')
+    ) shouldBe Array('1', 'a')
+    Set(Array('a', '1'), Array('1', 'b')) should contain(
+      findLongestSubArrayWithEqualLettersAndNumbers(Array('a', '1', 'b', 'c'))
+    )
+    Set(Array('1', 'a'), Array('2', '3')) should contain(
+      findLongestSubArrayWithEqualLettersAndNumbers(Array('1', 'a', '2', '3'))
+    )
+    Set(
+      Array('z', '1', 'a', '2', '3', 'b'),
+      Array('1', 'a', '2', '3', 'b', 'c')
+    ) should contain(
+      findLongestSubArrayWithEqualLettersAndNumbers(
+        Array('z', '1', 'a', '2', '3', 'b', 'c', 'z')
+      )
+    )
   }
 
   def countsOfTwoBruteForce(n: Int): Int = {
@@ -88,22 +107,47 @@ class Chapter17SolutionsTest extends AnyFlatSpec with should.Matchers {
     testCountsOfTwo(52314)
   }
 
-  def babyNameFrequencyReductionScala(freqs: Map[String, Int], syn: List[(String, String)]): Map[String, Int] = {
+  def babyNameFrequencyReductionScala(
+      freqs: Map[String, Int],
+      syn: List[(String, String)]
+  ): Map[String, Int] = {
     babyNameFrequencyReduction(
-      freqs.map { case (name, freq) => name -> JInt.valueOf(freq)}.asJava,
+      freqs.map { case (name, freq) => name -> JInt.valueOf(freq) }.asJava,
       syn.asJava
-    ).asScala.map { case(name, freq) => name -> Int.unbox(freq) }.toMap
+    ).asScala.map { case (name, freq) => name -> Int.unbox(freq) }.toMap
   }
 
   "babyNameFrequencyReduction" should "reduce baby name frequencies to one of the synonyms to the total of the synonym frequencies" in {
     babyNameFrequencyReductionScala(
-      Map("Myyk" -> 1, "John" -> 15, "Jon" -> 12, "Chris" -> 13, "Kris" -> 4, "Christopher" -> 19),
-      List("Jon" -> "John", "John" -> "Johnny", "Chris" -> "Kris", "Chris" -> "Christopher", "Poop" -> "Poo")
+      Map(
+        "Myyk" -> 1,
+        "John" -> 15,
+        "Jon" -> 12,
+        "Chris" -> 13,
+        "Kris" -> 4,
+        "Christopher" -> 19
+      ),
+      List(
+        "Jon" -> "John",
+        "John" -> "Johnny",
+        "Chris" -> "Kris",
+        "Chris" -> "Christopher",
+        "Poop" -> "Poo"
+      )
     ) shouldBe Map("John" -> 27, "Chris" -> 36, "Myyk" -> 1)
   }
 
   "circusTowerHeight" should "compute the largest human tower height that can be constructed" in {
-    circusTowerHeight(Set(new Person(65, 100), new Person(70, 150), new Person(56, 90), new Person(75, 190), new Person(60, 95), new Person(68, 110)).asJava) shouldBe 6
+    circusTowerHeight(
+      Set(
+        new Person(65, 100),
+        new Person(70, 150),
+        new Person(56, 90),
+        new Person(75, 190),
+        new Person(60, 95),
+        new Person(68, 110)
+      ).asJava
+    ) shouldBe 6
   }
 
   def testKthNumber(k: Int, expected: Int): Unit = {
@@ -112,10 +156,13 @@ class Chapter17SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "kthNumber" should "be the Kth number such that it's only prime factors are 3, 5, and 7" in {
-    for ((expected, kMinus1) <- Seq(1, 3, 5, 7, 9, 15, 21, 25, 27, 35, 45, 49).zipWithIndex) {
+    for (
+      (expected, kMinus1) <- Seq(1, 3, 5, 7, 9, 15, 21, 25, 27, 35, 45,
+        49).zipWithIndex
+    ) {
       testKthNumber(kMinus1 + 1, expected)
     }
-    testKthNumber(100, 33075) 
+    testKthNumber(100, 33075)
   }
 
   "findMajority" should "find the majority element in the array if it exists" in {
@@ -128,7 +175,5 @@ class Chapter17SolutionsTest extends AnyFlatSpec with should.Matchers {
     findMajority(Array(5, 9, 2, 9, 5, 5, 5, 1, 5)) shouldBe 5
   }
 
-  "wordDistance" should "find the minimum word distance between two words" in {
-    
-  }
+  "wordDistance" should "find the minimum word distance between two words" in {}
 }

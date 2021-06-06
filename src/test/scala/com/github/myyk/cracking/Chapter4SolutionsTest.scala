@@ -21,7 +21,7 @@ class Chapter4SolutionsTest extends AnyFlatSpec with should.Matchers {
       graph.addNode(node)
       node
     }
-    
+
     nodes(0) addAdjacent nodes(1)
     nodes(0) addAdjacent nodes(2)
     nodes(1) addAdjacent nodes(3)
@@ -62,7 +62,10 @@ class Chapter4SolutionsTest extends AnyFlatSpec with should.Matchers {
 
   "pathExists" should "find if there is a path between a and b" in {
     val (_, nodes) = createMediumDirectionalTestGraph
-    Chapter4Solutions.pathExistsDirectional(nodes.head, nodes.head) shouldBe true
+    Chapter4Solutions.pathExistsDirectional(
+      nodes.head,
+      nodes.head
+    ) shouldBe true
     Chapter4Solutions.pathExistsDirectional(nodes.head, nodes(1)) shouldBe true
     Chapter4Solutions.pathExistsDirectional(nodes(1), nodes.head) shouldBe false
     Chapter4Solutions.pathExistsDirectional(nodes.head, nodes(6)) shouldBe true
@@ -74,15 +77,36 @@ class Chapter4SolutionsTest extends AnyFlatSpec with should.Matchers {
 
   "pathExistsBidirectional" should "find if there is a path between a and b" in {
     val (_, nodes) = createMediumBidirectionalTestGraph
-    Chapter4Solutions.pathExistsBidirectional(nodes.head, nodes.head) shouldBe true
-    Chapter4Solutions.pathExistsBidirectional(nodes.head, nodes(1)) shouldBe true
-    Chapter4Solutions.pathExistsBidirectional(nodes(1), nodes.head) shouldBe true
-    Chapter4Solutions.pathExistsBidirectional(nodes.head, nodes(6)) shouldBe true
-    Chapter4Solutions.pathExistsBidirectional(nodes(6), nodes.head) shouldBe true
+    Chapter4Solutions.pathExistsBidirectional(
+      nodes.head,
+      nodes.head
+    ) shouldBe true
+    Chapter4Solutions.pathExistsBidirectional(
+      nodes.head,
+      nodes(1)
+    ) shouldBe true
+    Chapter4Solutions.pathExistsBidirectional(
+      nodes(1),
+      nodes.head
+    ) shouldBe true
+    Chapter4Solutions.pathExistsBidirectional(
+      nodes.head,
+      nodes(6)
+    ) shouldBe true
+    Chapter4Solutions.pathExistsBidirectional(
+      nodes(6),
+      nodes.head
+    ) shouldBe true
     Chapter4Solutions.pathExistsBidirectional(nodes(6), nodes(1)) shouldBe true
     Chapter4Solutions.pathExistsBidirectional(nodes(1), nodes(6)) shouldBe true
-    Chapter4Solutions.pathExistsBidirectional(nodes.head, nodes(7)) shouldBe false
-    Chapter4Solutions.pathExistsBidirectional(nodes(7), nodes.head) shouldBe false
+    Chapter4Solutions.pathExistsBidirectional(
+      nodes.head,
+      nodes(7)
+    ) shouldBe false
+    Chapter4Solutions.pathExistsBidirectional(
+      nodes(7),
+      nodes.head
+    ) shouldBe false
   }
 
   def getHeight(tree: Tree[_]): Int = {
@@ -135,7 +159,9 @@ class Chapter4SolutionsTest extends AnyFlatSpec with should.Matchers {
     }
   }
 
-  def javaListsOfListsToScala[T](lists: java.util.List[java.util.List[T]]): List[List[T]] = {
+  def javaListsOfListsToScala[T](
+      lists: java.util.List[java.util.List[T]]
+  ): List[List[T]] = {
     lists.asScala.map(_.asScala.toList).toList
   }
 
@@ -151,13 +177,14 @@ class Chapter4SolutionsTest extends AnyFlatSpec with should.Matchers {
      *     *  *         *  *
      */
     val tree = new Tree(
-        1,
-        new Tree(2, new Tree(3), null), new Tree(4, null, new Tree(5))
+      1,
+      new Tree(2, new Tree(3), null),
+      new Tree(4, null, new Tree(5))
     )
     listsOfDepths(tree) shouldBe List(
-        List(1),
-        List(2, 4),
-        List(3, 5)
+      List(1),
+      List(2, 4),
+      List(3, 5)
     )
     listsOfDepths(null) shouldBe List()
     listsOfDepths(new Tree(1)) shouldBe List(List(1))
@@ -166,43 +193,91 @@ class Chapter4SolutionsTest extends AnyFlatSpec with should.Matchers {
   "isBalanced" should "check if a tree is balanced" in {
     Chapter4Solutions.isBalanced(null) shouldBe true
     Chapter4Solutions.isBalanced(new Tree(1)) shouldBe true
-    Chapter4Solutions.isBalanced(new Tree(1, new Tree(2), new Tree(3))) shouldBe true
-    Chapter4Solutions.isBalanced(new Tree(1, new Tree(2, new Tree(4), null), null)) shouldBe true
-    Chapter4Solutions.isBalanced(new Tree(1, new Tree(2, null, new Tree(4)), null)) shouldBe true
-    Chapter4Solutions.isBalanced(new Tree(1, null, new Tree(2, null, new Tree(4)))) shouldBe true
-    Chapter4Solutions.isBalanced(new Tree(1, null, new Tree(2, new Tree(4), null))) shouldBe true
+    Chapter4Solutions.isBalanced(
+      new Tree(1, new Tree(2), new Tree(3))
+    ) shouldBe true
+    Chapter4Solutions.isBalanced(
+      new Tree(1, new Tree(2, new Tree(4), null), null)
+    ) shouldBe true
+    Chapter4Solutions.isBalanced(
+      new Tree(1, new Tree(2, null, new Tree(4)), null)
+    ) shouldBe true
+    Chapter4Solutions.isBalanced(
+      new Tree(1, null, new Tree(2, null, new Tree(4)))
+    ) shouldBe true
+    Chapter4Solutions.isBalanced(
+      new Tree(1, null, new Tree(2, new Tree(4), null))
+    ) shouldBe true
   }
 
   "isValidBST" should "check if a tree is balanced" in {
     // null, single, and simple
     Chapter4Solutions.isValidBST(null) shouldBe true
     Chapter4Solutions.isValidBST(new Tree[Integer](1)) shouldBe true
-    Chapter4Solutions.isValidBST(new Tree[Integer](1, new Tree(2), null)) shouldBe false
-    Chapter4Solutions.isValidBST(new Tree[Integer](1, new Tree(0), null)) shouldBe true
-    Chapter4Solutions.isValidBST(new Tree[Integer](1, null, new Tree(2))) shouldBe true
-    Chapter4Solutions.isValidBST(new Tree[Integer](1, null, new Tree(0))) shouldBe false
-    Chapter4Solutions.isValidBST(new Tree[Integer](1, new Tree(0), new Tree(2))) shouldBe true
+    Chapter4Solutions.isValidBST(
+      new Tree[Integer](1, new Tree(2), null)
+    ) shouldBe false
+    Chapter4Solutions.isValidBST(
+      new Tree[Integer](1, new Tree(0), null)
+    ) shouldBe true
+    Chapter4Solutions.isValidBST(
+      new Tree[Integer](1, null, new Tree(2))
+    ) shouldBe true
+    Chapter4Solutions.isValidBST(
+      new Tree[Integer](1, null, new Tree(0))
+    ) shouldBe false
+    Chapter4Solutions.isValidBST(
+      new Tree[Integer](1, new Tree(0), new Tree(2))
+    ) shouldBe true
 
     // duplicates
-    Chapter4Solutions.isValidBST(new Tree[Integer](1, new Tree(1), null)) shouldBe true
-    Chapter4Solutions.isValidBST(new Tree[Integer](1, null, new Tree(1))) shouldBe false
-    Chapter4Solutions.isValidBST(new Tree[Integer](1, new Tree(1), new Tree(1))) shouldBe false
+    Chapter4Solutions.isValidBST(
+      new Tree[Integer](1, new Tree(1), null)
+    ) shouldBe true
+    Chapter4Solutions.isValidBST(
+      new Tree[Integer](1, null, new Tree(1))
+    ) shouldBe false
+    Chapter4Solutions.isValidBST(
+      new Tree[Integer](1, new Tree(1), new Tree(1))
+    ) shouldBe false
 
-    Chapter4Solutions.isValidBST(Chapter4Solutions.minBinaryTree((0 until 1000).map(_ => Random.nextInt()).sorted.toArray)) shouldBe true
-    Chapter4Solutions.isValidBST(Chapter4Solutions.minBinaryTree((0 until 1000).map(_ => Random.nextInt()).toArray)) shouldBe false
+    Chapter4Solutions.isValidBST(
+      Chapter4Solutions.minBinaryTree(
+        (0 until 1000).map(_ => Random.nextInt()).sorted.toArray
+      )
+    ) shouldBe true
+    Chapter4Solutions.isValidBST(
+      Chapter4Solutions.minBinaryTree(
+        (0 until 1000).map(_ => Random.nextInt()).toArray
+      )
+    ) shouldBe false
 
     // right grandchild greater than node
-    Chapter4Solutions.isValidBST(new Tree[Integer](20, new Tree[Integer](10, null, new Tree(25)), new Tree(30))) shouldBe false
+    Chapter4Solutions.isValidBST(
+      new Tree[Integer](
+        20,
+        new Tree[Integer](10, null, new Tree(25)),
+        new Tree(30)
+      )
+    ) shouldBe false
   }
 
   "findSuccessor" should "find the in-order successor to the node" in {
-    Chapter4Solutions.findSuccessor(null: BinarySearchTree[Integer]) shouldBe null
-    Chapter4Solutions.findSuccessor(new BinarySearchTree[Integer](1)) shouldBe null
-    Chapter4Solutions.findSuccessor(new BinarySearchTree[Integer](2).setLeft(1)) shouldBe null
+    Chapter4Solutions.findSuccessor(
+      null: BinarySearchTree[Integer]
+    ) shouldBe null
+    Chapter4Solutions.findSuccessor(
+      new BinarySearchTree[Integer](1)
+    ) shouldBe null
+    Chapter4Solutions.findSuccessor(
+      new BinarySearchTree[Integer](2).setLeft(1)
+    ) shouldBe null
     val bst1 = new BinarySearchTree[Integer](2).setRight(3)
     bst1.getRight.setRight(4)
     Chapter4Solutions.findSuccessor(bst1) shouldBe bst1.getRight
-    Chapter4Solutions.findSuccessor(bst1.getRight) shouldBe bst1.getRight.getRight
+    Chapter4Solutions.findSuccessor(
+      bst1.getRight
+    ) shouldBe bst1.getRight.getRight
     Chapter4Solutions.findSuccessor(bst1.getRight.getRight) shouldBe null
     val bst2 = new BinarySearchTree[Integer](20).setLeft(10).setRight(30)
     bst2.getLeft.setRight(15)
@@ -259,21 +334,61 @@ class Chapter4SolutionsTest extends AnyFlatSpec with should.Matchers {
      *   2     3
      * 4     6   7
      */
-    val tree = new Tree(1, new Tree(2, new Tree(4), null), new Tree(3, new Tree(6), new Tree(7)))
+    val tree = new Tree(
+      1,
+      new Tree(2, new Tree(4), null),
+      new Tree(3, new Tree(6), new Tree(7))
+    )
     Chapter4Solutions.findFirstCommonAncestor(tree, tree, tree) shouldBe tree
-    Chapter4Solutions.findFirstCommonAncestor(tree, tree, new Tree(-999)) shouldBe null
-    Chapter4Solutions.findFirstCommonAncestor(tree, new Tree(-999), tree) shouldBe null
-    Chapter4Solutions.findFirstCommonAncestor(tree, tree.getRight.getRight, tree) shouldBe tree
-    Chapter4Solutions.findFirstCommonAncestor(tree, tree, tree.getRight.getRight) shouldBe tree
-    Chapter4Solutions.findFirstCommonAncestor(tree, tree.getLeft, tree) shouldBe tree
-    Chapter4Solutions.findFirstCommonAncestor(tree, tree, tree.getLeft) shouldBe tree
-    Chapter4Solutions.findFirstCommonAncestor(tree, tree.getRight.getRight, tree.getRight.getLeft) shouldBe tree.getRight
-    Chapter4Solutions.findFirstCommonAncestor(tree, tree.getLeft.getLeft, tree.getRight.getRight) shouldBe tree
+    Chapter4Solutions.findFirstCommonAncestor(
+      tree,
+      tree,
+      new Tree(-999)
+    ) shouldBe null
+    Chapter4Solutions.findFirstCommonAncestor(
+      tree,
+      new Tree(-999),
+      tree
+    ) shouldBe null
+    Chapter4Solutions.findFirstCommonAncestor(
+      tree,
+      tree.getRight.getRight,
+      tree
+    ) shouldBe tree
+    Chapter4Solutions.findFirstCommonAncestor(
+      tree,
+      tree,
+      tree.getRight.getRight
+    ) shouldBe tree
+    Chapter4Solutions.findFirstCommonAncestor(
+      tree,
+      tree.getLeft,
+      tree
+    ) shouldBe tree
+    Chapter4Solutions.findFirstCommonAncestor(
+      tree,
+      tree,
+      tree.getLeft
+    ) shouldBe tree
+    Chapter4Solutions.findFirstCommonAncestor(
+      tree,
+      tree.getRight.getRight,
+      tree.getRight.getLeft
+    ) shouldBe tree.getRight
+    Chapter4Solutions.findFirstCommonAncestor(
+      tree,
+      tree.getLeft.getLeft,
+      tree.getRight.getRight
+    ) shouldBe tree
   }
 
   "bstSequences" should "give all the sequences that could have created it" in {
     Chapter4Solutions.bstSequences[Int](null) shouldBe null
-    Chapter4Solutions.bstSequences(new Tree(1, new Tree(2), new Tree(3))).asScala.map(_.asScala.toList).toSet shouldBe Set(List(1,2,3), List(1,3,2))
+    Chapter4Solutions
+      .bstSequences(new Tree(1, new Tree(2), new Tree(3)))
+      .asScala
+      .map(_.asScala.toList)
+      .toSet shouldBe Set(List(1, 2, 3), List(1, 3, 2))
   }
 
   "weaveSequences" should "weave the two sequences together" in {
@@ -283,11 +398,24 @@ class Chapter4SolutionsTest extends AnyFlatSpec with should.Matchers {
     list2.add(2)
     val prefix = Lists.newLinkedList[Int]
     prefix.add(3)
-    Chapter4Solutions.weaveSequences(list1, list2, Lists.newLinkedList[util.LinkedList[Int]](), prefix).asScala.map(_.asScala.toList).toSet shouldBe Set(List(3,1,2), List(3,2,1))
+    Chapter4Solutions
+      .weaveSequences(
+        list1,
+        list2,
+        Lists.newLinkedList[util.LinkedList[Int]](),
+        prefix
+      )
+      .asScala
+      .map(_.asScala.toList)
+      .toSet shouldBe Set(List(3, 1, 2), List(3, 2, 1))
   }
 
   def testIsSubtree(isSubtreeOp: (Tree[Int], Tree[Int]) => Boolean): Unit = {
-    val t1 = new Tree(1, new Tree(2, new Tree(4), null), new Tree(3, new Tree(6), new Tree(7)))
+    val t1 = new Tree(
+      1,
+      new Tree(2, new Tree(4), null),
+      new Tree(3, new Tree(6), new Tree(7))
+    )
     isSubtreeOp(null, t1) shouldBe false
     isSubtreeOp(t1, null) shouldBe true
     isSubtreeOp(t1, t1.getRight) shouldBe true
@@ -307,11 +435,20 @@ class Chapter4SolutionsTest extends AnyFlatSpec with should.Matchers {
   }
 
   "RandomTree" should "be able to return a random number" in {
-    val tree = new RandomTree(1, new RandomTree(2), new RandomTree(3, new RandomTree(4), new RandomTree(5)))
+    val tree = new RandomTree(
+      1,
+      new RandomTree(2),
+      new RandomTree(3, new RandomTree(4), new RandomTree(5))
+    )
     val results = for (_ <- 0 until 10000) yield {
       tree.getRandomNode.getData
     }
-    val occurrences = results.groupBy(a => a).map{case (i, occurrences) => (i, occurrences.size)}.toList.sortBy{case (a, _) => a}.map{case (_, a) => a}
+    val occurrences = results
+      .groupBy(a => a)
+      .map { case (i, occurrences) => (i, occurrences.size) }
+      .toList
+      .sortBy { case (a, _) => a }
+      .map { case (_, a) => a }
     // this should pass most of the time
     // max freq shouldn't be more than 20% of the samples more than the min
     (occurrences.max - occurrences.min) should be < occurrences.sum / occurrences.size / 5
@@ -327,7 +464,11 @@ class Chapter4SolutionsTest extends AnyFlatSpec with should.Matchers {
      *  / \     \
      * 3  -2      1
      */
-    val left = new Tree[Integer](5, new Tree[Integer](3, new Tree(3), new Tree(-2)), new Tree[Integer](2, null, new Tree(1)))
+    val left = new Tree[Integer](
+      5,
+      new Tree[Integer](3, new Tree(3), new Tree(-2)),
+      new Tree[Integer](2, null, new Tree(1))
+    )
     val right = new Tree[Integer](-3, null, new Tree(11))
     val tree = new Tree[Integer](10, left, right)
     Chapter4Solutions.countPathsWithSum(tree, 10000) shouldBe 0
