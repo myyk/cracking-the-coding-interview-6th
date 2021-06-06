@@ -60,8 +60,12 @@ class Chapter1SolutionsTest extends AnyFlatSpec with should.Matchers {
     Chapter1Solutions.isOneAway("pale", "pale") shouldBe true
     Chapter1Solutions.isOneAway("pale", "ple") shouldBe true
     Chapter1Solutions.isOneAway("pales", "pale") shouldBe true
+    Chapter1Solutions.isOneAway("pale", "pales") shouldBe true
     Chapter1Solutions.isOneAway("pale", "bale") shouldBe true
     Chapter1Solutions.isOneAway("pale", "bake") shouldBe false
+    Chapter1Solutions.isOneAway("ple", "pate") shouldBe false
+    Chapter1Solutions.isOneAway("pate", "ple") shouldBe false
+    Chapter1Solutions.isOneAway("paste", "pate") shouldBe true
   }
 
   "compress" should "return a compressed string if it can compress it" in {
