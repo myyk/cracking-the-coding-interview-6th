@@ -162,7 +162,7 @@ public class Chapter1Solutions {
             return false;
           }
           if (shorter.length() != longer.length()) {
-            j++;
+            i--; // we insert a character at i, so we need to check this character against the next j, so we manually rewind
           }
           differenceFound = true;
         }
