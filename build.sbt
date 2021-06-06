@@ -1,7 +1,7 @@
 ThisBuild / scalaVersion := "3.0.0"
 
 libraryDependencies ++= Seq(
-  "com.google.guava" % "guava" % "19.0",
+  "com.google.guava" % "guava" % "30.1.1-jre",
   "org.scalactic" %% "scalactic" % "3.2.9",
   "org.scalatest" %% "scalatest" % "3.2.9" % "test"
 )
